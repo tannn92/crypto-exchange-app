@@ -19,10 +19,14 @@ const AssetsScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [hideSmallAssets, setHideSmallAssets] = useState(false);
   const [balanceVisible, setBalanceVisible] = useState(true);
+  const [currency, setCurrency] = useState('USDT');
+  const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
 
   // Mock data
-  const totalBalance = 34143.00;
-  const balanceChange = 43.96;
+  const baseBalance = 34143.00; // USDT balance
+  const VND_TO_USDT_RATE = 25290; // 1 USDT = 25,290 VND
+  const totalBalance = currency === 'VND' ? baseBalance * VND_TO_USDT_RATE : baseBalance;
+  const balanceChange = currency === 'VND' ? 43.96 * VND_TO_USDT_RATE : 43.96;
   const balanceChangePercent = 1.47;
 
   // Coin color schemes for gradients (lighter top colors fading to theme appropriate bottom)
@@ -143,6 +147,11 @@ const AssetsScreen = ({ navigation }) => {
 
   const toggleBalanceVisibility = () => {
     setBalanceVisible(!balanceVisible);
+  };
+
+  const handleCurrencySelect = (selectedCurrency) => {
+    setCurrency(selectedCurrency);
+    setShowCurrencyDropdown(false);
   };
 
   const formatBalance = (amount) => {
@@ -309,14 +318,20 @@ const AssetsScreen = ({ navigation }) => {
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Balance Card */}
         <View style={[styles.balanceCard, { backgroundColor: theme.backgroundInput }]}>
-          <Text style={[styles.balanceLabel, { color: theme.textSecondary }]}>
-            Total balance in <Text style={[styles.currencyText, { color: theme.primary }]}>USDT</Text>
-            <Ionicons name="chevron-down" size={16} color={theme.primary} style={styles.currencyDropdown} />
-          </Text>
+          <View style={styles.balanceHeader}>
+            <Text style={[styles.balanceLabel, { color: theme.textSecondary }]}>Total balance in</Text>
+            <TouchableOpacity 
+              style={styles.currencySelector}
+              onPress={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
+            >
+              <Text style={[styles.currencyText, { color: theme.primary }]}>{currency}</Text>
+              <Ionicons name="chevron-down" size={16} color={theme.primary} />
+            </TouchableOpacity>
+          </View>
           
           <View style={styles.balanceRow}>
             <Text style={[styles.balanceAmount, { color: theme.textPrimary }]}>
-              ${formatBalance(totalBalance)}
+              {currency === 'VND' ? '' : '$'}{formatBalance(totalBalance)}{currency === 'VND' ? ' VND' : ''}
             </Text>
             <TouchableOpacity onPress={toggleBalanceVisibility} style={styles.eyeIcon}>
               <Ionicons 
@@ -330,6 +345,25 @@ const AssetsScreen = ({ navigation }) => {
           <Text style={[styles.balanceChange, { color: '#4CAF50' }]}>
             {formatChange(balanceChange, balanceChangePercent)}
           </Text>
+
+          {showCurrencyDropdown && (
+            <View style={[styles.currencyDropdown, { backgroundColor: theme.backgroundCard }]}>
+              <TouchableOpacity 
+                style={[styles.currencyOption, currency === 'USDT' && styles.activeCurrencyOption]}
+                onPress={() => handleCurrencySelect('USDT')}
+              >
+                <Text style={[styles.currencyOptionText, { color: theme.textPrimary }]}>USDT</Text>
+                {currency === 'USDT' && <Ionicons name="checkmark" size={20} color={theme.primary} />}
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={[styles.currencyOption, currency === 'VND' && styles.activeCurrencyOption]}
+                onPress={() => handleCurrencySelect('VND')}
+              >
+                <Text style={[styles.currencyOptionText, { color: theme.textPrimary }]}>VND</Text>
+                {currency === 'VND' && <Ionicons name="checkmark" size={20} color={theme.primary} />}
+              </TouchableOpacity>
+            </View>
+          )}
 
           {/* Action Buttons */}
           <View style={styles.actionButtons}>
@@ -466,18 +500,57 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     marginBottom: 20,
     alignItems: 'center',
+    position: 'relative',
+  },
+  balanceHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
   },
   balanceLabel: {
     fontSize: 16,
-    marginBottom: 8,
+    marginRight: 8,
+  },
+  currencySelector: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 4,
   },
   currencyText: {
     fontWeight: '600',
+    fontSize: 16,
   },
   currencyDropdown: {
-    marginLeft: 4,
+    position: 'absolute',
+    top: 70,
+    right: 20,
+    left: 20,
+    borderRadius: 12,
+    padding: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    zIndex: 1000,
+  },
+  currencyOption: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+  },
+  currencyOptionText: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  activeCurrencyOption: {
+    backgroundColor: 'rgba(255, 107, 53, 0.1)',
   },
   balanceRow: {
     flexDirection: 'row',
