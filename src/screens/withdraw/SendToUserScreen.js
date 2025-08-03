@@ -513,9 +513,6 @@ const styles = StyleSheet.create({
   balanceText: {
     fontSize: 14,
   },
-  refreshIcon: {
-    marginLeft: 8,
-  },
 });
 
 export default SendToUserScreen;
