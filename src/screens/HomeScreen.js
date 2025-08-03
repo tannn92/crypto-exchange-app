@@ -131,7 +131,7 @@ const BalanceChart = ({ theme, currency, exchangeRate }) => {
   const [activeDot, setActiveDot] = useState(null);
   const [showDot, setShowDot] = useState(false);
   
-  // Smooth balance chart data
+  // Smooth balance chart data - scaled to represent growth from ~$1500 to $3243
   const chartData = [
     45, 46.2, 47.1, 46.8, 47.5, 48.2, 47.9, 48.8, 50.1, 51.3, 50.8, 52.4, 53.6, 54.2, 55.8, 
     58.2, 60.1, 62.3, 64.8, 67.2, 69.8, 71.4, 73.9, 75.6, 77.8, 79.2, 81.5, 83.1, 84.8, 86.4, 
@@ -192,8 +192,8 @@ const BalanceChart = ({ theme, currency, exchangeRate }) => {
   
   
   const formatValue = (value) => {
-    const baseValue = 912.28; // Base USDT value
-    const scaledValue = baseValue * (value / 97); // Scale based on chart data
+    const baseValue = 3243.00; // Base USDT value - updated to match real balance
+    const scaledValue = baseValue * (value / 95.7); // Scale based on chart data max value
     
     if (currency === 'VND') {
       return `${(scaledValue * exchangeRate).toLocaleString('en-US', { maximumFractionDigits: 0 })} VND`;
