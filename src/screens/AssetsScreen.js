@@ -302,9 +302,6 @@ const AssetsScreen = ({ navigation }) => {
         </Text>
         
         <View style={styles.headerRight}>
-          <TouchableOpacity style={styles.notificationButton}>
-            <Ionicons name="headset-outline" size={24} color={theme.textSecondary} />
-          </TouchableOpacity>
         </View>
       </View>
 
