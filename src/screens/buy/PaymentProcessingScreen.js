@@ -556,7 +556,7 @@ const styles = StyleSheet.create({
     height: 20, // For verification state - minimal gap
   },
   secondConnectorVerifying: {
-    height: 140, // Connect step 2 to step 3 in verification state - further increased to eliminate remaining gap
+    height: 180, // Connect step 2 to step 3 in verification state - increased to fully eliminate gap
   },
   timelineContent: {
     flex: 1,
