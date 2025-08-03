@@ -23,6 +23,20 @@ const BalanceHeader = ({
     setShowCurrencyDropdown(false);
   };
 
+  const formatBalanceDisplay = (amount) => {
+    if (!balanceVisible) {
+      return '*********';
+    }
+    
+    if (currency === 'VND') {
+      // For VND, show only integer part
+      return Math.floor(amount).toLocaleString();
+    } else {
+      // For USDT, show with decimals
+      return formatBalance(amount);
+    }
+  };
+
   return (
     <>
       <View style={styles.balanceHeader}>
@@ -38,7 +52,7 @@ const BalanceHeader = ({
       
       <View style={styles.balanceAmountContainer}>
         <Text style={[styles.balanceAmount, { color: theme.textPrimary }]}>
-          {currency === 'VND' ? '' : '$'}{formatBalance(totalBalance)}{currency === 'VND' ? ' VND' : ''}
+          {currency === 'VND' ? '' : '$'}{formatBalanceDisplay(totalBalance)}{currency === 'VND' ? ' VND' : ''}
         </Text>
         <TouchableOpacity onPress={toggleBalanceVisibility} style={styles.eyeIcon}>
           <Ionicons 
@@ -79,6 +93,7 @@ const styles = StyleSheet.create({
   balanceHeader: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 5,
   },
   balanceLabel: {
