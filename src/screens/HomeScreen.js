@@ -18,6 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Svg, { Path, Circle, Rect, Defs, LinearGradient as SvgLinearGradient, Stop } from 'react-native-svg';
 import { useTheme } from '../context/ThemeContext';
 import CoinIcon from '../components/CoinIcon';
+import BalanceHeader from '../components/BalanceHeader';
 import { cryptoData, coinPrices } from '../data/coinPrices';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -452,52 +453,19 @@ const HomeScreen = ({ navigation, route }) => {
       >
         {/* Balance Card */}
         <View style={[styles.balanceCard, { backgroundColor: theme.backgroundCard }]}>
-          <View style={styles.balanceHeader}>
-            <Text style={[styles.balanceLabel, { color: theme.textSecondary }]}>Total balance in</Text>
-            <TouchableOpacity 
-              style={styles.currencySelector}
-              onPress={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
-            >
-              <Text style={[styles.currencyText, { color: theme.primary }]}>{currency}</Text>
-              <Ionicons name="chevron-down" size={16} color={theme.primary} />
-            </TouchableOpacity>
-          </View>
-          
-          <View style={styles.balanceAmountContainer}>
-            <Text style={[styles.balanceAmount, { color: theme.textPrimary }]}>
-              {currency === 'VND' ? '' : '$'}{formatBalance(baseBalance)}{currency === 'VND' ? ' VND' : ''}
-            </Text>
-            <TouchableOpacity style={styles.eyeIcon} onPress={toggleBalanceVisibility}>
-              <Ionicons 
-                name={balanceVisible ? "eye-outline" : "eye-off-outline"} 
-                size={20} 
-                color={theme.textSecondary} 
-              />
-            </TouchableOpacity>
-          </View>
-          
-          <Text style={[styles.balanceChange, { color: '#16C784' }]}>
-            {formatChange(baseChange, baseChangePercent)}
-          </Text>
-          
-          {showCurrencyDropdown && (
-            <View style={[styles.currencyDropdown, { backgroundColor: theme.backgroundCard }]}>
-              <TouchableOpacity 
-                style={[styles.currencyOption, currency === 'USDT' && styles.activeCurrencyOption]}
-                onPress={() => handleCurrencySelect('USDT')}
-              >
-                <Text style={[styles.currencyOptionText, { color: theme.textPrimary }]}>USDT</Text>
-                {currency === 'USDT' && <Ionicons name="checkmark" size={20} color={theme.primary} />}
-              </TouchableOpacity>
-              <TouchableOpacity 
-                style={[styles.currencyOption, currency === 'VND' && styles.activeCurrencyOption]}
-                onPress={() => handleCurrencySelect('VND')}
-              >
-                <Text style={[styles.currencyOptionText, { color: theme.textPrimary }]}>VND</Text>
-                {currency === 'VND' && <Ionicons name="checkmark" size={20} color={theme.primary} />}
-              </TouchableOpacity>
-            </View>
-          )}
+          <BalanceHeader
+            currency={currency}
+            setCurrency={setCurrency}
+            showCurrencyDropdown={showCurrencyDropdown}
+            setShowCurrencyDropdown={setShowCurrencyDropdown}
+            totalBalance={baseBalance}
+            balanceVisible={balanceVisible}
+            toggleBalanceVisibility={toggleBalanceVisibility}
+            balanceChange={baseChange}
+            balanceChangePercent={baseChangePercent}
+            formatBalance={formatBalance}
+            formatChange={formatChange}
+          />
 
           <BalanceChart theme={{ ...theme, isDarkMode }} currency={currency} exchangeRate={exchangeRate} />
           
