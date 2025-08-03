@@ -256,42 +256,51 @@ const AssetsScreen = ({ navigation }) => {
     );
   };
 
-  const renderCryptoRow = (crypto) => (
-    <View key={crypto.id} style={[styles.cryptoRow, { borderBottomColor: theme.border }]}>
-      <View style={styles.cryptoInfo}>
-        <CoinIcon coinId={crypto.id} size={40} />
-        <View style={styles.cryptoDetails}>
-          <Text style={[styles.cryptoSymbol, { color: theme.textPrimary }]}>
-            {crypto.symbol}
+  const renderCryptoRow = (crypto, index) => {
+    const isLastItem = index === popularCryptos.length - 1;
+    return (
+      <View key={crypto.id} style={[
+        styles.cryptoRow, 
+        { 
+          borderBottomColor: theme.border,
+          borderBottomWidth: isLastItem ? 0 : 1 // Remove border for last item
+        }
+      ]}>
+        <View style={styles.cryptoInfo}>
+          <CoinIcon coinId={crypto.id} size={40} />
+          <View style={styles.cryptoDetails}>
+            <Text style={[styles.cryptoSymbol, { color: theme.textPrimary }]}>
+              {crypto.symbol}
+            </Text>
+            <Text style={[styles.cryptoName, { color: theme.textSecondary }]}>
+              {crypto.name}
+            </Text>
+          </View>
+        </View>
+        
+        <View style={styles.cryptoPriceInfo}>
+          <Text style={[styles.cryptoPrice, { color: theme.textPrimary }]}>
+            {crypto.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}
           </Text>
-          <Text style={[styles.cryptoName, { color: theme.textSecondary }]}>
-            {crypto.name}
+          <Text style={[
+            styles.cryptoChange, 
+            { color: crypto.isPositive ? '#4CAF50' : '#FF3B30' }
+          ]}>
+            {crypto.isPositive ? '+' : ''}{crypto.change.toFixed(2)}%
           </Text>
         </View>
+        
+        <TouchableOpacity 
+          style={[styles.buyButton, { backgroundColor: theme.backgroundInput }]}
+          onPress={() => handleBuy(crypto)}
+        >
+          <Text style={[styles.buyButtonText, { color: theme.textPrimary }]}>
+            Buy
+          </Text>
+        </TouchableOpacity>
       </View>
-      
-      <View style={styles.cryptoPriceInfo}>
-        <Text style={[styles.cryptoPrice, { color: theme.textPrimary }]}>
-          {crypto.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-        </Text>
-        <Text style={[
-          styles.cryptoChange, 
-          { color: crypto.isPositive ? '#4CAF50' : '#FF3B30' }
-        ]}>
-          {crypto.isPositive ? '+' : ''}{crypto.change.toFixed(2)}%
-        </Text>
-      </View>
-      
-      <TouchableOpacity 
-        style={[styles.buyButton, { backgroundColor: theme.backgroundInput }]}
-        onPress={() => handleBuy(crypto)}
-      >
-        <Text style={[styles.buyButtonText, { color: theme.textPrimary }]}>
-          Buy
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
+    );
+  };
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
@@ -373,8 +382,6 @@ const AssetsScreen = ({ navigation }) => {
               <Ionicons name="search-outline" size={18} color={theme.textSecondary} />
               <TextInput
                 style={[styles.searchInput, { color: theme.textPrimary }]}
-                placeholder="Search..."
-                placeholderTextColor={theme.textSecondary}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
               />
@@ -391,15 +398,22 @@ const AssetsScreen = ({ navigation }) => {
           </Text>
           
           <View style={styles.cryptoHeader}>
-            <Text style={[styles.headerLabel, { color: theme.textSecondary }]}>
-              Name
-            </Text>
-            <Text style={[styles.headerLabel, { color: theme.textSecondary }]}>
-              Last price
-            </Text>
+            <View style={styles.headerNameSection}>
+              <Text style={[styles.headerLabel, { color: theme.textSecondary }]}>
+                Name
+              </Text>
+            </View>
+            <View style={styles.headerPriceSection}>
+              <Text style={[styles.headerLabel, { color: theme.textSecondary }]}>
+                Last price
+              </Text>
+            </View>
+            <View style={styles.headerActionSection}>
+              {/* Empty space for Buy button column */}
+            </View>
           </View>
           
-          {popularCryptos.map(renderCryptoRow)}
+          {popularCryptos.map((crypto, index) => renderCryptoRow(crypto, index))}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -452,8 +466,9 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     minWidth: 90,
-    paddingVertical: 4,
+    paddingVertical: 0,
     paddingHorizontal: 4,
+    textAlignVertical: 'center',
   },
   content: {
     flex: 1,
@@ -672,9 +687,19 @@ const styles = StyleSheet.create({
   },
   cryptoHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: 0,
     marginBottom: 16,
+  },
+  headerNameSection: {
+    flex: 1,
+  },
+  headerPriceSection: {
+    flex: 1,
+    alignItems: 'flex-end',
+  },
+  headerActionSection: {
+    width: 60, // Match Buy button width
   },
   headerLabel: {
     fontSize: 14,
@@ -685,8 +710,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 0,
-    borderBottomWidth: 1,
-    borderBottomColor: 'transparent', // Will be set dynamically
   },
   cryptoInfo: {
     flexDirection: 'row',
