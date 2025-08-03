@@ -450,12 +450,13 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 20,
     gap: 8,
-    width: 140,
+    width: 160,
   },
   searchInput: {
     flex: 1,
     fontSize: 14,
-    minWidth: 80,
+    minWidth: 100,
+    paddingVertical: 2,
   },
   content: {
     flex: 1,
