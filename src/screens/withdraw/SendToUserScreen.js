@@ -479,9 +479,6 @@ const styles = StyleSheet.create({
     lineHeight: 40,
     textAlignVertical: 'center',
   },
-  maxButton: {
-    marginRight: 10,
-  },
   quantityInfo: {
     flexDirection: 'row',
     justifyContent: 'space-between',

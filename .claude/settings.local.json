@@ -29,7 +29,13 @@
       "Bash(eas build:configure:*)",
       "Bash(expo publish:*)",
       "Bash(npx expo export:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(gh repo create:*)",
+      "Bash(git remote add:*)",
+      "Bash(git remote remove:*)",
+      "Bash(git push:*)",
+      "Bash(git rm:*)"
     ],
     "deny": []
   }
