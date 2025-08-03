@@ -397,21 +397,6 @@ const AssetsScreen = ({ navigation }) => {
             Trade popular cryptocurrencies
           </Text>
           
-          <View style={styles.cryptoHeader}>
-            <View style={styles.headerNameSection}>
-              <Text style={[styles.headerLabel, { color: theme.textSecondary }]}>
-                Name
-              </Text>
-            </View>
-            <View style={styles.headerPriceSection}>
-              <Text style={[styles.headerLabel, { color: theme.textSecondary }]}>
-                Last price
-              </Text>
-            </View>
-            <View style={styles.headerActionSection}>
-              {/* Empty space for Buy button column */}
-            </View>
-          </View>
           
           {popularCryptos.map((crypto, index) => renderCryptoRow(crypto, index))}
         </View>
@@ -684,26 +669,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '600',
     marginBottom: 20,
-  },
-  cryptoHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 0,
-    marginBottom: 16,
-  },
-  headerNameSection: {
-    flex: 1,
-  },
-  headerPriceSection: {
-    flex: 1,
-    alignItems: 'flex-end',
-  },
-  headerActionSection: {
-    width: 60, // Match Buy button width
-  },
-  headerLabel: {
-    fontSize: 14,
-    fontWeight: '500',
   },
   cryptoRow: {
     flexDirection: 'row',
