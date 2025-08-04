@@ -9,10 +9,64 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
+import CoinIcon from '../../components/CoinIcon';
 
 const WithdrawSuccessScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
-  const { coin, network, address, amount, transactionTime } = route.params;
+  const { 
+    coin, 
+    network = 'Ethereum', 
+    address = '0x742d35Cc6608C673B8cbE4f4E2E4b0b8f90D8F90',
+    amount,
+    cryptoAmount,
+    recipientAddress,
+    networkFee,
+    transactionTime,
+    date,
+    fromHistory = false,
+    fromNotification = false,
+    fromCoinDetails = false
+  } = route.params || {};
+
+  // Safety check for required parameters
+  if (!coin || !coin.id) {
+    return (
+      <View style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.content, { justifyContent: 'center', alignItems: 'center' }]}>
+          <Text style={[styles.errorText, { color: theme.textPrimary }]}>Invalid withdraw data</Text>
+        </View>
+      </View>
+    );
+  }
+
+  // Use the appropriate amount and address values
+  const displayAmount = cryptoAmount || amount;
+  const displayAddress = recipientAddress || address;
+
+  // Get proper network name based on coin
+  const getNetworkName = (coinSymbol, networkString) => {
+    const networkMap = {
+      'BTC': 'Bitcoin',
+      'ETH': 'Ethereum',
+      'USDT': 'Ethereum (ERC-20)',
+      'BNB': 'BNB Smart Chain',
+      'SOL': 'Solana',
+      'XRP': 'XRP Ledger',
+      'MATIC': 'Polygon',
+      'ADA': 'Cardano',
+      'DOT': 'Polkadot',
+      'AVAX': 'Avalanche',
+    };
+    
+    return networkMap[coinSymbol?.toUpperCase()] || networkString || 'Ethereum';
+  };
+
+  const displayNetwork = getNetworkName(coin?.symbol, network);
 
   const formatNumber = (num) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -30,6 +84,19 @@ const WithdrawSuccessScreen = ({ navigation, route }) => {
     return '2d80x1287fgehdaayltzfhgi07mbvza0735fh';
   };
 
+  const handleBack = () => {
+    if (fromCoinDetails) {
+      // Navigate back to CoinDetails screen
+      navigation.goBack();
+    } else if (fromHistory) {
+      // Navigate back to History screen
+      navigation.navigate('MainTabs', { screen: 'History' });
+    } else {
+      // Default behavior - go to main tabs
+      navigation.navigate('MainTabs');
+    }
+  };
+
   const handleHomepage = () => {
     // Navigate to homepage
     navigation.navigate('MainTabs', { screen: 'Home' });
@@ -45,28 +112,28 @@ const WithdrawSuccessScreen = ({ navigation, route }) => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('MainTabs')}
+          onPress={() => {
+            console.log('Back button touched - WithdrawSuccessScreen');
+            handleBack();
+          }}
           style={styles.backButton}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          activeOpacity={0.7}
+          accessible={true}
+          accessibilityLabel="Go back"
+          testID="withdraw-success-back-button"
         >
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
         </TouchableOpacity>
+        <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>Withdraw Success</Text>
         <View style={styles.headerRight} />
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Success Icon */}
+        {/* Coin Icon */}
         <View style={styles.iconSection}>
-          <View style={styles.successIconContainer}>
-            <View style={styles.checkmarkIcon}>
-              <Ionicons name="checkmark" size={32} color="white" />
-            </View>
-          </View>
-          {/* Decorative stars */}
-          <View style={[styles.star, styles.starTopRight]}>
-            <Text style={styles.starText}>✦</Text>
-          </View>
-          <View style={[styles.star, styles.starBottomLeft]}>
-            <Text style={[styles.starText, { color: '#4285F4' }]}>✦</Text>
+          <View style={styles.coinIconContainer}>
+            <CoinIcon coinId={coin.id} size={40} />
           </View>
         </View>
 
@@ -76,7 +143,7 @@ const WithdrawSuccessScreen = ({ navigation, route }) => {
             Withdraw
           </Text>
           <Text style={[styles.amount, { color: theme.textPrimary }]}>
-            {formatNumber(amount)} {coin.symbol}
+            {formatNumber(displayAmount)} {coin.symbol}
           </Text>
           <View style={[styles.statusLabel, { backgroundColor: '#E8F5E8' }]}>
             <Text style={[styles.statusText, { color: '#4CAF50' }]}>
@@ -121,7 +188,7 @@ const WithdrawSuccessScreen = ({ navigation, route }) => {
               Network
             </Text>
             <Text style={[styles.detailValue, { color: theme.textPrimary }]}>
-              {network?.name || 'Unknown Network'}
+              {displayNetwork}
             </Text>
           </View>
 
@@ -131,7 +198,7 @@ const WithdrawSuccessScreen = ({ navigation, route }) => {
               To address
             </Text>
             <Text style={[styles.detailValue, { color: theme.textPrimary }]} numberOfLines={2}>
-              {formatAddress(address)}
+              {formatAddress(displayAddress)}
             </Text>
           </View>
 
@@ -152,23 +219,25 @@ const WithdrawSuccessScreen = ({ navigation, route }) => {
             </View>
           </View>
         </View>
-      </ScrollView>
 
-      {/* Action Buttons */}
-      <View style={styles.actionButtons}>
-        <TouchableOpacity
-          style={[styles.saveButton, { backgroundColor: theme.backgroundInput }]}
-          onPress={handleHomepage}
-        >
-          <Text style={[styles.saveButtonText, { color: theme.textPrimary }]}>Homepage</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.balanceButton, { backgroundColor: '#FF6B35' }]}
-          onPress={handleViewBalance}
-        >
-          <Text style={styles.balanceButtonText}>View balance</Text>
-        </TouchableOpacity>
-      </View>
+        {/* Action Buttons */}
+        <View style={styles.actionButtons}>
+          <TouchableOpacity
+            style={[styles.saveButton, { backgroundColor: theme.backgroundInput }]}
+            onPress={handleHomepage}
+            testID="withdraw-homepage-button"
+          >
+            <Text style={[styles.saveButtonText, { color: theme.textPrimary }]}>Homepage</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.balanceButton, { backgroundColor: '#FF6B35' }]}
+            onPress={handleViewBalance}
+            testID="withdraw-view-balance-button"
+          >
+            <Text style={styles.balanceButtonText}>View balance</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -185,27 +254,38 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   backButton: {
-    padding: 5,
+    width: 60,
+    alignItems: 'flex-start',
+    zIndex: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    textAlign: 'center',
+    zIndex: 1,
   },
   headerRight: {
-    width: 24,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   content: {
     flex: 1,
     paddingHorizontal: 20,
   },
+  errorText: {
+    fontSize: 16,
+    textAlign: 'center',
+  },
   iconSection: {
     alignItems: 'center',
-    marginVertical: 40,
-    position: 'relative',
+    marginVertical: 20,
   },
-  successIconContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#4CAF50',
-    justifyContent: 'center',
-    alignItems: 'center',
+  coinIconContainer: {
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -214,28 +294,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 6,
-  },
-  checkmarkIcon: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  star: {
-    position: 'absolute',
-  },
-  starTopRight: {
-    top: 10,
-    right: 80,
-  },
-  starBottomLeft: {
-    bottom: 10,
-    left: 80,
-  },
-  starText: {
-    fontSize: 20,
-    color: '#FF9500',
   },
   transactionSection: {
     alignItems: 'center',
@@ -311,7 +369,7 @@ const styles = StyleSheet.create({
   },
   actionButtons: {
     flexDirection: 'row',
-    paddingHorizontal: 20,
+    paddingHorizontal: 0,
     paddingBottom: 30,
     gap: 15,
   },

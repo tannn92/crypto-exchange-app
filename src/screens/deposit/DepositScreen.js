@@ -72,8 +72,16 @@ const DepositScreen = ({ navigation, route }) => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            console.log('Back button touched - DepositScreen');
+            navigation.goBack();
+          }}
           style={styles.backButton}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          activeOpacity={0.7}
+          accessible={true}
+          accessibilityLabel="Go back"
+          testID="back-button"
         >
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
         </TouchableOpacity>
@@ -83,10 +91,17 @@ const DepositScreen = ({ navigation, route }) => {
         <View style={styles.headerRight}>
           <TouchableOpacity
             style={styles.headerIcon}
-            onPress={() => navigation.getParent()?.navigate('MainTabs', {
-              screen: 'History',
-              params: { selectedTab: 'Deposit' },
-            })}
+            onPress={() => {
+              console.log('History button touched - DepositScreen');
+              navigation.getParent()?.navigate('MainTabs', {
+                screen: 'History',
+                params: { selectedTab: 'Deposit' },
+              });
+            }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            activeOpacity={0.7}
+            accessible={true}
+            accessibilityLabel="View transaction history"
           >
             <Ionicons name="time-outline" size={24} color={theme.textSecondary} />
           </TouchableOpacity>
@@ -110,6 +125,7 @@ const DepositScreen = ({ navigation, route }) => {
             <TouchableOpacity
               style={[styles.selectionField, { backgroundColor: theme.backgroundInput }]}
               onPress={handleCoinSelect}
+              testID="deposit-coin-selector"
             >
               <View style={styles.selectionContent}>
                 <CoinIcon coinId={selectedCoin?.id || 'usdt'} size={24} />
@@ -129,6 +145,7 @@ const DepositScreen = ({ navigation, route }) => {
             <TouchableOpacity
               style={[styles.selectionField, { backgroundColor: theme.backgroundInput }]}
               onPress={handleNetworkSelect}
+              testID="deposit-network-selector"
             >
               <View style={styles.networkContent}>
                 <Text style={[
@@ -165,7 +182,7 @@ const DepositScreen = ({ navigation, route }) => {
                   selectTextOnFocus={true}
                 />
                 {depositAddress && (
-                  <TouchableOpacity style={[styles.copyButton, { backgroundColor: theme.primary }]}>
+                  <TouchableOpacity style={[styles.copyButton, { backgroundColor: theme.primary }]} testID="copy-address-button">
                     <Ionicons name="copy-outline" size={16} color="white" />
                   </TouchableOpacity>
                 )}
@@ -257,10 +274,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    paddingTop: Platform.OS === 'android' ? 25 : 0,
   },
   backButton: {
-    padding: 5,
+    width: 60,
+    alignItems: 'flex-start',
+    zIndex: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
   },
   headerTitle: {
     fontSize: 20,
@@ -269,7 +289,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     textAlign: 'center',
-    zIndex: -1,
+    zIndex: 1,
   },
   headerRight: {
     flexDirection: 'row',
@@ -278,6 +298,7 @@ const styles = StyleSheet.create({
   headerIcon: {
     marginLeft: 15,
     padding: 5,
+    zIndex: 10,
   },
   keyboardView: {
     flex: 1,

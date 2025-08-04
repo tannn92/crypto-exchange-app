@@ -82,8 +82,15 @@ const SendToUserScreen = ({ navigation, route }) => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            console.log('Back button touched - SendToUserScreen');
+            navigation.goBack();
+          }}
           style={styles.backButton}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          activeOpacity={0.7}
+          accessible={true}
+          accessibilityLabel="Go back"
         >
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
         </TouchableOpacity>
@@ -93,10 +100,17 @@ const SendToUserScreen = ({ navigation, route }) => {
         <View style={styles.headerRight}>
           <TouchableOpacity
             style={styles.headerIcon}
-            onPress={() => navigation.getParent()?.push('MainTabs', {
-              screen: 'History',
-              params: { selectedTab: 'Withdrawal' },
-            })}
+            onPress={() => {
+              console.log('History button touched - SendToUserScreen');
+              navigation.getParent()?.navigate('MainTabs', {
+                screen: 'History',
+                params: { selectedTab: 'Withdrawal' },
+              });
+            }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            activeOpacity={0.7}
+            accessible={true}
+            accessibilityLabel="View transaction history"
           >
             <Ionicons name="time-outline" size={24} color={theme.textSecondary} />
           </TouchableOpacity>
@@ -276,7 +290,11 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   backButton: {
-    padding: 5,
+    width: 60,
+    alignItems: 'flex-start',
+    zIndex: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
   },
   headerTitle: {
     fontSize: 20,
@@ -285,7 +303,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     textAlign: 'center',
-    zIndex: -1,
+    zIndex: 1,
   },
   headerRight: {
     flexDirection: 'row',
@@ -294,6 +312,7 @@ const styles = StyleSheet.create({
   headerIcon: {
     marginLeft: 15,
     padding: 5,
+    zIndex: 10,
   },
   keyboardView: {
     flex: 1,

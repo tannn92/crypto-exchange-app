@@ -81,11 +81,13 @@ export const getDeviceInfo = (insets) => {
 export const getTabBarHeight = (insets) => {
   const baseHeight = 50;
   const minHeight = 60;
+  const minHeightNoGestures = 65; // Ensure adequate height for non-gesture devices
   
   if (hasGestureNavigation(insets)) {
     // Add extra height for gesture navigation
     return Math.max(baseHeight + insets.bottom, minHeight);
   }
   
-  return baseHeight;
+  // For devices without gesture navigation, ensure minimum height
+  return minHeightNoGestures;
 };

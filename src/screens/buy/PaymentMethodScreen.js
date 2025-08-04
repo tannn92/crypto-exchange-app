@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   TouchableOpacity,
   ScrollView,
   Dimensions,
@@ -81,9 +80,19 @@ const PaymentMethodScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
+    <View style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <TouchableOpacity
+          onPress={() => {
+            console.log('Back button touched - PaymentMethodScreen');
+            navigation.goBack();
+          }}
+          style={styles.backButton}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          activeOpacity={0.7}
+          accessible={true}
+          accessibilityLabel="Go back"
+        >
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
         </TouchableOpacity>
         <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>Paying with</Text>
@@ -102,6 +111,7 @@ const PaymentMethodScreen = ({ navigation, route }) => {
             },
           ]}
           onPress={() => handleSelectMethod('bank')}
+          testID="bank-transfer-option"
         >
           <View style={styles.paymentLeft}>
             <View style={[styles.paymentIcon, { backgroundColor: theme.primary }]}>
@@ -144,6 +154,7 @@ const PaymentMethodScreen = ({ navigation, route }) => {
                   },
                 ]}
                 onPress={() => handleSelectBank(bankId)}
+                testID={`bank-${bankId}-option`}
               >
                 <View style={styles.bankLeft}>
                   <BankIcon bankId={bankId} size={24} />
@@ -170,6 +181,7 @@ const PaymentMethodScreen = ({ navigation, route }) => {
             },
           ]}
           onPress={() => handleSelectMethod('balance')}
+          testID="balance-option"
         >
           <View style={styles.paymentLeft}>
             <View style={[styles.paymentIcon, { backgroundColor: theme.primary }]}>
@@ -189,7 +201,7 @@ const PaymentMethodScreen = ({ navigation, route }) => {
           )}
         </TouchableOpacity>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -203,19 +215,26 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    paddingTop: Platform.OS === 'android' ? 25 : 0,
   },
   backButton: {
-    marginRight: 10,
+    width: 60,
+    alignItems: 'flex-start',
+    zIndex: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
   },
   headerTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '600',
-    flex: 1,
+    position: 'absolute',
+    left: 0,
+    right: 0,
     textAlign: 'center',
+    zIndex: 1,
   },
   headerRight: {
-    width: 24,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   content: {
     flex: 1,

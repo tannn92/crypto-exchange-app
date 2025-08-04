@@ -4,7 +4,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   TouchableOpacity,
   TextInput,
   KeyboardAvoidingView,
@@ -120,7 +119,7 @@ const SellAmountScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
+    <View style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -129,8 +128,16 @@ const SellAmountScreen = ({ navigation, route }) => {
           {/* Header */}
           <View style={styles.header}>
             <TouchableOpacity
-              onPress={() => navigation.goBack()}
+              onPress={() => {
+                console.log('Back button touched - SellAmountScreen');
+                navigation.goBack();
+              }}
               style={styles.backButton}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              activeOpacity={0.7}
+              accessible={true}
+              accessibilityLabel="Go back"
+              testID="back-button"
             >
               <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
             </TouchableOpacity>
@@ -140,10 +147,17 @@ const SellAmountScreen = ({ navigation, route }) => {
             <View style={styles.headerRight}>
               <TouchableOpacity
                 style={styles.headerIcon}
-                onPress={() => navigation.getParent()?.navigate('MainTabs', {
-                  screen: 'History',
-                  params: { selectedTab: 'Sell' },
-                })}
+                onPress={() => {
+                  console.log('History button touched - SellAmountScreen');
+                  navigation.getParent()?.navigate('MainTabs', {
+                    screen: 'History',
+                    params: { selectedTab: 'Sell' },
+                  });
+                }}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                activeOpacity={0.7}
+                accessible={true}
+                accessibilityLabel="View transaction history"
               >
                 <Ionicons name="time-outline" size={24} color={theme.textSecondary} />
               </TouchableOpacity>
@@ -162,12 +176,13 @@ const SellAmountScreen = ({ navigation, route }) => {
                   keyboardType="decimal-pad"
                   placeholder="0.00"
                   placeholderTextColor={theme.textSecondary}
+                  testID="sell-amount-input"
                 />
-                <TouchableOpacity onPress={handleMax} style={styles.maxButton}>
+                <TouchableOpacity onPress={handleMax} style={styles.maxButton} testID="max-button">
                   <Text style={[styles.maxText, { color: theme.primary }]}>Max</Text>
                 </TouchableOpacity>
                 <View style={[styles.divider, { backgroundColor: theme.border }]} />
-                <TouchableOpacity style={styles.coinSelector} onPress={handleSelectSourceCoin}>
+                <TouchableOpacity style={styles.coinSelector} onPress={handleSelectSourceCoin} testID="sell-coin-selector">
                   <CoinIcon coinId={selectedCoin?.id || 'btc'} size={24} />
                   <Text style={[styles.coinSymbol, { color: theme.textPrimary }]}>
                     {selectedCoin?.symbol || 'BTC'}
@@ -236,6 +251,7 @@ const SellAmountScreen = ({ navigation, route }) => {
               <TouchableOpacity
                 style={[styles.receiveMethodContainer, { backgroundColor: theme.backgroundInput }]}
                 onPress={handleReceiveMethodPress}
+                testID="receive-method-selector"
               >
                 <BankIcon bankId={receiveMethod.replace('bank-', '')} size={32} />
                 <View style={styles.bankDetails}>
@@ -271,6 +287,7 @@ const SellAmountScreen = ({ navigation, route }) => {
               ]}
               onPress={handleConfirm}
               disabled={!cryptoAmount || parseFloat(cryptoAmount) <= 0}
+              testID="sell-confirm-button"
             >
               <Text style={styles.confirmButtonText}>Confirm</Text>
             </TouchableOpacity>
@@ -280,7 +297,7 @@ const SellAmountScreen = ({ navigation, route }) => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -297,10 +314,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    paddingTop: Platform.OS === 'android' ? 25 : 0,
   },
   backButton: {
-    padding: 5,
+    width: 60,
+    alignItems: 'flex-start',
+    zIndex: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
   },
   headerTitle: {
     fontSize: 20,
@@ -309,7 +329,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     textAlign: 'center',
-    zIndex: -1,
+    zIndex: 1,
   },
   headerRight: {
     flexDirection: 'row',
@@ -318,6 +338,7 @@ const styles = StyleSheet.create({
   headerIcon: {
     marginLeft: 15,
     padding: 5,
+    zIndex: 10,
   },
   content: {
     flex: 1,

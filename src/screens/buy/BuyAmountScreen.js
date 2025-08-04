@@ -4,7 +4,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   TouchableOpacity,
   TextInput,
   ScrollView,
@@ -129,7 +128,7 @@ const BuyAmountScreen = ({ navigation, route }) => {
   // Handle missing coin parameter
   if (!coin) {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
+      <View style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerLeft}>
             <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
@@ -140,7 +139,7 @@ const BuyAmountScreen = ({ navigation, route }) => {
         <View style={[styles.content, { justifyContent: 'center', alignItems: 'center' }]}>
           <Text style={[styles.errorText, { color: theme.textPrimary }]}>No coin selected</Text>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
@@ -180,15 +179,22 @@ const BuyAmountScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
+    <View style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardView}
       >
         <View style={styles.header}>
           <TouchableOpacity
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              console.log('Back button touched - BuyAmountScreen');
+              navigation.goBack();
+            }}
             style={styles.backButton}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            activeOpacity={0.7}
+            accessible={true}
+            accessibilityLabel="Go back"
           >
             <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
           </TouchableOpacity>
@@ -196,10 +202,17 @@ const BuyAmountScreen = ({ navigation, route }) => {
           <View style={styles.headerRight}>
             <TouchableOpacity
               style={styles.headerIcon}
-              onPress={() => navigation.getParent()?.navigate('MainTabs', {
-                screen: 'History',
-                params: { selectedTab: 'Buy' },
-              })}
+              onPress={() => {
+                console.log('History button touched - BuyAmountScreen');
+                navigation.getParent()?.navigate('MainTabs', {
+                  screen: 'History',
+                  params: { selectedTab: 'Buy' },
+                });
+              }}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              activeOpacity={0.7}
+              accessible={true}
+              accessibilityLabel="View transaction history"
             >
               <Ionicons name="time-outline" size={24} color={theme.textSecondary} />
             </TouchableOpacity>
@@ -223,6 +236,7 @@ const BuyAmountScreen = ({ navigation, route }) => {
                 value={vndAmount}
                 onChangeText={handleVndChange}
                 keyboardType="numeric"
+                testID="buy-amount-input"
               />
               <View style={styles.currencyBadge}>
                 <CoinIcon coinId={paymentCurrency} size={24} />
@@ -240,7 +254,7 @@ const BuyAmountScreen = ({ navigation, route }) => {
               <Text style={[styles.amountInput, { color: theme.textPrimary }]}>
                 {cryptoAmount || '0.00'}
               </Text>
-              <TouchableOpacity style={styles.currencyBadge} onPress={handleSelectDestinationCoin}>
+              <TouchableOpacity style={styles.currencyBadge} onPress={handleSelectDestinationCoin} testID="coin-selector">
                 <CoinIcon coinId={selectedCoin.id} size={24} />
                 <Text style={[styles.currencyText, { color: theme.textPrimary }]}>{selectedCoin.symbol}</Text>
                 <Ionicons name="chevron-down" size={16} color={theme.textSecondary} />
@@ -310,6 +324,7 @@ const BuyAmountScreen = ({ navigation, route }) => {
                   console.error('Navigation error:', error);
                 }
               }}
+              testID="payment-method-selector"
             >
               <View style={styles.paymentLeft}>
                 {selectedPayment.startsWith('bank-') ? (
@@ -360,6 +375,7 @@ const BuyAmountScreen = ({ navigation, route }) => {
             ]}
             onPress={handleConfirm}
             disabled={!vndAmount || parseFloat(vndAmount) <= 0}
+            testID="buy-confirm-button"
           >
             <Text style={styles.confirmButtonText}>
               Confirm
@@ -370,7 +386,7 @@ const BuyAmountScreen = ({ navigation, route }) => {
           <ProcessingGuarantee />
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -387,10 +403,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    paddingTop: Platform.OS === 'android' ? 25 : 0,
   },
   backButton: {
-    padding: 5,
+    width: 60,
+    alignItems: 'flex-start',
+    zIndex: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
   },
   headerTitle: {
     fontSize: 20,
@@ -399,7 +418,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     textAlign: 'center',
-    zIndex: -1,
+    zIndex: 1,
   },
   headerRight: {
     flexDirection: 'row',
@@ -408,6 +427,7 @@ const styles = StyleSheet.create({
   headerIcon: {
     marginLeft: 15,
     padding: 5,
+    zIndex: 10,
   },
   content: {
     flex: 1,

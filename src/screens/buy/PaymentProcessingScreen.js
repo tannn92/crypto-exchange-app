@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   TouchableOpacity,
   ScrollView,
   Animated,
@@ -144,9 +143,20 @@ const PaymentProcessingScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
+    <View style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleCancel} style={styles.backButton}>
+        <TouchableOpacity
+          onPress={() => {
+            console.log('Back button touched - PaymentProcessingScreen');
+            handleCancel();
+          }}
+          style={styles.backButton}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          activeOpacity={0.7}
+          accessible={true}
+          accessibilityLabel="Go back"
+          testID="payment-back-button"
+        >
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
         </TouchableOpacity>
         <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>Payment Processing</Text>
@@ -311,13 +321,6 @@ const PaymentProcessingScreen = ({ navigation, route }) => {
                       </View>
                     )}
 
-                    {/* Warning */}
-                    <View style={[styles.warningBox, { backgroundColor: '#FFF3CD' }]}>
-                      <Ionicons name="warning" size={20} color="#856404" />
-                      <Text style={[styles.warningText, { color: '#856404' }]}>
-                        Funds may be lost if the transfer details are incorrect.
-                      </Text>
-                    </View>
                   </View>
                 </View>
               </View>
@@ -412,8 +415,6 @@ const PaymentProcessingScreen = ({ navigation, route }) => {
                         </View>
                       </View>
                     </View>
-
-
                   </View>
                 </View>
               </View>
@@ -438,6 +439,7 @@ const PaymentProcessingScreen = ({ navigation, route }) => {
           <TouchableOpacity
             style={[styles.confirmButton, { backgroundColor: '#FF6B35' }]}
             onPress={handlePaymentSent}
+            testID="confirm-payment-button"
           >
             <Text style={styles.confirmButtonText}>I have sent the payment</Text>
           </TouchableOpacity>
@@ -445,12 +447,13 @@ const PaymentProcessingScreen = ({ navigation, route }) => {
           <TouchableOpacity
             style={[styles.homeButton, { backgroundColor: '#FF6B35' }]}
             onPress={handleBackToHome}
+            testID="back-to-home-button"
           >
             <Text style={styles.homeButtonText}>Back to Homepage</Text>
           </TouchableOpacity>
         )}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -468,10 +471,13 @@ const styles = StyleSheet.create({
   },
   backButton: {
     width: 60,
+    alignItems: 'flex-start',
     zIndex: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '600',
     position: 'absolute',
     left: 0,
@@ -480,7 +486,8 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   headerRight: {
-    width: 60,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   content: {
     flex: 1,
@@ -541,16 +548,16 @@ const styles = StyleSheet.create({
     marginTop: 0,
   },
   firstConnector: {
-    height: 450, // Base height for processing state
+    height: 380, // Increased height to fill the gap in connecting line
   },
   firstConnectorExpanded: {
-    height: 650, // Expanded height when bank details are shown
+    height: 580, // Increased expanded height to fill the gap in connecting line
   },
   firstConnectorVerifying: {
     height: 20, // For verification state - minimal gap
   },
   secondConnectorVerifying: {
-    height: 180, // Connect step 2 to step 3 in verification state - increased to fully eliminate gap
+    height: 120, // Adjusted height after removing ProcessingGuarantee component
   },
   timelineContent: {
     flex: 1,

@@ -19,41 +19,11 @@ const NotificationScreen = ({ navigation, route }) => {
   // Notification type tabs
   const notificationTabs = ['All', 'Activities', 'Announcements'];
 
-  // Mock notification data
+  // Mock notification data with mixed order
   const allNotifications = {
     Activities: [
       {
         id: '1',
-        type: 'buy',
-        title: 'Buy BTC',
-        description: 'You bought 0.000041 BTC successfully',
-        amount: '+0.000041 BTC',
-        time: '2 hours ago',
-        isPositive: true,
-        icon: 'arrow-up',
-      },
-      {
-        id: '2',
-        type: 'sell',
-        title: 'Sell ETH',
-        description: 'You sold 0.5 ETH successfully',
-        amount: '-0.5 ETH',
-        time: '1 day ago',
-        isPositive: false,
-        icon: 'arrow-down',
-      },
-      {
-        id: '3',
-        type: 'deposit',
-        title: 'Deposit VND',
-        description: 'You deposited 1,000,000 VND to your wallet',
-        amount: '+1,000,000 VND',
-        time: '2 days ago',
-        isPositive: true,
-        icon: 'arrow-up',
-      },
-      {
-        id: '4',
         type: 'withdraw',
         title: 'Withdraw USDT',
         description: 'You withdrew 500 USDT from your wallet',
@@ -61,32 +31,129 @@ const NotificationScreen = ({ navigation, route }) => {
         time: '3 days ago',
         isPositive: false,
         icon: 'arrow-down',
+        timestamp: Date.now() - (3 * 24 * 60 * 60 * 1000), // 3 days ago
+      },
+      {
+        id: '6',
+        type: 'buy',
+        title: 'Buy BTC',
+        description: 'You bought 0.000041 BTC successfully',
+        amount: '+0.000041 BTC',
+        time: '2 hours ago',
+        isPositive: true,
+        icon: 'arrow-up',
+        timestamp: Date.now() - (2 * 60 * 60 * 1000), // 2 hours ago
+      },
+      {
+        id: '7',
+        type: 'sell',
+        title: 'Sell ETH',
+        description: 'You sold 0.5 ETH successfully',
+        amount: '-0.5 ETH',
+        time: '5 hours ago',
+        isPositive: false,
+        icon: 'arrow-down',
+        timestamp: Date.now() - (5 * 60 * 60 * 1000), // 5 hours ago
+      },
+      {
+        id: '9',
+        type: 'withdraw',
+        title: 'Withdraw USDT',
+        description: 'You withdrew 200 USDT from your wallet',
+        amount: '-200 USDT',
+        time: '9 hours ago',
+        isPositive: false,
+        icon: 'arrow-down',
+        timestamp: Date.now() - (9 * 60 * 60 * 1000), // 9 hours ago
+      },
+      {
+        id: '10',
+        type: 'buy',
+        title: 'Buy ETH',
+        description: 'You bought 0.25 ETH successfully',
+        amount: '+0.25 ETH',
+        time: '11 hours ago',
+        isPositive: true,
+        icon: 'arrow-up',
+        timestamp: Date.now() - (11 * 60 * 60 * 1000), // 11 hours ago
+      },
+      {
+        id: '12',
+        type: 'sell',
+        title: 'Sell BNB',
+        description: 'You sold 1.5 BNB successfully',
+        amount: '-1.5 BNB',
+        time: '15 hours ago',
+        isPositive: false,
+        icon: 'arrow-down',
+        timestamp: Date.now() - (15 * 60 * 60 * 1000), // 15 hours ago
+      },
+      {
+        id: '13',
+        type: 'convert',
+        title: 'Convert BTC to USDT',
+        description: 'You converted 0.001 BTC to 97.15 USDT successfully',
+        amount: '+97.15 USDT',
+        time: '17 hours ago',
+        isPositive: true,
+        icon: 'swap-horizontal',
+        timestamp: Date.now() - (17 * 60 * 60 * 1000), // 17 hours ago
       },
     ],
     Announcements: [
+      {
+        id: '8',
+        type: 'announcement',
+        title: 'Security upgrade completed',
+        description: 'Enhanced security measures now active.',
+        time: '3 hours ago',
+        isCryptoVN: true,
+        timestamp: Date.now() - (3 * 60 * 60 * 1000), // 3 hours ago
+      },
+      {
+        id: '11',
+        type: 'announcement',
+        title: 'Trading pairs maintenance',
+        description: 'Scheduled maintenance for BTC/VND pair completed.',
+        time: '7 hours ago',
+        isCryptoVN: true,
+        timestamp: Date.now() - (7 * 60 * 60 * 1000), // 7 hours ago
+      },
       {
         id: '5',
         type: 'announcement',
         title: 'CryptoVN has been successfully updated to version 1.0.5',
         description: 'Bugs fixed and performance improvements.',
-        time: '17:08 - 12/7/2023',
+        time: '10 hours ago',
         isCryptoVN: true,
+        timestamp: Date.now() - (10 * 60 * 60 * 1000), // 10 hours ago
       },
       {
-        id: '6',
+        id: '14',
+        type: 'announcement',
+        title: 'New feature: Price alerts',
+        description: 'Set custom price alerts for your favorite cryptocurrencies.',
+        time: '13 hours ago',
+        isCryptoVN: true,
+        timestamp: Date.now() - (13 * 60 * 60 * 1000), // 13 hours ago
+      },
+      {
+        id: '3',
         type: 'announcement',
         title: 'The referral program has started! Tap to join now!',
         description: 'Invite friends and earn rewards together.',
-        time: '22:30 - 5/7/2023',
+        time: '16 hours ago',
         isCryptoVN: true,
+        timestamp: Date.now() - (16 * 60 * 60 * 1000), // 16 hours ago
       },
       {
-        id: '7',
+        id: '2',
         type: 'announcement',
         title: 'New trading pairs available',
         description: 'We added BNB/VND and SOL/VND trading pairs.',
-        time: '14:15 - 3/7/2023',
+        time: '18 hours ago',
         isCryptoVN: true,
+        timestamp: Date.now() - (18 * 60 * 60 * 1000), // 18 hours ago
       },
     ],
   };
@@ -96,8 +163,8 @@ const NotificationScreen = ({ navigation, route }) => {
     const activities = allNotifications.Activities || [];
     const announcements = allNotifications.Announcements || [];
     return [...activities, ...announcements].sort((a, b) => {
-      // Sort by time (newest first) - simplified sorting
-      return b.id - a.id;
+      // Sort by timestamp (newest first)
+      return (b.timestamp || 0) - (a.timestamp || 0);
     });
   };
 
@@ -111,20 +178,161 @@ const NotificationScreen = ({ navigation, route }) => {
   const getTransactionIconColor = (type, isPositive) => {
     if (type === 'buy' || type === 'deposit') {return '#4CAF50';}
     if (type === 'sell' || type === 'withdraw') {return '#FF6B35';}
+    if (type === 'convert') {return '#2196F3';}
     return theme.textSecondary;
   };
 
   const getTransactionIconBackground = (type, isPositive) => {
     if (type === 'buy' || type === 'deposit') {return '#E8F5E9';}
     if (type === 'sell' || type === 'withdraw') {return '#FFEBEE';}
+    if (type === 'convert') {return '#E3F2FD';}
     return '#F5F5F5';
+  };
+
+  // Handle notification click
+  const handleNotificationPress = (item) => {
+    if (item.isCryptoVN) {
+      // Handle system announcement clicks - navigate to info page
+      navigation.navigate('AnnouncementDetail', {
+        title: item.title,
+        description: item.description,
+        time: item.time,
+        type: 'announcement'
+      });
+    } else {
+      // Handle activity notifications - navigate to completion screens like history
+      handleActivityNotificationPress(item);
+    }
+  };
+
+  // Handle activity notification clicks (similar to history navigation)
+  const handleActivityNotificationPress = (item) => {
+    // Extract coin symbol from amount
+    const coinMatch = item.amount.match(/(BTC|ETH|USDT|VND|XRP|BNB|SOL)/);
+    const coinSymbol = coinMatch ? coinMatch[1] : 'USDT';
+    
+    // Get coin data
+    const getCoinData = (symbol) => {
+      const coinMap = {
+        'BTC': { id: 'btc', symbol: 'BTC', name: 'Bitcoin', price: 95000 },
+        'ETH': { id: 'eth', symbol: 'ETH', name: 'Ethereum', price: 3500 },
+        'USDT': { id: 'usdt', symbol: 'USDT', name: 'Tether', price: 1 },
+        'VND': { id: 'vnd', symbol: 'VND', name: 'Vietnamese Dong', price: 0.00004 },
+        'XRP': { id: 'xrp', symbol: 'XRP', name: 'XRP', price: 2.5 },
+        'BNB': { id: 'bnb', symbol: 'BNB', name: 'BNB', price: 650 },
+        'SOL': { id: 'sol', symbol: 'SOL', name: 'Solana', price: 200 },
+      };
+      return coinMap[symbol] || coinMap['USDT'];
+    };
+
+    const coin = getCoinData(coinSymbol);
+    const amount = parseFloat(item.amount.replace(/[+\-,]/g, '').split(' ')[0]);
+
+    // Generate completion data
+    const completionData = {
+      coin: coin,
+      amount: amount,
+      date: item.time,
+      transactionId: `#N${item.id.padStart(9, '0')}121`,
+      status: 'Completed',
+      fromNotification: true,
+    };
+
+    // Navigate to appropriate completion screen
+    if (item.type === 'buy') {
+      navigation.navigate('BuyFlow', {
+        screen: 'PaymentCompleted',
+        params: {
+          ...completionData,
+          cryptoAmount: amount,
+          vndAmount: amount * 25000,
+          exchangeRate: 25000,
+          paymentMethod: 'Bank Transfer',
+        }
+      });
+    } else if (item.type === 'sell') {
+      navigation.navigate('SellFlow', {
+        screen: 'SellCompleted',
+        params: {
+          ...completionData,
+          cryptoAmount: amount,
+          vndAmount: amount * 25000,
+          exchangeRate: 25000,
+          receiveMethod: 'Bank Transfer',
+          accountName: 'John Doe',
+          accountNumber: '1234567890',
+        }
+      });
+    } else if (item.type === 'convert') {
+      // Extract source and destination coins from description
+      const sourceCoin = { id: 'btc', symbol: 'BTC', name: 'Bitcoin' };
+      const destinationCoin = { id: 'usdt', symbol: 'USDT', name: 'Tether' };
+      navigation.navigate('ConvertFlow', {
+        screen: 'ConvertSuccess',
+        params: {
+          sourceCoin: sourceCoin,
+          destinationCoin: destinationCoin,
+          sourceAmount: 0.001,
+          destinationAmount: 97.15,
+          exchangeRate: 97150,
+          fee: 0.97,
+          finalAmount: 97.15,
+          transactionId: completionData.transactionId,
+          transactionTime: completionData.date,
+          fromNotification: true,
+        }
+      });
+    } else if (item.type === 'deposit') {
+      if (coinSymbol === 'VND') {
+        // VND deposit - go to a simple success screen
+        navigation.navigate('BuyFlow', {
+          screen: 'PaymentCompleted',
+          params: {
+            ...completionData,
+            cryptoAmount: 0,
+            vndAmount: amount,
+            exchangeRate: 1,
+            paymentMethod: 'Bank Transfer',
+            isDeposit: true,
+          }
+        });
+      } else {
+        // Crypto deposit
+        navigation.navigate('BuyFlow', {
+          screen: 'PaymentCompleted',
+          params: {
+            ...completionData,
+            cryptoAmount: amount,
+            vndAmount: 0,
+            exchangeRate: 1,
+            paymentMethod: 'Crypto Network',
+            isDeposit: true,
+          }
+        });
+      }
+    } else if (item.type === 'withdraw') {
+      navigation.navigate('WithdrawFlow', {
+        screen: 'WithdrawSuccess',
+        params: {
+          ...completionData,
+          cryptoAmount: amount,
+          networkFee: amount * 0.001,
+          recipientAddress: '0x742d35Cc6608C673B8cbE4f4E2E4b0b8f90D8F90',
+          network: 'Ethereum',
+        }
+      });
+    }
   };
 
   const renderNotificationItem = ({ item }) => {
     if (item.isCryptoVN) {
       // Announcement notification
       return (
-        <View style={styles.notificationItem}>
+        <TouchableOpacity 
+          style={styles.notificationItem}
+          onPress={() => handleNotificationPress(item)}
+          activeOpacity={0.7}
+        >
           <View style={styles.notificationLeft}>
             <Image
               source={require('../../assets/icon.png')}
@@ -143,12 +351,18 @@ const NotificationScreen = ({ navigation, route }) => {
               </Text>
             </View>
           </View>
-        </View>
+          <View style={styles.notificationRight}>
+          </View>
+        </TouchableOpacity>
       );
     } else {
       // Activity notification
       return (
-        <View style={styles.notificationItem}>
+        <TouchableOpacity 
+          style={styles.notificationItem}
+          onPress={() => handleNotificationPress(item)}
+          activeOpacity={0.7}
+        >
           <View style={styles.notificationLeft}>
             <View style={[
               styles.activityIcon,
@@ -180,7 +394,7 @@ const NotificationScreen = ({ navigation, route }) => {
               {item.amount}
             </Text>
           </View>
-        </View>
+        </TouchableOpacity>
       );
     }
   };
@@ -191,8 +405,15 @@ const NotificationScreen = ({ navigation, route }) => {
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <TouchableOpacity
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              console.log('Back button touched - NotificationScreen');
+              navigation.navigate('MainTabs', { screen: 'Home' });
+            }}
             style={styles.backButton}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            activeOpacity={0.7}
+            accessible={true}
+            accessibilityLabel="Go back"
           >
             <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
           </TouchableOpacity>
@@ -269,17 +490,24 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   backButton: {
-    padding: 5,
+    width: 60,
+    alignItems: 'flex-start',
+    zIndex: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
   },
   headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    flex: 1,
+    fontSize: 20,
+    fontWeight: '600',
+    position: 'absolute',
+    left: 0,
+    right: 0,
     textAlign: 'center',
+    zIndex: 1,
   },
   headerRight: {
-    width: 80,
-    alignItems: 'flex-end',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   tabsContainer: {
     maxHeight: 50,

@@ -136,7 +136,14 @@ const AssetsScreen = ({ navigation }) => {
     const depositCoin = coin || { id: 'usdt', symbol: 'USDT', name: 'Tether' };
     navigation.navigate('DepositFlow', {
       screen: 'Deposit',
-      params: { coin: depositCoin },
+      params: { 
+        coin: {
+          id: depositCoin.id,
+          symbol: depositCoin.symbol,
+          name: depositCoin.name,
+          price: depositCoin.price
+        }
+      },
     });
   };
 

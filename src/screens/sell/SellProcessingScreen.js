@@ -119,13 +119,19 @@ const SellProcessingScreen = ({ navigation, route }) => {
     <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={handleCancel}
+          onPress={() => {
+            console.log('Back button touched - SellProcessingScreen');
+            handleCancel();
+          }}
           style={styles.backButton}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           activeOpacity={0.7}
+          accessible={true}
+          accessibilityLabel="Go back"
         >
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
         </TouchableOpacity>
+        <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>Sell Processing</Text>
         <View style={styles.headerRight} />
       </View>
 
@@ -273,13 +279,22 @@ const SellProcessingScreen = ({ navigation, route }) => {
           </View>
         </View>
 
-        {/* Transaction Details Button */}
-        <TouchableOpacity
-          style={[styles.detailsButton, { backgroundColor: theme.primary }]}
-          onPress={() => navigation.navigate('SellTransactionDetails', route.params)}
-        >
-          <Text style={styles.detailsButtonText}>Transaction details</Text>
-        </TouchableOpacity>
+        {/* Action Buttons */}
+        <View style={styles.actionButtons}>
+          <TouchableOpacity
+            style={[styles.viewBalanceButton, { backgroundColor: theme.backgroundForm, borderColor: theme.border }]}
+            onPress={() => navigation.navigate('SellTransactionDetails', route.params)}
+          >
+            <Text style={[styles.viewBalanceText, { color: theme.textPrimary }]}>Transaction details</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity
+            style={[styles.sellMoreButton, { backgroundColor: '#FF6B35' }]}
+            onPress={() => navigation.navigate('SellAmount')}
+          >
+            <Text style={styles.sellMoreText}>Sell more</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -304,8 +319,18 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 5,
   },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    textAlign: 'center',
+    zIndex: 1,
+  },
   headerRight: {
-    width: 60,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   content: {
     flex: 1,
@@ -504,6 +529,34 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     marginLeft: 8,
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    paddingHorizontal: 0,
+    paddingBottom: 30,
+    gap: 15,
+  },
+  viewBalanceButton: {
+    flex: 1,
+    paddingVertical: 16,
+    borderRadius: 25,
+    alignItems: 'center',
+    borderWidth: 1,
+  },
+  viewBalanceText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  sellMoreButton: {
+    flex: 1,
+    paddingVertical: 16,
+    borderRadius: 25,
+    alignItems: 'center',
+  },
+  sellMoreText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: '600',
   },
   detailsButton: {
     paddingVertical: 16,

@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   TouchableOpacity,
   TextInput,
   FlatList,
@@ -113,7 +112,14 @@ const CoinSelectionScreen = ({ navigation, route }) => {
         setTimeout(() => {
           navigation.navigate('DepositFlow', {
             screen: 'Deposit',
-            params: { selectedCoin: coin },
+            params: { 
+              selectedCoin: {
+                id: coin.id,
+                symbol: coin.symbol,
+                name: coin.name,
+                price: coin.price
+              }
+            },
           });
         }, 100);
       }
@@ -180,6 +186,7 @@ const CoinSelectionScreen = ({ navigation, route }) => {
       <TouchableOpacity
         style={styles.coinItem}
         onPress={() => handleSelectCoin(item)}
+        testID={`coin-item-${item.symbol.toLowerCase()}`}
       >
         <View style={styles.coinLeft}>
           <CoinIcon coinId={item.id} size={40} style={{ marginRight: 12 }} />
@@ -201,12 +208,22 @@ const CoinSelectionScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <TouchableOpacity
+            onPress={() => {
+              console.log('Back button touched - CoinSelectionScreen');
+              navigation.goBack();
+            }}
+            style={styles.backButton}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            activeOpacity={0.7}
+            accessible={true}
+            accessibilityLabel="Go back"
+          >
             <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
           </TouchableOpacity>
-          <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>Select cryptocurrency</Text>
+          <Text style={[styles.headerTitle, { color: theme.textPrimary }]} testID="coin-selection-title">Select cryptocurrency</Text>
           <View style={styles.headerRight} />
         </View>
 
@@ -219,6 +236,7 @@ const CoinSelectionScreen = ({ navigation, route }) => {
               placeholderTextColor={theme.textTertiary}
               value={searchText}
               onChangeText={setSearchText}
+              testID="coin-search-input"
             />
           </View>
         </View>
@@ -239,6 +257,7 @@ const CoinSelectionScreen = ({ navigation, route }) => {
                     },
                   ]}
                   onPress={() => handlePopularCoinSelect(coinSymbol)}
+                  testID={`popular-coin-${coinSymbol.toLowerCase()}`}
                 >
                   <CoinIcon coinId={coin?.id} size={20} style={{ marginRight: 6 }} />
                   <Text style={[
@@ -299,7 +318,7 @@ const CoinSelectionScreen = ({ navigation, route }) => {
           style={styles.coinList}
           contentContainerStyle={styles.coinListContent}
         />
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -315,16 +334,24 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   backButton: {
-    marginRight: 10,
+    width: 60,
+    alignItems: 'flex-start',
+    zIndex: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
   },
   headerTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '600',
-    flex: 1,
+    position: 'absolute',
+    left: 0,
+    right: 0,
     textAlign: 'center',
+    zIndex: 1,
   },
   headerRight: {
-    width: 24,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   searchContainer: {
     paddingHorizontal: 20,

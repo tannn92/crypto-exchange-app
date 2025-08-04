@@ -21,6 +21,7 @@ import {
   SafeConvertConfirmationScreen,
   SafeConvertSuccessScreen,
   SafeDepositScreen,
+  SafeDepositCompletedScreen,
   SafeNetworkSelectionScreen,
   SafeWithdrawScreen,
   SafeAddressSelectionScreen,
@@ -35,6 +36,7 @@ import {
   SafeCoinMarketScreen,
   SafeProfileMenuScreen,
   SafeNotificationScreen,
+  SafeAnnouncementDetailScreen,
 } from './SafeScreens';
 
 const Stack = createStackNavigator();
@@ -115,6 +117,7 @@ const DepositFlowNavigator = () => {
       }}
     >
       <DepositStack.Screen name="Deposit" component={SafeDepositScreen} />
+      <DepositStack.Screen name="DepositCompleted" component={SafeDepositCompletedScreen} />
     </DepositStack.Navigator>
   );
 };
@@ -307,6 +310,13 @@ const AppNavigator = () => {
         <Stack.Screen
           name="Notification"
           component={SafeNotificationScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="AnnouncementDetail"
+          component={SafeAnnouncementDetailScreen}
           options={{
             headerShown: false,
           }}

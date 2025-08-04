@@ -3,15 +3,31 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 
 const PaymentCompletedScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
-  const { coin, cryptoAmount } = route.params;
+  const { coin, cryptoAmount, isDeposit = false, fromHistory = false, fromNotification = false, fromCoinDetails = false } = route.params || {};
+
+  // Safety check for required parameters
+  if (!coin || !coin.id) {
+    return (
+      <View style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.content, { justifyContent: 'center', alignItems: 'center' }]}>
+          <Text style={[styles.errorText, { color: theme.textPrimary }]}>Invalid payment data</Text>
+        </View>
+      </View>
+    );
+  }
   const [selectedFeedback, setSelectedFeedback] = useState(null);
 
   const formatNumber = (num) => {
@@ -20,6 +36,22 @@ const PaymentCompletedScreen = ({ navigation, route }) => {
 
   const handleViewBalance = () => {
     navigation.navigate('MainTabs', { screen: 'Assets' });
+  };
+
+  const handleBack = () => {
+    if (fromNotification) {
+      // Navigate back to Notification screen
+      navigation.navigate('Notification');
+    } else if (fromCoinDetails) {
+      // Navigate back to CoinDetails screen
+      navigation.goBack();
+    } else if (fromHistory) {
+      // Navigate back to History screen
+      navigation.navigate('MainTabs', { screen: 'History' });
+    } else {
+      // Default behavior - go to buy more
+      handleBuyMore();
+    }
   };
 
   const handleBuyMore = () => {
@@ -41,18 +73,36 @@ const PaymentCompletedScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleBuyMore} style={styles.backButton}>
+        <TouchableOpacity
+          onPress={() => {
+            console.log('Back button touched - PaymentCompletedScreen');
+            handleBack();
+          }}
+          style={styles.backButton}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          activeOpacity={0.7}
+          accessible={true}
+          accessibilityLabel="Go back"
+          testID="completed-back-button"
+        >
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>Payment Completed</Text>
+        <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>
+          {isDeposit ? 'Deposit Completed' : 'Payment Completed'}
+        </Text>
         <View style={styles.headerRight} />
       </View>
 
-      <View style={styles.content}>
-        {/* Success Icon */}
-        <View style={styles.successSection}>
+      <ScrollView 
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.content}>
+          {/* Success Icon */}
+          <View style={styles.successSection}>
           <View style={styles.successIcon}>
             <View style={styles.iconBackground}>
               <Ionicons name="checkmark" size={40} color="white" />
@@ -146,17 +196,20 @@ const PaymentCompletedScreen = ({ navigation, route }) => {
         <TouchableOpacity
           style={[styles.viewBalanceButton, { backgroundColor: theme.backgroundSecondary }]}
           onPress={handleViewBalance}
+          testID="view-balance-button"
         >
           <Text style={[styles.viewBalanceText, { color: theme.textPrimary }]}>View Balance</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.buyMoreButton, { backgroundColor: '#FF6B35' }]}
           onPress={handleBuyMore}
+          testID="buy-more-button"
         >
           <Text style={styles.buyMoreText}>Buy more</Text>
         </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -172,21 +225,39 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   backButton: {
-    marginRight: 10,
+    width: 60,
+    alignItems: 'flex-start',
+    zIndex: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: '600',
-    flex: 1,
+    position: 'absolute',
+    left: 0,
+    right: 0,
     textAlign: 'center',
+    zIndex: 1,
   },
   headerRight: {
-    width: 24,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
   content: {
     flex: 1,
     paddingHorizontal: 20,
     paddingTop: 30,
+  },
+  errorText: {
+    fontSize: 16,
+    textAlign: 'center',
   },
   successSection: {
     alignItems: 'center',

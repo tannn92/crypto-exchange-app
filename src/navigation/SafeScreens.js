@@ -18,6 +18,7 @@ import ConvertScreen from '../screens/convert/ConvertScreen';
 import ConvertConfirmationScreen from '../screens/convert/ConvertConfirmationScreen';
 import ConvertSuccessScreen from '../screens/convert/ConvertSuccessScreen';
 import DepositScreen from '../screens/deposit/DepositScreen';
+import DepositCompletedScreen from '../screens/deposit/DepositCompletedScreen';
 import NetworkSelectionScreen from '../screens/deposit/NetworkSelectionScreen';
 import WithdrawScreen from '../screens/withdraw/WithdrawScreen';
 import AddressSelectionScreen from '../screens/withdraw/AddressSelectionScreen';
@@ -32,6 +33,7 @@ import CoinDetailsScreen from '../screens/CoinDetailsScreen';
 import CoinMarketScreen from '../screens/CoinMarketScreen';
 import ProfileMenuScreen from '../screens/ProfileMenuScreen';
 import NotificationScreen from '../screens/NotificationScreen';
+import AnnouncementDetailScreen from '../screens/AnnouncementDetailScreen';
 import HomeScreen from '../screens/HomeScreen';
 import AssetsScreen from '../screens/AssetsScreen';
 import HistoryScreen from '../screens/HistoryScreen';
@@ -94,6 +96,7 @@ export const SafeConvertConfirmationScreen = createSafeScreen(ConvertConfirmatio
 export const SafeConvertSuccessScreen = createSafeScreen(ConvertSuccessScreen, false, 'form');
 
 export const SafeDepositScreen = createSafeScreen(DepositScreen, false, 'form');
+export const SafeDepositCompletedScreen = createSafeScreen(DepositCompletedScreen, false, 'form');
 export const SafeNetworkSelectionScreen = createSafeScreen(NetworkSelectionScreen, true, 'form');
 
 export const SafeWithdrawScreen = createSafeScreen(WithdrawScreen, false, 'form');
@@ -111,6 +114,7 @@ export const SafeCoinDetailsScreen = createSafeScreen(CoinDetailsScreen, false, 
 export const SafeCoinMarketScreen = createSafeScreen(CoinMarketScreen, false, 'form');
 export const SafeProfileMenuScreen = createSafeScreen(ProfileMenuScreen, true);
 export const SafeNotificationScreen = createSafeScreen(NotificationScreen, false, 'form');
+export const SafeAnnouncementDetailScreen = createSafeScreen(AnnouncementDetailScreen, false, 'form');
 
 // Tab screens
 export const SafeHomeScreen = createSafeScreen(HomeScreen);

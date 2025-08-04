@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    height: 650,
+    height: 500,
     paddingTop: 15,
   },
   modalHeader: {
@@ -233,11 +233,9 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   modalContent: {
-    flex: 1,
     paddingHorizontal: 20,
   },
   scrollContent: {
-    flexGrow: 1,
     paddingBottom: 10,
   },
   iconSection: {
@@ -301,7 +299,7 @@ const styles = StyleSheet.create({
   detailsCard: {
     borderRadius: 16,
     padding: 16,
-    marginBottom: 15,
+    marginBottom: 5,
   },
   detailRow: {
     flexDirection: 'row',

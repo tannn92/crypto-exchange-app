@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   TouchableOpacity,
   ScrollView,
   Platform,
@@ -19,7 +18,7 @@ const CoinDetailsScreen = ({ navigation, route }) => {
 
   if (!coin) {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
+      <View style={[styles.container, { backgroundColor: theme.backgroundInput }]}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
@@ -28,7 +27,7 @@ const CoinDetailsScreen = ({ navigation, route }) => {
         <View style={[styles.content, { justifyContent: 'center', alignItems: 'center' }]}>
           <Text style={[styles.errorText, { color: theme.textPrimary }]}>No coin selected</Text>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
@@ -328,12 +327,26 @@ const CoinDetailsScreen = ({ navigation, route }) => {
   const handleDeposit = () => {
     navigation.navigate('DepositFlow', {
       screen: 'Deposit',
-      params: { coin },
+      params: { 
+        coin: {
+          id: coin.id,
+          symbol: coin.symbol,
+          name: coin.name,
+          price: coin.price
+        }
+      },
     });
   };
 
   const handleWithdraw = () => {
-    navigation.navigate('WithdrawMethodSelectionModal', { coin });
+    navigation.navigate('WithdrawMethodSelectionModal', { 
+      coin: {
+        id: coin.id,
+        symbol: coin.symbol,
+        name: coin.name,
+        price: coin.price
+      }
+    });
   };
 
   const handleConvert = () => {
@@ -370,14 +383,121 @@ const CoinDetailsScreen = ({ navigation, route }) => {
     return `${sign}${formattedAmount} ${currency}`;
   };
 
+  const handleTransactionPress = (transaction) => {
+    console.log('Transaction pressed:', transaction);
+    
+    // Ensure we have valid coin data
+    if (!coin || !coin.id) {
+      console.error('Invalid coin data for transaction navigation:', coin);
+      return;
+    }
+    
+    // Navigate to appropriate completed screen based on transaction type
+    switch (transaction.type) {
+      case 'deposit':
+        navigation.navigate('DepositFlow', {
+          screen: 'DepositCompleted',
+          params: {
+            coin,
+            cryptoAmount: transaction.amount,
+            network: 'Ethereum',
+            depositAddress: '0x3ccc...s24145',
+            transactionHash: '2d801...0735fn',
+            transactionId: `#R${transaction.id.padStart(9, '0')}121`,
+            date: transaction.date,
+            fromHistory: true,
+            fromCoinDetails: true
+          }
+        });
+        break;
+      case 'withdraw':
+        navigation.navigate('WithdrawFlow', {
+          screen: 'WithdrawSuccess',
+          params: { 
+            coin,
+            cryptoAmount: transaction.amount,
+            networkFee: transaction.amount * 0.001, // Small fee like HistoryScreen
+            recipientAddress: '0x742d35Cc6608C673B8cbE4f4E2E4b0b8f90D8F90',
+            transactionId: `#R${transaction.id.padStart(9, '0')}121`,
+            date: transaction.date,
+            fromHistory: true,
+            fromCoinDetails: true
+          }
+        });
+        break;
+      case 'convert':
+        navigation.navigate('ConvertFlow', {
+          screen: 'ConvertSuccess',
+          params: {
+            sourceCoin: transaction.fromCurrency ? { symbol: transaction.fromCurrency, id: transaction.fromCurrency.toLowerCase() } : coin,
+            destinationCoin: coin,
+            sourceAmount: transaction.amount,
+            destinationAmount: transaction.amount * 50000, // Fake conversion rate like HistoryScreen
+            exchangeRate: 50000,
+            fee: transaction.amount * 0.001, // Small fee like HistoryScreen
+            finalAmount: transaction.amount * 50000,
+            transactionId: `#R${transaction.id.padStart(9, '0')}121`,
+            transactionTime: transaction.date,
+            fromHistory: true,
+            fromCoinDetails: true
+          }
+        });
+        break;
+      case 'buy':
+        navigation.navigate('BuyFlow', {
+          screen: 'PaymentCompleted',
+          params: {
+            coin,
+            cryptoAmount: transaction.amount,
+            vndAmount: transaction.amount * 25000, // Fake VND amount like HistoryScreen
+            exchangeRate: 25000,
+            paymentMethod: 'Bank Transfer',
+            transactionId: `#R${transaction.id.padStart(9, '0')}121`,
+            fromHistory: true,
+            fromCoinDetails: true
+          }
+        });
+        break;
+      case 'sell':
+        navigation.navigate('SellFlow', {
+          screen: 'SellCompleted',
+          params: {
+            coin,
+            cryptoAmount: transaction.amount,
+            vndAmount: transaction.amount * 25000, // Fake VND amount like HistoryScreen
+            exchangeRate: 25000,
+            receiveMethod: 'Bank Transfer',
+            accountName: 'John Doe',
+            accountNumber: '1234567890',
+            transactionId: `#R${transaction.id.padStart(9, '0')}121`,
+            fromHistory: true,
+            fromCoinDetails: true
+          }
+        });
+        break;
+      default:
+        console.log('Unknown transaction type:', transaction.type);
+    }
+  };
+
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
+    <View style={[styles.container, { backgroundColor: theme.backgroundInput }]}>
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Top Section - Seamless White Background including header */}
         <View style={[styles.topSection, { backgroundColor: theme.backgroundInput }]}>
           {/* Header with Back Button */}
           <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <TouchableOpacity
+              onPress={() => {
+                console.log('Back button touched - CoinDetailsScreen');
+                navigation.goBack();
+              }}
+              style={styles.backButton}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              activeOpacity={0.7}
+              accessible={true}
+              accessibilityLabel="Go back"
+            >
               <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
             </TouchableOpacity>
           </View>
@@ -451,7 +571,14 @@ const CoinDetailsScreen = ({ navigation, route }) => {
 
           <View style={[styles.transactionsList, { backgroundColor: theme.backgroundInput }]}>
             {coinTransactions.map((transaction) => (
-              <View key={transaction.id} style={styles.transactionItem}>
+              <TouchableOpacity
+                key={transaction.id}
+                style={styles.transactionItem}
+                onPress={() => handleTransactionPress(transaction)}
+                activeOpacity={0.7}
+                accessible={true}
+                accessibilityLabel={`${transaction.description} transaction`}
+              >
                 <View style={styles.transactionLeft}>
                   <View style={[
                     styles.transactionIcon,
@@ -481,12 +608,12 @@ const CoinDetailsScreen = ({ navigation, route }) => {
                     {formatAmount(transaction.amount, transaction.currency, transaction.isPositive)}
                   </Text>
                 </View>
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -498,11 +625,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingTop: Platform.OS === 'android' ? 25 : 0,
-    paddingBottom: 0,
+    paddingVertical: 15,
   },
   backButton: {
-    padding: 5,
+    width: 60,
+    alignItems: 'flex-start',
+    zIndex: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
   },
   content: {
     flex: 1,

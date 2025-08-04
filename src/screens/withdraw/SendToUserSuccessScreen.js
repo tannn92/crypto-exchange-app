@@ -35,6 +35,7 @@ const SendToUserSuccessScreen = ({ navigation, route }) => {
         <TouchableOpacity
           onPress={() => navigation.navigate('MainTabs')}
           style={styles.backButton}
+          testID="send-user-success-back-button"
         >
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
         </TouchableOpacity>
@@ -130,12 +131,14 @@ const SendToUserSuccessScreen = ({ navigation, route }) => {
         <TouchableOpacity
           style={[styles.saveButton, { backgroundColor: theme.backgroundInput }]}
           onPress={handleGoToHomepage}
+          testID="send-user-homepage-button"
         >
           <Text style={[styles.saveButtonText, { color: theme.textPrimary }]}>Homepage</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.balanceButton, { backgroundColor: '#FF6B35' }]}
           onPress={handleViewBalance}
+          testID="send-user-view-balance-button"
         >
           <Text style={styles.balanceButtonText}>View balance</Text>
         </TouchableOpacity>

@@ -23,10 +23,45 @@ const ConvertSuccessScreen = ({ navigation, route }) => {
     finalAmount,
     transactionId,
     transactionTime,
-  } = route.params;
+    fromHistory = false,
+    fromNotification = false,
+    fromCoinDetails = false,
+  } = route.params || {};
+
+  // Safety check for required parameters
+  if (!sourceCoin || !destinationCoin) {
+    return (
+      <View style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.content, { justifyContent: 'center', alignItems: 'center' }]}>
+          <Text style={[styles.errorText, { color: theme.textPrimary }]}>Invalid conversion data</Text>
+        </View>
+      </View>
+    );
+  }
 
   const formatNumber = (num) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
+  const handleBack = () => {
+    if (fromNotification) {
+      // Navigate back to Notification screen
+      navigation.navigate('Notification');
+    } else if (fromCoinDetails) {
+      // Navigate back to CoinDetails screen
+      navigation.goBack();
+    } else if (fromHistory) {
+      // Navigate back to History screen
+      navigation.navigate('MainTabs', { screen: 'History' });
+    } else {
+      // Default behavior - go to convert flow
+      navigation.navigate('ConvertFlow', { screen: 'Convert' });
+    }
   };
 
   return (
@@ -34,12 +69,20 @@ const ConvertSuccessScreen = ({ navigation, route }) => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('ConvertFlow', { screen: 'Convert' })}
+          onPress={() => {
+            console.log('Back button touched - ConvertSuccessScreen');
+            handleBack();
+          }}
           style={styles.backButton}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          activeOpacity={0.7}
+          accessible={true}
+          accessibilityLabel="Go back"
+          testID="convert-success-back-button"
         >
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
         </TouchableOpacity>
+        <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>Convert Success</Text>
         <View style={styles.headerRight} />
       </View>
 
@@ -156,23 +199,25 @@ const ConvertSuccessScreen = ({ navigation, route }) => {
             </Text>
           </View>
         </View>
-      </ScrollView>
 
-      {/* Action Buttons */}
-      <View style={styles.actionButtons}>
-        <TouchableOpacity
-          style={[styles.balanceButton, { backgroundColor: theme.backgroundInput }]}
-          onPress={() => navigation.navigate('MainTabs', { screen: 'Assets' })}
-        >
-          <Text style={[styles.balanceButtonText, { color: theme.textPrimary }]}>View Balance</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.convertMoreButton, { backgroundColor: '#FF6B35' }]}
-          onPress={() => navigation.navigate('ConvertFlow', { screen: 'Convert' })}
-        >
-          <Text style={styles.convertMoreButtonText}>Convert more</Text>
-        </TouchableOpacity>
-      </View>
+        {/* Action Buttons */}
+        <View style={styles.actionButtons}>
+          <TouchableOpacity
+            style={[styles.balanceButton, { backgroundColor: theme.backgroundInput }]}
+            onPress={() => navigation.navigate('MainTabs', { screen: 'Assets' })}
+            testID="convert-view-balance-button"
+          >
+            <Text style={[styles.balanceButtonText, { color: theme.textPrimary }]}>View Balance</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.convertMoreButton, { backgroundColor: '#FF6B35' }]}
+            onPress={() => navigation.navigate('ConvertFlow', { screen: 'Convert' })}
+            testID="convert-more-button"
+          >
+            <Text style={styles.convertMoreButtonText}>Convert more</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -189,14 +234,32 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   backButton: {
-    padding: 5,
+    width: 60,
+    alignItems: 'flex-start',
+    zIndex: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    textAlign: 'center',
+    zIndex: 1,
   },
   headerRight: {
-    width: 24,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   content: {
     flex: 1,
     paddingHorizontal: 20,
+  },
+  errorText: {
+    fontSize: 16,
+    textAlign: 'center',
   },
   iconSection: {
     alignItems: 'center',
@@ -213,6 +276,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'white',
     zIndex: 2,
     shadowColor: '#000',
     shadowOffset: {
@@ -316,7 +380,7 @@ const styles = StyleSheet.create({
   },
   actionButtons: {
     flexDirection: 'row',
-    paddingHorizontal: 20,
+    paddingHorizontal: 0,
     paddingBottom: 30,
     gap: 15,
   },

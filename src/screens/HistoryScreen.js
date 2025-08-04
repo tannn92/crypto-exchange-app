@@ -174,7 +174,7 @@ const HistoryScreen = ({ navigation, route }) => {
     Convert: [
       {
         id: '13',
-        type: 'Convert BTC → VNF',
+        type: 'Convert BTC → USDT',
         amount: '-0.03100025 BTC',
         date: 'Yesterday - 09:10',
         status: 'Success',
@@ -183,7 +183,7 @@ const HistoryScreen = ({ navigation, route }) => {
       },
       {
         id: '14',
-        type: 'Convert BTC → VNF',
+        type: 'Convert BTC → USDT',
         amount: '-0.03100025 BTC',
         date: '3/2/2025 - 10:10',
         status: 'Success',
@@ -192,7 +192,7 @@ const HistoryScreen = ({ navigation, route }) => {
       },
       {
         id: '15',
-        type: 'Convert BTC → VNF',
+        type: 'Convert BTC → USDT',
         amount: '-0.03100025 BTC',
         date: '3/2/2025 - 10:10',
         status: 'Success',
@@ -201,7 +201,7 @@ const HistoryScreen = ({ navigation, route }) => {
       },
       {
         id: '16',
-        type: 'Convert BTC → VNF',
+        type: 'Convert BTC → USDT',
         amount: '-0.03100025 BTC',
         date: '3/2/2025 - 10:10',
         status: 'Success',
@@ -327,8 +327,119 @@ const HistoryScreen = ({ navigation, route }) => {
     return '#F5F5F5';
   };
 
+  // Helper function to extract coin from transaction type
+  const extractCoinFromType = (type) => {
+    const match = type.match(/(BTC|ETH|USDT|XRP|BNB|SOL|VNF)/);
+    return match ? match[1] : 'USDT';
+  };
+
+  // Navigation handler for transaction items
+  const handleTransactionPress = (transaction) => {
+    const coinSymbol = extractCoinFromType(transaction.type);
+    const coinData = getCoinData(coinSymbol);
+    
+    // Generate fake completion data based on transaction
+    const completionData = {
+      coin: coinData,
+      amount: transaction.amount.replace(/[\+\-]/g, ''), // Remove +/- signs
+      date: transaction.date,
+      transactionId: `#R${transaction.id.padStart(9, '0')}121`,
+      status: transaction.status,
+    };
+
+    if (transaction.type.includes('Buy')) {
+      navigation.navigate('BuyFlow', {
+        screen: 'PaymentCompleted',
+        params: {
+          ...completionData,
+          cryptoAmount: parseFloat(completionData.amount),
+          vndAmount: parseFloat(completionData.amount) * 25000, // Fake VND amount
+          exchangeRate: 25000,
+          paymentMethod: 'Bank Transfer',
+          fromHistory: true,
+        }
+      });
+    } else if (transaction.type.includes('Sell')) {
+      navigation.navigate('SellFlow', {
+        screen: 'SellCompleted',
+        params: {
+          ...completionData,
+          cryptoAmount: parseFloat(completionData.amount),
+          vndAmount: parseFloat(completionData.amount) * 25000, // Fake VND amount
+          exchangeRate: 25000,
+          receiveMethod: 'Bank Transfer',
+          accountName: 'John Doe',
+          accountNumber: '1234567890',
+          fromHistory: true,
+        }
+      });
+    } else if (transaction.type.includes('Convert')) {
+      const [fromCoin, toCoin] = transaction.type.includes('→') 
+        ? transaction.type.split('→').map(s => s.replace('Convert ', '').trim())
+        : ['BTC', 'USDT'];
+      
+      navigation.navigate('ConvertFlow', {
+        screen: 'ConvertSuccess',
+        params: {
+          sourceCoin: getCoinData(fromCoin),
+          destinationCoin: getCoinData(toCoin),
+          sourceAmount: parseFloat(completionData.amount),
+          destinationAmount: parseFloat(completionData.amount) * 50000, // Fake conversion
+          exchangeRate: 50000,
+          fee: parseFloat(completionData.amount) * 0.001,
+          transactionId: completionData.transactionId,
+          transactionTime: completionData.date,
+          fromHistory: true,
+        }
+      });
+    } else if (transaction.type.includes('Deposit')) {
+      // Navigate to dedicated DepositCompletedScreen
+      navigation.navigate('DepositFlow', {
+        screen: 'DepositCompleted',
+        params: {
+          ...completionData,
+          cryptoAmount: parseFloat(completionData.amount),
+          network: 'Ethereum',
+          depositAddress: '0x3ccc...s24145',
+          transactionHash: '2d801...0735fn',
+          fromHistory: true,
+        }
+      });
+    } else if (transaction.type.includes('Withdraw') || transaction.type.includes('Send')) {
+      navigation.navigate('WithdrawFlow', {
+        screen: 'WithdrawSuccess',
+        params: {
+          ...completionData,
+          cryptoAmount: parseFloat(completionData.amount),
+          networkFee: parseFloat(completionData.amount) * 0.001,
+          recipientAddress: '0x742d35Cc6608C673B8cbE4f4E2E4b0b8f90D8F90',
+          network: 'Ethereum',
+          fromHistory: true,
+        }
+      });
+    }
+  };
+
+  // Helper function to get coin data
+  const getCoinData = (symbol) => {
+    const coinMap = {
+      'BTC': { id: 'btc', symbol: 'BTC', name: 'Bitcoin', price: 95000 },
+      'ETH': { id: 'eth', symbol: 'ETH', name: 'Ethereum', price: 3500 },
+      'USDT': { id: 'usdt', symbol: 'USDT', name: 'Tether', price: 1 },
+      'XRP': { id: 'xrp', symbol: 'XRP', name: 'XRP', price: 2.5 },
+      'BNB': { id: 'bnb', symbol: 'BNB', name: 'BNB', price: 650 },
+      'SOL': { id: 'sol', symbol: 'SOL', name: 'Solana', price: 200 },
+      'VNF': { id: 'vnf', symbol: 'VNF', name: 'VNF Token', price: 0.5 },
+    };
+    return coinMap[symbol] || coinMap['USDT'];
+  };
+
   const renderTransactionItem = ({ item }) => (
-    <View style={styles.transactionItem}>
+    <TouchableOpacity 
+      style={styles.transactionItem}
+      onPress={() => handleTransactionPress(item)}
+      activeOpacity={0.7}
+    >
       <View style={styles.transactionLeft}>
         <View style={[
           styles.transactionIcon,
@@ -357,8 +468,9 @@ const HistoryScreen = ({ navigation, route }) => {
         ]}>
           {item.amount}
         </Text>
+        <Ionicons name="chevron-forward" size={20} color={theme.textSecondary} style={styles.chevronIcon} />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   const renderSection = ({ item }) => {
@@ -538,11 +650,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   transactionRight: {
-    alignItems: 'flex-end',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   transactionAmount: {
     fontSize: 16,
     fontWeight: '600',
+  },
+  chevronIcon: {
+    marginLeft: 4,
   },
 });
 

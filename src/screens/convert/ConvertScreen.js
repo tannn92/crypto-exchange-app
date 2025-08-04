@@ -194,8 +194,15 @@ const ConvertScreen = ({ navigation, route }) => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            console.log('Back button touched - ConvertScreen');
+            navigation.goBack();
+          }}
           style={styles.backButton}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          activeOpacity={0.7}
+          accessible={true}
+          accessibilityLabel="Go back"
         >
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
         </TouchableOpacity>
@@ -203,10 +210,17 @@ const ConvertScreen = ({ navigation, route }) => {
         <View style={styles.headerRight}>
           <TouchableOpacity
             style={styles.headerIcon}
-            onPress={() => navigation.getParent()?.navigate('MainTabs', {
-              screen: 'History',
-              params: { selectedTab: 'Convert' },
-            })}
+            onPress={() => {
+              console.log('History button touched - ConvertScreen');
+              navigation.getParent()?.navigate('MainTabs', {
+                screen: 'History',
+                params: { selectedTab: 'Convert' },
+              });
+            }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            activeOpacity={0.7}
+            accessible={true}
+            accessibilityLabel="View transaction history"
           >
             <Ionicons name="time-outline" size={24} color={theme.textSecondary} />
           </TouchableOpacity>
@@ -220,6 +234,7 @@ const ConvertScreen = ({ navigation, route }) => {
             <TouchableOpacity
               style={styles.currencySelector}
               onPress={handleSourceCoinSelect}
+              testID="convert-source-coin-selector"
             >
               <CoinIcon coinId={sourceCoin.id} size={24} />
               <View style={[styles.currencyLabel, { backgroundColor: theme.backgroundForm }]}>
@@ -250,10 +265,12 @@ const ConvertScreen = ({ navigation, route }) => {
               placeholder="0.00"
               placeholderTextColor={theme.textSecondary}
               keyboardType="numeric"
+              testID="convert-source-amount-input"
             />
             <TouchableOpacity
               style={[styles.maxButton, { backgroundColor: theme.primary }]}
               onPress={handleMaxPress}
+              testID="convert-max-button"
             >
               <Text style={styles.maxButtonText}>MAX</Text>
             </TouchableOpacity>
@@ -265,6 +282,7 @@ const ConvertScreen = ({ navigation, route }) => {
           <TouchableOpacity
             style={[styles.swapButton, { backgroundColor: '#4285F4' }]}
             onPress={handleSwapCurrencies}
+            testID="convert-swap-button"
           >
             <Ionicons name="swap-vertical" size={20} color="white" />
           </TouchableOpacity>
@@ -276,6 +294,7 @@ const ConvertScreen = ({ navigation, route }) => {
             <TouchableOpacity
               style={styles.currencySelector}
               onPress={handleDestinationCoinSelect}
+              testID="convert-destination-coin-selector"
             >
               <CoinIcon coinId={destinationCoin.id} size={24} />
               <View style={[styles.currencyLabel, { backgroundColor: theme.backgroundForm }]}>
@@ -294,6 +313,7 @@ const ConvertScreen = ({ navigation, route }) => {
               placeholder="0.00"
               placeholderTextColor={theme.textSecondary}
               editable={false}
+              testID="convert-destination-amount-display"
             />
           </View>
 
@@ -354,6 +374,7 @@ const ConvertScreen = ({ navigation, route }) => {
           ]}
           onPress={handlePreviewConversion}
           disabled={!isPreviewEnabled}
+          testID="convert-preview-button"
         >
           <Text style={styles.previewButtonText}>Preview conversion</Text>
         </TouchableOpacity>
@@ -372,10 +393,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    paddingTop: Platform.OS === 'android' ? 25 : 0,
   },
   backButton: {
-    padding: 5,
+    width: 60,
+    alignItems: 'flex-start',
+    zIndex: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
   },
   headerTitle: {
     fontSize: 20,
@@ -384,7 +408,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     textAlign: 'center',
-    zIndex: -1,
+    zIndex: 1,
   },
   headerRight: {
     flexDirection: 'row',
@@ -393,6 +417,7 @@ const styles = StyleSheet.create({
   headerIcon: {
     marginLeft: 15,
     padding: 5,
+    zIndex: 10,
   },
   content: {
     flex: 1,

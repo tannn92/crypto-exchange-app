@@ -5,6 +5,7 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
@@ -78,9 +79,14 @@ const SellConfirmationScreen = ({ navigation, route }) => {
           <View style={styles.headerRight} />
         </View>
 
-        <View style={styles.content}>
-          {/* Coin Icon and Amount */}
-          <View style={styles.amountSection}>
+        <ScrollView 
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.content}>
+            {/* Coin Icon and Amount */}
+            <View style={styles.amountSection}>
             <View style={styles.coinIconContainer}>
               <CoinIcon coinId={coin.id} size={60} />
             </View>
@@ -167,7 +173,8 @@ const SellConfirmationScreen = ({ navigation, route }) => {
           >
             <Text style={styles.confirmButtonText}>Confirm</Text>
           </TouchableOpacity>
-        </View>
+          </View>
+        </ScrollView>
     </SafeAreaView>
   );
 };
@@ -175,6 +182,16 @@ const SellConfirmationScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
   },
   header: {
     flexDirection: 'row',
@@ -185,19 +202,20 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   backButton: {
-    width: 40,
+    width: 60,
     alignItems: 'flex-start',
     zIndex: 10,
     paddingVertical: 5,
     paddingHorizontal: 5,
   },
   headerTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '600',
     position: 'absolute',
     left: 0,
     right: 0,
     textAlign: 'center',
+    zIndex: 1,
   },
   headerRight: {
     width: 40,

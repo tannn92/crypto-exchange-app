@@ -159,8 +159,15 @@ const WithdrawScreen = ({ navigation, route }) => {
           {/* Header */}
           <View style={styles.header}>
             <TouchableOpacity
-              onPress={() => navigation.goBack()}
+              onPress={() => {
+                console.log('Back button touched - WithdrawScreen');
+                navigation.goBack();
+              }}
               style={styles.backButton}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              activeOpacity={0.7}
+              accessible={true}
+              accessibilityLabel="Go back"
             >
               <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
             </TouchableOpacity>
@@ -170,10 +177,17 @@ const WithdrawScreen = ({ navigation, route }) => {
             <View style={styles.headerRight}>
               <TouchableOpacity
                 style={styles.headerIcon}
-                onPress={() => navigation.getParent()?.push('MainTabs', {
-                  screen: 'History',
-                  params: { selectedTab: 'Withdrawal' },
-                })}
+                onPress={() => {
+                  console.log('History button touched - WithdrawScreen');
+                  navigation.getParent()?.navigate('MainTabs', {
+                    screen: 'History',
+                    params: { selectedTab: 'Withdrawal' },
+                  });
+                }}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                activeOpacity={0.7}
+                accessible={true}
+                accessibilityLabel="View transaction history"
               >
                 <Ionicons name="time-outline" size={24} color={theme.textSecondary} />
               </TouchableOpacity>
@@ -202,6 +216,7 @@ const WithdrawScreen = ({ navigation, route }) => {
                   onChangeText={setWithdrawAddress}
                   placeholder="Long press to paste"
                   placeholderTextColor={theme.textSecondary}
+                  testID="withdraw-address-input"
                   multiline={true}
                   numberOfLines={withdrawAddress ? 2 : 1}
                   textAlignVertical="top"
@@ -252,12 +267,13 @@ const WithdrawScreen = ({ navigation, route }) => {
                 keyboardType="decimal-pad"
                 placeholder="0.00"
                 placeholderTextColor={theme.textSecondary}
+                testID="withdraw-amount-input"
               />
-              <TouchableOpacity onPress={handleMaxPress} style={styles.maxButton}>
+              <TouchableOpacity onPress={handleMaxPress} style={styles.maxButton} testID="withdraw-max-button">
                 <Text style={[styles.maxText, { color: theme.primary }]}>Max</Text>
               </TouchableOpacity>
               <View style={[styles.divider, { backgroundColor: theme.border }]} />
-              <TouchableOpacity style={styles.coinSelector} onPress={handleCoinSelect}>
+              <TouchableOpacity style={styles.coinSelector} onPress={handleCoinSelect} testID="withdraw-coin-selector">
                 <CoinIcon coinId={selectedCoin?.id || 'usdt'} size={24} />
                 <Text style={[styles.coinSymbol, { color: theme.textPrimary }]}>
                   {selectedCoin?.symbol || 'USDT'}
@@ -337,6 +353,7 @@ const WithdrawScreen = ({ navigation, route }) => {
               ]}
               onPress={handleSubmit}
               disabled={!isSubmitEnabled}
+              testID="withdraw-submit-button"
             >
               <Text style={styles.submitButtonText}>Submit</Text>
             </TouchableOpacity>
@@ -447,10 +464,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    paddingTop: Platform.OS === 'android' ? 25 : 0,
   },
   backButton: {
-    padding: 5,
+    width: 60,
+    alignItems: 'flex-start',
+    zIndex: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
   },
   headerTitle: {
     fontSize: 20,
@@ -459,7 +479,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     textAlign: 'center',
-    zIndex: -1,
+    zIndex: 1,
   },
   headerRight: {
     flexDirection: 'row',
@@ -468,6 +488,7 @@ const styles = StyleSheet.create({
   headerIcon: {
     marginLeft: 15,
     padding: 5,
+    zIndex: 10,
   },
   keyboardView: {
     flex: 1,

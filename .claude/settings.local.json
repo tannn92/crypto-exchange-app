@@ -40,7 +40,22 @@
       "Bash(npm run lint:*)",
       "Bash(npm run:*)",
       "Bash(sed:*)",
-      "Bash(npx detox:*)"
+      "Bash(npx detox:*)",
+      "Bash(brew tap:*)",
+      "Bash(HOMEBREW_NO_AUTO_UPDATE=1 brew tap wix/brew)",
+      "Bash(HOMEBREW_NO_AUTO_UPDATE=1 brew install applesimutils)",
+      "Bash(applesimutils:*)",
+      "Bash(ruby --version)",
+      "Bash(gem list)",
+      "Bash(gem update:*)",
+      "Bash(pod:*)",
+      "Bash(gem uninstall:*)",
+      "Bash(gem install:*)",
+      "Bash(rbenv global:*)",
+      "Bash(sudo gem install:*)",
+      "Bash(xcrun simctl list:*)",
+      "Bash(npx expo run:ios --configuration Debug)",
+      "Bash(xcrun simctl create:*)"
     ],
     "deny": []
   }

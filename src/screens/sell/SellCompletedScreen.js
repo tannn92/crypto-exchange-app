@@ -5,13 +5,30 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 
 const SellCompletedScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
-  const { coin, cryptoAmount, vndAmount } = route.params;
+  const { coin, cryptoAmount, vndAmount, fromHistory = false, fromNotification = false, fromCoinDetails = false } = route.params || {};
+
+  // Safety check for required parameters
+  if (!coin || !coin.id) {
+    return (
+      <View style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.content, { justifyContent: 'center', alignItems: 'center' }]}>
+          <Text style={[styles.errorText, { color: theme.textPrimary }]}>Invalid sell data</Text>
+        </View>
+      </View>
+    );
+  }
   const [selectedFeedback, setSelectedFeedback] = useState(null);
 
   const formatNumber = (num) => {
@@ -20,6 +37,22 @@ const SellCompletedScreen = ({ navigation, route }) => {
 
   const handleViewBalance = () => {
     navigation.navigate('MainTabs', { screen: 'Assets' });
+  };
+
+  const handleBack = () => {
+    if (fromNotification) {
+      // Navigate back to Notification screen
+      navigation.navigate('Notification');
+    } else if (fromCoinDetails) {
+      // Navigate back to CoinDetails screen
+      navigation.goBack();
+    } else if (fromHistory) {
+      // Navigate back to History screen
+      navigation.navigate('MainTabs', { screen: 'History' });
+    } else {
+      // Default behavior - go to sell more
+      handleSellMore();
+    }
   };
 
   const handleSellMore = () => {
@@ -31,119 +64,138 @@ const SellCompletedScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleSellMore} style={styles.backButton}>
+        <TouchableOpacity
+          onPress={() => {
+            console.log('Back button touched - SellCompletedScreen');
+            handleBack();
+          }}
+          style={styles.backButton}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          activeOpacity={0.7}
+          accessible={true}
+          accessibilityLabel="Go back"
+          testID="sell-completed-back-button"
+        >
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
         </TouchableOpacity>
         <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>Sell Completed</Text>
         <View style={styles.headerRight} />
       </View>
 
-      <View style={styles.content}>
-        {/* Success Icon */}
-        <View style={styles.successSection}>
-          <View style={styles.successIcon}>
-            <View style={styles.iconBackground}>
-              <Ionicons name="checkmark" size={40} color="white" />
-            </View>
-            {/* Decorative stars */}
-            <View style={[styles.star, styles.star1]}>
-              <Text style={styles.starText}>✦</Text>
-            </View>
-            <View style={[styles.star, styles.star2]}>
-              <Text style={styles.starText}>✦</Text>
+      <ScrollView 
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.content}>
+          {/* Success Icon */}
+          <View style={styles.successSection}>
+            <View style={styles.successIcon}>
+              <View style={styles.iconBackground}>
+                <Ionicons name="checkmark" size={40} color="white" />
+              </View>
+              {/* Decorative stars */}
+              <View style={[styles.star, styles.star1]}>
+                <Text style={styles.starText}>✦</Text>
+              </View>
+              <View style={[styles.star, styles.star2]}>
+                <Text style={styles.starText}>✦</Text>
+              </View>
             </View>
           </View>
-        </View>
 
-        {/* Transaction Details */}
-        <View style={styles.transactionSection}>
-          <Text style={[styles.transactionType, { color: theme.textSecondary }]}>
-            Sell {coin.symbol} and receive to Bank account
-          </Text>
-          <Text style={[styles.cryptoAmount, { color: theme.textPrimary }]}>
-            {cryptoAmount} {coin.symbol}
-          </Text>
-          <View style={[styles.statusLabel, { backgroundColor: '#E8F5E8' }]}>
-            <Text style={[styles.statusText, { color: '#4CAF50' }]}>
-              Success
+          {/* Transaction Details */}
+          <View style={styles.transactionSection}>
+            <Text style={[styles.transactionType, { color: theme.textSecondary }]}>
+              Sell {coin.symbol} and receive to Bank account
+            </Text>
+            <Text style={[styles.cryptoAmount, { color: theme.textPrimary }]}>
+              {cryptoAmount} {coin.symbol}
+            </Text>
+            <View style={[styles.statusLabel, { backgroundColor: '#E8F5E8' }]}>
+              <Text style={[styles.statusText, { color: '#4CAF50' }]}>
+                Success
+              </Text>
+            </View>
+          </View>
+
+          {/* Success Message */}
+          <View style={styles.messageSection}>
+            <Text style={[styles.successMessage, { color: theme.textSecondary }]}>
+              You've successfully sold {cryptoAmount} {coin.symbol} and received {formatNumber(Math.round(vndAmount))} VND to your bank account
             </Text>
           </View>
-        </View>
 
-        {/* Success Message */}
-        <View style={styles.messageSection}>
-          <Text style={[styles.successMessage, { color: theme.textSecondary }]}>
-            You've successfully sold {cryptoAmount} {coin.symbol} and received {formatNumber(Math.round(vndAmount))} VND to your bank account
-          </Text>
-        </View>
+          {/* Feedback Section */}
+          <View style={[styles.feedbackSection, { borderColor: theme.border }]}>
+            <Text style={[styles.feedbackTitle, { color: theme.textPrimary }]}>
+              How was the experience?
+            </Text>
 
-        {/* Feedback Section */}
-        <View style={[styles.feedbackSection, { borderColor: theme.border }]}>
-          <Text style={[styles.feedbackTitle, { color: theme.textPrimary }]}>
-            How was the experience?
-          </Text>
+            <View style={styles.feedbackButtons}>
+              <TouchableOpacity
+                style={styles.feedbackButton}
+                onPress={() => setSelectedFeedback('good')}
+              >
+                <View style={[
+                  styles.emojiContainer,
+                  {
+                    backgroundColor: selectedFeedback === 'good' ? '#4CAF50' : theme.backgroundSecondary,
+                  },
+                ]}>
+                  <Text style={styles.emoji}>😊</Text>
+                </View>
+                <Text style={[
+                  styles.feedbackLabel,
+                  {
+                    color: selectedFeedback === 'good' ? '#4CAF50' : theme.textPrimary,
+                    fontWeight: selectedFeedback === 'good' ? '600' : '500',
+                  },
+                ]}>Good</Text>
+              </TouchableOpacity>
 
-          <View style={styles.feedbackButtons}>
+              <TouchableOpacity
+                style={styles.feedbackButton}
+                onPress={() => setSelectedFeedback('bad')}
+              >
+                <View style={[
+                  styles.emojiContainer,
+                  {
+                    backgroundColor: selectedFeedback === 'bad' ? '#FF5252' : theme.backgroundSecondary,
+                  },
+                ]}>
+                  <Text style={styles.emoji}>😞</Text>
+                </View>
+                <Text style={[
+                  styles.feedbackLabel,
+                  {
+                    color: selectedFeedback === 'bad' ? '#FF5252' : theme.textPrimary,
+                    fontWeight: selectedFeedback === 'bad' ? '600' : '500',
+                  },
+                ]}>Bad</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* Action Buttons */}
+          <View style={styles.actionButtons}>
             <TouchableOpacity
-              style={styles.feedbackButton}
-              onPress={() => setSelectedFeedback('good')}
+              style={[styles.viewBalanceButton, { backgroundColor: theme.backgroundSecondary }]}
+              onPress={handleViewBalance}
+              testID="sell-view-balance-button"
             >
-              <View style={[
-                styles.emojiContainer,
-                {
-                  backgroundColor: selectedFeedback === 'good' ? '#4CAF50' : theme.backgroundSecondary,
-                },
-              ]}>
-                <Text style={styles.emoji}>😊</Text>
-              </View>
-              <Text style={[
-                styles.feedbackLabel,
-                {
-                  color: selectedFeedback === 'good' ? '#4CAF50' : theme.textPrimary,
-                  fontWeight: selectedFeedback === 'good' ? '600' : '500',
-                },
-              ]}>Good</Text>
+              <Text style={[styles.viewBalanceText, { color: theme.textPrimary }]}>View Balance</Text>
             </TouchableOpacity>
-
             <TouchableOpacity
-              style={styles.feedbackButton}
-              onPress={() => setSelectedFeedback('bad')}
+              style={[styles.sellMoreButton, { backgroundColor: '#FF6B35' }]}
+              onPress={handleSellMore}
+              testID="sell-more-button"
             >
-              <View style={[
-                styles.emojiContainer,
-                {
-                  backgroundColor: selectedFeedback === 'bad' ? '#FF5252' : theme.backgroundSecondary,
-                },
-              ]}>
-                <Text style={styles.emoji}>😞</Text>
-              </View>
-              <Text style={[
-                styles.feedbackLabel,
-                {
-                  color: selectedFeedback === 'bad' ? '#FF5252' : theme.textPrimary,
-                  fontWeight: selectedFeedback === 'bad' ? '600' : '500',
-                },
-              ]}>Bad</Text>
+              <Text style={styles.sellMoreText}>Sell more</Text>
             </TouchableOpacity>
           </View>
         </View>
-      </View>
-
-      {/* Action Buttons */}
-      <View style={styles.actionButtons}>
-        <TouchableOpacity
-          style={[styles.viewBalanceButton, { backgroundColor: theme.backgroundSecondary }]}
-          onPress={handleViewBalance}
-        >
-          <Text style={[styles.viewBalanceText, { color: theme.textPrimary }]}>View Balance</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.sellMoreButton, { backgroundColor: '#FF6B35' }]}
-          onPress={handleSellMore}
-        >
-          <Text style={styles.sellMoreText}>Sell more</Text>
-        </TouchableOpacity>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -151,6 +203,12 @@ const SellCompletedScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
   header: {
     flexDirection: 'row',
@@ -160,21 +218,33 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   backButton: {
-    marginRight: 10,
+    width: 60,
+    alignItems: 'flex-start',
+    zIndex: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: '600',
-    flex: 1,
+    position: 'absolute',
+    left: 0,
+    right: 0,
     textAlign: 'center',
+    zIndex: 1,
   },
   headerRight: {
-    width: 24,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   content: {
     flex: 1,
     paddingHorizontal: 20,
     paddingTop: 30,
+  },
+  errorText: {
+    fontSize: 16,
+    textAlign: 'center',
   },
   successSection: {
     alignItems: 'center',
@@ -277,7 +347,7 @@ const styles = StyleSheet.create({
   },
   actionButtons: {
     flexDirection: 'row',
-    paddingHorizontal: 20,
+    paddingHorizontal: 0,
     paddingBottom: 30,
     gap: 15,
   },

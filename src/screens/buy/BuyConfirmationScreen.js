@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   TouchableOpacity,
   Platform,
 } from 'react-native';
@@ -27,13 +26,25 @@ const BuyConfirmationScreen = ({ navigation, route }) => {
   };
 
   const handleCancel = () => {
+    console.log('Back button pressed - BuyConfirmation');
     navigation.goBack();
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
+    <View style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={handleCancel} style={styles.backButton}>
+          <TouchableOpacity
+            onPress={() => {
+              console.log('Back button touched - BuyConfirmation');
+              handleCancel();
+            }}
+            style={styles.backButton}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            activeOpacity={0.7}
+            accessible={true}
+            accessibilityLabel="Go back"
+            testID="back-button"
+          >
             <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
           </TouchableOpacity>
           <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>Confirmation</Text>
@@ -49,7 +60,7 @@ const BuyConfirmationScreen = ({ navigation, route }) => {
             <Text style={[styles.transactionType, { color: theme.textSecondary }]}>
               Buy {coin.symbol} via Bank Transfer
             </Text>
-            <Text style={[styles.cryptoAmount, { color: theme.textPrimary }]}>
+            <Text style={[styles.cryptoAmount, { color: theme.textPrimary }]} testID="crypto-amount-display">
               {cryptoAmount.toFixed(6)} {coin.symbol}
             </Text>
           </View>
@@ -94,7 +105,7 @@ const BuyConfirmationScreen = ({ navigation, route }) => {
 
             <View style={[styles.detailRow, styles.totalRow]}>
               <Text style={[styles.detailLabel, { color: theme.textSecondary }]}>You pay</Text>
-              <Text style={[styles.totalAmount, { color: theme.textPrimary }]}>
+              <Text style={[styles.totalAmount, { color: theme.textPrimary }]} testID="total-amount-display">
                 {formatNumber((vndAmount - 10000).toFixed(0))} VND
               </Text>
             </View>
@@ -110,11 +121,12 @@ const BuyConfirmationScreen = ({ navigation, route }) => {
           <TouchableOpacity
             style={[styles.confirmButton, { backgroundColor: theme.primary }]}
             onPress={handleConfirm}
+            testID="confirm-payment-button"
           >
             <Text style={styles.confirmButtonText}>Confirm</Text>
           </TouchableOpacity>
         </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -128,19 +140,23 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    paddingTop: Platform.OS === 'android' ? 25 : 0,
     position: 'relative',
   },
   backButton: {
-    width: 40,
+    width: 60,
+    alignItems: 'flex-start',
+    zIndex: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
   },
   headerTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '600',
     position: 'absolute',
     left: 0,
     right: 0,
     textAlign: 'center',
+    zIndex: 1,
   },
   headerRight: {
     width: 40,

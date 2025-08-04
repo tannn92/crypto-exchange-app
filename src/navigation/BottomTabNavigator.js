@@ -37,7 +37,7 @@ const BottomTabNavigator = () => {
           backgroundColor: theme.bottomNavBackground,
           borderTopColor: theme.border,
           // Dynamic padding based on gesture navigation
-          paddingBottom: hasGestures ? Math.max(insets.bottom - 5, 8) : 8,
+          paddingBottom: hasGestures ? Math.max(insets.bottom - 5, 8) : 12,
           paddingTop: 8,
           // Dynamic height based on safe areas
           height: tabBarHeight,
