@@ -125,6 +125,7 @@ const SendToUserScreen = ({ navigation, route }) => {
                   onChangeText={setUsername}
                   placeholder="Long press to paste"
                   placeholderTextColor={theme.textSecondary}
+                  testID="username-input"
                 />
                 <TouchableOpacity
                   style={[styles.actionButton, { backgroundColor: theme.backgroundForm }]}
@@ -147,6 +148,7 @@ const SendToUserScreen = ({ navigation, route }) => {
                 keyboardType="decimal-pad"
                 placeholder="0"
                 placeholderTextColor={theme.textSecondary}
+                testID="amount-input"
               />
               <TouchableOpacity onPress={handleMaxPress} style={styles.maxButton}>
                 <Text style={[styles.maxText, { color: theme.primary }]}>Max</Text>
@@ -251,6 +253,7 @@ const SendToUserScreen = ({ navigation, route }) => {
               ]}
               onPress={handleSubmit}
               disabled={!isSubmitEnabled}
+              testID="submit-button"
             >
               <Text style={styles.submitButtonText}>Submit</Text>
             </TouchableOpacity>

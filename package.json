@@ -6,7 +6,12 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "test:e2e:ios": "detox test --configuration ios.sim",
+    "test:e2e:android": "detox test --configuration android.emu",
+    "build:e2e:ios": "detox build --configuration ios.sim",
+    "build:e2e:android": "detox build --configuration android.emu",
+    "test:e2e": "npm run test:e2e:ios"
   },
   "dependencies": {
     "@expo/metro-runtime": "~5.0.4",
@@ -36,7 +41,9 @@
   "devDependencies": {
     "@babel/core": "^7.25.0",
     "@react-native-community/eslint-config": "^3.2.0",
-    "eslint": "^8.57.1"
+    "detox": "^20.40.2",
+    "eslint": "^8.57.1",
+    "jest": "^30.0.5"
   },
   "private": true
 }

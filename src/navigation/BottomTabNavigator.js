@@ -58,9 +58,27 @@ const BottomTabNavigator = () => {
         headerShown: false,
       })}
     >
-      <Tab.Screen name="Home" component={SafeHomeScreen} />
-      <Tab.Screen name="Assets" component={SafeAssetsScreen} />
-      <Tab.Screen name="History" component={SafeHistoryScreen} />
+      <Tab.Screen 
+        name="Home" 
+        component={SafeHomeScreen}
+        options={{
+          tabBarTestID: 'home-tab',
+        }}
+      />
+      <Tab.Screen 
+        name="Assets" 
+        component={SafeAssetsScreen}
+        options={{
+          tabBarTestID: 'assets-tab',
+        }}
+      />
+      <Tab.Screen 
+        name="History" 
+        component={SafeHistoryScreen}
+        options={{
+          tabBarTestID: 'history-tab',
+        }}
+      />
     </Tab.Navigator>
   );
 };

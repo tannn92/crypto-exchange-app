@@ -455,6 +455,7 @@ const HomeScreen = ({ navigation, route }) => {
                 key={action.id}
                 style={styles.actionButton}
                 onPress={() => handleQuickAction(action.id)}
+                testID={`${action.id}-button`}
               >
                 <View style={[styles.actionIconContainer, { backgroundColor: theme.primary }]}>
                   <action.iconComponent size={32} />

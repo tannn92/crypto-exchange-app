@@ -12,12 +12,11 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import CoinIcon from '../../components/CoinIcon';
-import ProcessingGuarantee from '../../components/ProcessingGuarantee';
 
 const SellProcessingScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
   const { coin, cryptoAmount, vndAmount, exchangeRate, receiveMethod, accountName, accountNumber } = route.params;
-  const [timeRemaining, setTimeRemaining] = useState({ minutes: 0, seconds: 10 });
+  const [timeRemaining, setTimeRemaining] = useState({ minutes: 0, seconds: 5 });
   const [currentStep, setCurrentStep] = useState(2); // Start at step 2 (sending money) immediately
   const [hasNavigated, setHasNavigated] = useState(false);
   const rotateAnim = useRef(new Animated.Value(0)).current;
@@ -212,7 +211,7 @@ const SellProcessingScreen = ({ navigation, route }) => {
                 styles.secondConnector,
                 {
                   backgroundColor: currentStep >= 3 ? '#4CAF50' : '#E0E0E0',
-                  height: currentStep === 2 ? 140 : 40, // Longer when processing, shorter when completed
+                  height: currentStep === 2 ? 80 : 40, // Adjusted height after removing ProcessingGuarantee
                 },
               ]} />
             </View>
@@ -225,25 +224,20 @@ const SellProcessingScreen = ({ navigation, route }) => {
                   <Text style={[styles.stepDescription, { color: theme.textSecondary }]}>
                     Processing time
                   </Text>
-                  <View style={styles.processingSection}>
-                    <View style={styles.timerRow}>
-                      <View style={styles.timerContainer}>
-                        <View style={[styles.timerBox, { backgroundColor: '#4285F4' }]}>
-                          <Text style={styles.timerText}>
-                            {timeRemaining.minutes.toString().padStart(2, '0')}
-                          </Text>
-                        </View>
-                        <Text style={[styles.timerColon, { color: theme.textPrimary }]}>:</Text>
-                        <View style={[styles.timerBox, { backgroundColor: '#4285F4' }]}>
-                          <Text style={styles.timerText}>
-                            {timeRemaining.seconds.toString().padStart(2, '0')}
-                          </Text>
-                        </View>
+                  <View style={styles.timerRow}>
+                    <View style={styles.timerContainer}>
+                      <View style={[styles.timerBox, { backgroundColor: '#4285F4' }]}>
+                        <Text style={styles.timerText}>
+                          {timeRemaining.minutes.toString().padStart(2, '0')}
+                        </Text>
+                      </View>
+                      <Text style={[styles.timerColon, { color: theme.textPrimary }]}>:</Text>
+                      <View style={[styles.timerBox, { backgroundColor: '#4285F4' }]}>
+                        <Text style={styles.timerText}>
+                          {timeRemaining.seconds.toString().padStart(2, '0')}
+                        </Text>
                       </View>
                     </View>
-
-                    {/* Processing Guarantee */}
-                    <ProcessingGuarantee />
                   </View>
                 </>
               )}
@@ -476,7 +470,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 5,
   },
   timerContainer: {
     flexDirection: 'row',

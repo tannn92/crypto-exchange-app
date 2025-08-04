@@ -39,7 +39,8 @@
       "Bash(npx eslint:*)",
       "Bash(npm run lint:*)",
       "Bash(npm run:*)",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "Bash(npx detox:*)"
     ],
     "deny": []
   }

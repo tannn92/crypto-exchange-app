@@ -18,7 +18,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import CoinIcon from '../../components/CoinIcon';
 import BankIcon from '../../components/BankIcon';
-import ProcessingGuarantee from '../../components/ProcessingGuarantee';
 
 const PaymentProcessingScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
@@ -414,8 +413,6 @@ const PaymentProcessingScreen = ({ navigation, route }) => {
                       </View>
                     </View>
 
-                    {/* Processing Guarantee */}
-                    <ProcessingGuarantee />
 
                   </View>
                 </View>

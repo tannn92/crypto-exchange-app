@@ -10,7 +10,6 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import CoinIcon from '../../components/CoinIcon';
-import ProcessingGuarantee from '../../components/ProcessingGuarantee';
 
 const BuyConfirmationScreen = ({ navigation, route }) => {
   const { theme, isDarkMode } = useTheme();
@@ -106,8 +105,6 @@ const BuyConfirmationScreen = ({ navigation, route }) => {
             </View>
           </View>
 
-          {/* Processing Guarantee */}
-          <ProcessingGuarantee />
 
           {/* Action Button */}
           <TouchableOpacity
