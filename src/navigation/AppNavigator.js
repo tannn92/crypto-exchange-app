@@ -2,6 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useTheme } from '../context/ThemeContext';
+import ScreenWrapper from '../components/ScreenWrapper';
 
 import BottomTabNavigator from './BottomTabNavigator';
 import CoinSelectionScreen from '../screens/buy/CoinSelectionScreen';
@@ -43,6 +44,25 @@ const DepositStack = createStackNavigator();
 const WithdrawStack = createStackNavigator();
 const SendToUserStack = createStackNavigator();
 
+// Helper function to wrap screens with safe area handling
+const wrapWithSafeArea = (Component, options = {}) => {
+  return (props) => {
+    // Skip wrapper for specific screens if needed
+    if (options.skipSafeArea) {
+      return <Component {...props} />;
+    }
+    
+    // Determine if it's a modal based on screen options
+    const isModal = options.isModal || false;
+    
+    return (
+      <ScreenWrapper route={props.route} isModal={isModal}>
+        <Component {...props} />
+      </ScreenWrapper>
+    );
+  };
+};
+
 // Buy Flow Navigator
 const BuyFlowNavigator = () => {
   return (
@@ -51,12 +71,12 @@ const BuyFlowNavigator = () => {
         headerShown: false,
       }}
     >
-      <BuyStack.Screen name="CoinSelection" component={CoinSelectionScreen} />
-      <BuyStack.Screen name="BuyAmount" component={BuyAmountScreen} />
-      <BuyStack.Screen name="PaymentMethod" component={PaymentMethodScreen} />
-      <BuyStack.Screen name="BuyConfirmation" component={BuyConfirmationScreen} />
-      <BuyStack.Screen name="PaymentProcessing" component={PaymentProcessingScreen} />
-      <BuyStack.Screen name="PaymentCompleted" component={PaymentCompletedScreen} />
+      <BuyStack.Screen name="CoinSelection" component={wrapWithSafeArea(CoinSelectionScreen)} />
+      <BuyStack.Screen name="BuyAmount" component={wrapWithSafeArea(BuyAmountScreen)} />
+      <BuyStack.Screen name="PaymentMethod" component={wrapWithSafeArea(PaymentMethodScreen)} />
+      <BuyStack.Screen name="BuyConfirmation" component={wrapWithSafeArea(BuyConfirmationScreen)} />
+      <BuyStack.Screen name="PaymentProcessing" component={wrapWithSafeArea(PaymentProcessingScreen)} />
+      <BuyStack.Screen name="PaymentCompleted" component={wrapWithSafeArea(PaymentCompletedScreen)} />
     </BuyStack.Navigator>
   );
 };
@@ -69,12 +89,12 @@ const SellFlowNavigator = () => {
         headerShown: false,
       }}
     >
-      <SellStack.Screen name="CoinSelection" component={CoinSelectionScreen} />
-      <SellStack.Screen name="SellAmount" component={SellAmountScreen} />
-      <SellStack.Screen name="SellConfirmation" component={SellConfirmationScreen} />
-      <SellStack.Screen name="SellProcessing" component={SellProcessingScreen} />
-      <SellStack.Screen name="SellCompleted" component={SellCompletedScreen} />
-      <SellStack.Screen name="SellTransactionDetails" component={SellTransactionDetailsScreen} />
+      <SellStack.Screen name="CoinSelection" component={wrapWithSafeArea(CoinSelectionScreen)} />
+      <SellStack.Screen name="SellAmount" component={wrapWithSafeArea(SellAmountScreen)} />
+      <SellStack.Screen name="SellConfirmation" component={wrapWithSafeArea(SellConfirmationScreen)} />
+      <SellStack.Screen name="SellProcessing" component={wrapWithSafeArea(SellProcessingScreen)} />
+      <SellStack.Screen name="SellCompleted" component={wrapWithSafeArea(SellCompletedScreen)} />
+      <SellStack.Screen name="SellTransactionDetails" component={wrapWithSafeArea(SellTransactionDetailsScreen)} />
     </SellStack.Navigator>
   );
 };
@@ -87,10 +107,10 @@ const ConvertFlowNavigator = () => {
         headerShown: false,
       }}
     >
-      <ConvertStack.Screen name="Convert" component={ConvertScreen} />
+      <ConvertStack.Screen name="Convert" component={wrapWithSafeArea(ConvertScreen)} />
       <ConvertStack.Screen
         name="ConvertConfirmation"
-        component={ConvertConfirmationScreen}
+        component={wrapWithSafeArea(ConvertConfirmationScreen, { isModal: true })}
         options={{
           presentation: 'transparentModal',
           headerShown: false,
@@ -99,7 +119,7 @@ const ConvertFlowNavigator = () => {
           cardStyle: { backgroundColor: 'transparent' },
         }}
       />
-      <ConvertStack.Screen name="ConvertSuccess" component={ConvertSuccessScreen} />
+      <ConvertStack.Screen name="ConvertSuccess" component={wrapWithSafeArea(ConvertSuccessScreen)} />
     </ConvertStack.Navigator>
   );
 };
@@ -112,7 +132,7 @@ const DepositFlowNavigator = () => {
         headerShown: false,
       }}
     >
-      <DepositStack.Screen name="Deposit" component={DepositScreen} />
+      <DepositStack.Screen name="Deposit" component={wrapWithSafeArea(DepositScreen)} />
     </DepositStack.Navigator>
   );
 };
@@ -125,10 +145,10 @@ const WithdrawFlowNavigator = () => {
         headerShown: false,
       }}
     >
-      <WithdrawStack.Screen name="Withdraw" component={WithdrawScreen} />
+      <WithdrawStack.Screen name="Withdraw" component={wrapWithSafeArea(WithdrawScreen)} />
       <WithdrawStack.Screen
         name="WithdrawConfirmation"
-        component={WithdrawConfirmationScreen}
+        component={wrapWithSafeArea(WithdrawConfirmationScreen, { isModal: true })}
         options={{
           presentation: 'transparentModal',
           headerShown: false,
@@ -137,7 +157,7 @@ const WithdrawFlowNavigator = () => {
           cardStyle: { backgroundColor: 'transparent' },
         }}
       />
-      <WithdrawStack.Screen name="WithdrawSuccess" component={WithdrawSuccessScreen} />
+      <WithdrawStack.Screen name="WithdrawSuccess" component={wrapWithSafeArea(WithdrawSuccessScreen)} />
     </WithdrawStack.Navigator>
   );
 };
@@ -150,10 +170,10 @@ const SendToUserFlowNavigator = () => {
         headerShown: false,
       }}
     >
-      <SendToUserStack.Screen name="SendToUser" component={SendToUserScreen} />
+      <SendToUserStack.Screen name="SendToUser" component={wrapWithSafeArea(SendToUserScreen)} />
       <SendToUserStack.Screen
         name="SendToUserConfirmation"
-        component={SendToUserConfirmationScreen}
+        component={wrapWithSafeArea(SendToUserConfirmationScreen, { isModal: true })}
         options={{
           presentation: 'transparentModal',
           headerShown: false,
@@ -162,7 +182,7 @@ const SendToUserFlowNavigator = () => {
           cardStyle: { backgroundColor: 'transparent' },
         }}
       />
-      <SendToUserStack.Screen name="SendToUserSuccess" component={SendToUserSuccessScreen} />
+      <SendToUserStack.Screen name="SendToUserSuccess" component={wrapWithSafeArea(SendToUserSuccessScreen)} />
     </SendToUserStack.Navigator>
   );
 };
@@ -178,22 +198,22 @@ const AppNavigator = () => {
           cardStyle: { backgroundColor: theme.background },
         }}
       >
-        <Stack.Screen name="MainTabs" component={BottomTabNavigator} />
+        <Stack.Screen name="MainTabs" component={wrapWithSafeArea(BottomTabNavigator)} />
         <Stack.Screen
           name="BuyFlow"
-          component={BuyFlowNavigator}
+          component={wrapWithSafeArea(BuyFlowNavigator)}
         />
         <Stack.Screen
           name="SellFlow"
-          component={SellFlowNavigator}
+          component={wrapWithSafeArea(SellFlowNavigator)}
         />
         <Stack.Screen
           name="ConvertFlow"
-          component={ConvertFlowNavigator}
+          component={wrapWithSafeArea(ConvertFlowNavigator)}
         />
         <Stack.Screen
           name="CoinSelectionModal"
-          component={CoinSelectionScreen}
+          component={wrapWithSafeArea(CoinSelectionScreen, { isModal: true })}
           options={{
             presentation: 'modal',
             headerShown: false,
@@ -203,14 +223,14 @@ const AppNavigator = () => {
         />
         <Stack.Screen
           name="CoinSelectionScreen"
-          component={CoinSelectionScreen}
+          component={wrapWithSafeArea(CoinSelectionScreen)}
           options={{
             headerShown: false,
           }}
         />
         <Stack.Screen
           name="ReceiveMethodScreen"
-          component={ReceiveMethodScreen}
+          component={wrapWithSafeArea(ReceiveMethodScreen, { isModal: true })}
           options={{
             presentation: 'modal',
             headerShown: false,
@@ -220,19 +240,19 @@ const AppNavigator = () => {
         />
         <Stack.Screen
           name="DepositFlow"
-          component={DepositFlowNavigator}
+          component={wrapWithSafeArea(DepositFlowNavigator)}
         />
         <Stack.Screen
           name="WithdrawFlow"
-          component={WithdrawFlowNavigator}
+          component={wrapWithSafeArea(WithdrawFlowNavigator)}
         />
         <Stack.Screen
           name="SendToUserFlow"
-          component={SendToUserFlowNavigator}
+          component={wrapWithSafeArea(SendToUserFlowNavigator)}
         />
         <Stack.Screen
           name="NetworkSelectionModal"
-          component={NetworkSelectionScreen}
+          component={wrapWithSafeArea(NetworkSelectionScreen, { isModal: true })}
           options={{
             presentation: 'modal',
             headerShown: false,
@@ -242,7 +262,7 @@ const AppNavigator = () => {
         />
         <Stack.Screen
           name="AddressSelectionModal"
-          component={AddressSelectionScreen}
+          component={wrapWithSafeArea(AddressSelectionScreen, { isModal: true })}
           options={{
             presentation: 'modal',
             headerShown: false,
@@ -252,7 +272,7 @@ const AppNavigator = () => {
         />
         <Stack.Screen
           name="WithdrawMethodSelectionModal"
-          component={WithdrawMethodSelectionScreen}
+          component={wrapWithSafeArea(WithdrawMethodSelectionScreen, { isModal: true })}
           options={{
             presentation: 'transparentModal',
             headerShown: false,
@@ -263,7 +283,7 @@ const AppNavigator = () => {
         />
         <Stack.Screen
           name="UsernameSelectionModal"
-          component={UsernameSelectionScreen}
+          component={wrapWithSafeArea(UsernameSelectionScreen, { isModal: true })}
           options={{
             presentation: 'modal',
             headerShown: false,
@@ -273,18 +293,18 @@ const AppNavigator = () => {
         />
         <Stack.Screen
           name="CoinDetails"
-          component={CoinDetailsScreen}
+          component={wrapWithSafeArea(CoinDetailsScreen)}
         />
         <Stack.Screen
           name="CoinMarket"
-          component={CoinMarketScreen}
+          component={wrapWithSafeArea(CoinMarketScreen)}
           options={{
             headerShown: false,
           }}
         />
         <Stack.Screen
           name="ProfileMenu"
-          component={ProfileMenuScreen}
+          component={wrapWithSafeArea(ProfileMenuScreen, { isModal: true })}
           options={{
             presentation: 'modal',
             headerShown: false,
@@ -294,7 +314,7 @@ const AppNavigator = () => {
         />
         <Stack.Screen
           name="PaymentMethodModal"
-          component={PaymentMethodScreen}
+          component={wrapWithSafeArea(PaymentMethodScreen, { isModal: true })}
           options={{
             presentation: 'modal',
             headerShown: false,
@@ -304,7 +324,7 @@ const AppNavigator = () => {
         />
         <Stack.Screen
           name="Notification"
-          component={NotificationScreen}
+          component={wrapWithSafeArea(NotificationScreen)}
           options={{
             headerShown: false,
           }}

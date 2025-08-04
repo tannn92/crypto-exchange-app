@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { getTabBarHeight, hasGestureNavigation } from '../utils/SafeAreaHelper';
+import ScreenWrapper from '../components/ScreenWrapper';
 import HomeScreen from '../screens/HomeScreen';
 import AssetsScreen from '../screens/AssetsScreen';
 import HistoryScreen from '../screens/HistoryScreen';
@@ -64,9 +65,30 @@ const BottomTabNavigator = () => {
         headerShown: false,
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Assets" component={AssetsScreen} />
-      <Tab.Screen name="History" component={HistoryScreen} />
+      <Tab.Screen 
+        name="Home" 
+        component={(props) => (
+          <ScreenWrapper route={props.route}>
+            <HomeScreen {...props} />
+          </ScreenWrapper>
+        )} 
+      />
+      <Tab.Screen 
+        name="Assets" 
+        component={(props) => (
+          <ScreenWrapper route={props.route}>
+            <AssetsScreen {...props} />
+          </ScreenWrapper>
+        )} 
+      />
+      <Tab.Screen 
+        name="History" 
+        component={(props) => (
+          <ScreenWrapper route={props.route}>
+            <HistoryScreen {...props} />
+          </ScreenWrapper>
+        )} 
+      />
     </Tab.Navigator>
   );
 };

@@ -5,12 +5,10 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  StatusBar,
   Dimensions,
   Image,
   Platform,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import Svg, { Path, Circle, Rect, Defs, LinearGradient as SvgLinearGradient, Stop } from 'react-native-svg';
 import { useTheme } from '../context/ThemeContext';
@@ -309,7 +307,6 @@ const CryptoItem = ({ item, theme, navigation }) => {
 
 const HomeScreen = ({ navigation, route }) => {
   const { theme, isDarkMode, toggleTheme } = useTheme();
-  const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState('popular');
   const [balanceVisible, setBalanceVisible] = useState(true);
   const [currency, setCurrency] = useState('USDT');
@@ -391,12 +388,7 @@ const HomeScreen = ({ navigation, route }) => {
   };
 
   return (
-    <View style={[styles.container, { 
-      backgroundColor: theme.background,
-      paddingTop: insets.top,
-      paddingBottom: insets.bottom,
-    }]}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
 
       {/* Header */}
       <View style={[styles.header, { backgroundColor: theme.background }]}>
