@@ -413,10 +413,10 @@ const WithdrawScreen = ({ navigation, route }) => {
                   </View>
                   <View style={styles.methodContent}>
                     <Text style={[styles.methodTitle, { color: theme.textPrimary }]}>
-                      Send to Azasend user
+                      Send to CryptoVN user
                     </Text>
                     <Text style={[styles.methodSubtitle, { color: theme.textSecondary }]}>
-                      Send crypto to Azasend users instantly with no fees
+                      Send crypto to CryptoVN users instantly with no fees
                     </Text>
                   </View>
                   <Ionicons name="chevron-forward" size={20} color={theme.textSecondary} />

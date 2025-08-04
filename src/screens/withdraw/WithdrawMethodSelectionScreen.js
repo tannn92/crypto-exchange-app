@@ -69,8 +69,8 @@ const WithdrawMethodSelectionScreen = ({ navigation, route }) => {
   const withdrawMethods = [
     {
       id: 'user',
-      title: 'Send to Azasend user',
-      subtitle: 'Send crypto to Azasend users instantly with no fees',
+      title: 'Send to CryptoVN user',
+      subtitle: 'Send crypto to CryptoVN users instantly with no fees',
       icon: 'person-circle-outline',
       iconColor: '#FF6B35',
       onPress: handleSendToUser,
