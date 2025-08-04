@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
+import { getTabBarHeight, hasGestureNavigation } from '../utils/SafeAreaHelper';
 import HomeScreen from '../screens/HomeScreen';
 import AssetsScreen from '../screens/AssetsScreen';
 import HistoryScreen from '../screens/HistoryScreen';
@@ -17,6 +18,8 @@ const Tab = createBottomTabNavigator();
 const BottomTabNavigator = () => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
+  const hasGestures = hasGestureNavigation(insets);
+  const tabBarHeight = getTabBarHeight(insets);
 
   return (
     <Tab.Navigator
@@ -39,13 +42,24 @@ const BottomTabNavigator = () => {
         tabBarStyle: {
           backgroundColor: theme.bottomNavBackground,
           borderTopColor: theme.border,
-          paddingBottom: Platform.OS === 'ios' ? insets.bottom : 5,
-          paddingTop: 5,
-          height: Platform.OS === 'ios' ? 40 + insets.bottom : 40,
+          // Dynamic padding based on gesture navigation
+          paddingBottom: hasGestures ? Math.max(insets.bottom - 5, 8) : 8,
+          paddingTop: 8,
+          // Dynamic height based on safe areas
+          height: tabBarHeight,
+          // Add subtle elevation for gesture nav devices
+          ...(hasGestures && Platform.OS === 'android' && {
+            elevation: 8,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: -2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+          }),
         },
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: '500',
+          marginBottom: hasGestures ? 2 : 0,
         },
         headerShown: false,
       })}

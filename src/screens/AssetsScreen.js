@@ -3,12 +3,12 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   TouchableOpacity,
   ScrollView,
   TextInput,
   Platform,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
@@ -17,6 +17,7 @@ import BalanceHeader from '../components/BalanceHeader';
 
 const AssetsScreen = ({ navigation }) => {
   const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
   const [searchQuery, setSearchQuery] = useState('');
   const [hideSmallAssets, setHideSmallAssets] = useState(false);
   const [balanceVisible, setBalanceVisible] = useState(true);
@@ -303,7 +304,10 @@ const AssetsScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
+    <View style={[styles.container, { 
+      backgroundColor: theme.backgroundForm,
+      paddingTop: insets.top,
+    }]}>
       {/* Header */}
       <View style={[styles.header, { backgroundColor: theme.backgroundForm }]}>
         <View style={styles.headerLeft}>
@@ -400,7 +404,7 @@ const AssetsScreen = ({ navigation }) => {
           {popularCryptos.map((crypto, index) => renderCryptoRow(crypto, index))}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
