@@ -9,12 +9,14 @@ import {
   Animated,
   Dimensions,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import CoinIcon from '../../components/CoinIcon';
 
 const SendToUserConfirmationScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
   const { coin, username, amount, message } = route.params;
 
   const slideAnim = useRef(new Animated.Value(550)).current;
@@ -81,6 +83,7 @@ const SendToUserConfirmationScreen = ({ navigation, route }) => {
           {
             backgroundColor: theme.backgroundForm,
             transform: [{ translateY: slideAnim }],
+            paddingBottom: insets.bottom,
           },
         ]}>
           {/* Header */}
@@ -160,7 +163,7 @@ const SendToUserConfirmationScreen = ({ navigation, route }) => {
           </ScrollView>
 
           {/* Action Buttons */}
-          <View style={styles.modalActions}>
+          <View style={[styles.modalActions, { paddingBottom: insets.bottom > 0 ? 15 : 25 }]}>
             <TouchableOpacity
               style={[styles.cancelButton, { backgroundColor: theme.backgroundInput }]}
               onPress={handleCancel}

@@ -80,11 +80,8 @@ const PaymentProcessingScreen = ({ navigation, route }) => {
   };
 
   const handleCancel = () => {
-    setHasNavigated(true);
-    navigation.navigate('BuyFlow', {
-      screen: 'BuyAmount',
-      params: { coin },
-    });
+    // Simply go back without setting hasNavigated flag
+    navigation.goBack();
   };
 
   const handlePaymentSent = () => {

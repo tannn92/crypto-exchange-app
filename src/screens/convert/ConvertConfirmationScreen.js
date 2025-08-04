@@ -9,12 +9,14 @@ import {
   Animated,
   Dimensions,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import CoinIcon from '../../components/CoinIcon';
 
 const ConvertConfirmationScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
   const { sourceCoin, destinationCoin, sourceAmount, destinationAmount, exchangeRate } = route.params;
 
   const slideAnim = useRef(new Animated.Value(650)).current;
@@ -81,6 +83,7 @@ const ConvertConfirmationScreen = ({ navigation, route }) => {
           {
             backgroundColor: theme.backgroundForm,
             transform: [{ translateY: slideAnim }],
+            paddingBottom: insets.bottom,
           },
         ]}>
           {/* Header */}
@@ -171,7 +174,7 @@ const ConvertConfirmationScreen = ({ navigation, route }) => {
           </ScrollView>
 
           {/* Action Buttons */}
-          <View style={styles.modalActions}>
+          <View style={[styles.modalActions, { paddingBottom: insets.bottom > 0 ? 15 : 25 }]}>
             <TouchableOpacity
               style={[styles.cancelButton, { backgroundColor: theme.backgroundInput }]}
               onPress={handleCancel}
