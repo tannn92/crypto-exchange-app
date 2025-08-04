@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
+import StandardHeader from '../components/StandardHeader';
 import Svg, { Path } from 'react-native-svg';
 
 // Custom SVG Icons from Homepage
@@ -493,22 +494,11 @@ const HistoryScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
       {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}
-          >
-            <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
-          </TouchableOpacity>
-        </View>
-
-        <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>
-          History
-        </Text>
-
-        <View style={styles.headerRight} />
-      </View>
+      <StandardHeader
+        title="History"
+        onBackPress={() => navigation.goBack()}
+        testID="history-header"
+      />
 
       {/* Transaction Type Tabs */}
       <ScrollView
@@ -552,31 +542,6 @@ const HistoryScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    paddingTop: Platform.OS === 'android' ? 25 : 0,
-  },
-  headerLeft: {
-    width: 80,
-    alignItems: 'flex-start',
-  },
-  backButton: {
-    padding: 5,
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    flex: 1,
-    textAlign: 'center',
-  },
-  headerRight: {
-    width: 80,
-    alignItems: 'flex-end',
   },
   tabsContainer: {
     paddingHorizontal: 20,

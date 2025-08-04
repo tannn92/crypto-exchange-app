@@ -163,7 +163,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingTop: Platform.OS === 'android' ? 25 : 0,
     paddingBottom: 16,
   },
   closeButton: {

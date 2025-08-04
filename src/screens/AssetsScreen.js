@@ -12,6 +12,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
+import StandardHeader from '../components/StandardHeader';
 import CoinIcon from '../components/CoinIcon';
 import BalanceHeader from '../components/BalanceHeader';
 import { coinPrices } from '../data/coinPrices';
@@ -289,18 +290,12 @@ const AssetsScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
       {/* Header */}
-      <View style={[styles.header, { backgroundColor: theme.backgroundForm }]}>
-        <View style={styles.headerLeft}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
-          </TouchableOpacity>
-        </View>
-
-        <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>
-          Assets
-        </Text>
-
-        <View style={styles.headerRight} />
+      <View style={{ backgroundColor: theme.backgroundForm }}>
+        <StandardHeader
+          title="Assets"
+          onBackPress={() => navigation.goBack()}
+          testID="assets-header"
+        />
       </View>
 
 
@@ -391,31 +386,6 @@ const AssetsScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    paddingTop: Platform.OS === 'android' ? 25 : 0,
-  },
-  headerLeft: {
-    width: 40,
-  },
-  backButton: {
-    padding: 4,
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    flex: 1,
-    textAlign: 'center',
-    marginHorizontal: 20,
-  },
-  headerRight: {
-    width: 40,
-    alignItems: 'flex-end',
   },
   searchBar: {
     flexDirection: 'row',

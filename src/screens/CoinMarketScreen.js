@@ -14,6 +14,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import Svg, { Rect, Line, Path, Circle, Text as SvgText } from 'react-native-svg';
 import { useTheme } from '../context/ThemeContext';
+import StandardHeader from '../components/StandardHeader';
 
 const { width: screenWidth } = Dimensions.get('window');
 const chartWidth = screenWidth - 40;
@@ -412,16 +413,12 @@ const CoinMarketScreen = ({ navigation, route }) => {
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
 
       {/* Header */}
-      <View style={[styles.header, { backgroundColor: theme.background }]}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
-        </TouchableOpacity>
-
-        <Text style={[styles.coinPair, { color: theme.textPrimary }]}>
-          {coin.name}
-        </Text>
-
-        <View style={styles.headerRight} />
+      <View style={{ backgroundColor: theme.background }}>
+        <StandardHeader
+          title={coin.name}
+          onBackPress={() => navigation.goBack()}
+          testID="coin-market-header"
+        />
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -586,28 +583,6 @@ const CoinMarketScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    paddingTop: Platform.OS === 'android' ? 25 : 0,
-  },
-  backButton: {
-    padding: 4,
-    width: 40,
-  },
-  coinPair: {
-    fontSize: 18,
-    fontWeight: '600',
-    textAlign: 'center',
-    flex: 1,
-  },
-  headerRight: {
-    width: 40,
-    alignItems: 'flex-end',
   },
   filterButton: {
     padding: 4,

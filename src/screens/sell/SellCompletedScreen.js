@@ -48,7 +48,7 @@ const SellCompletedScreen = ({ navigation, route }) => {
       navigation.goBack();
     } else if (fromHistory) {
       // Navigate back to History screen
-      navigation.navigate('MainTabs', { screen: 'History' });
+      navigation.goBack();
     } else {
       // Default behavior - go to sell more
       handleSellMore();
