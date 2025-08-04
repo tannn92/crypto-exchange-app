@@ -119,8 +119,8 @@ const SellProcessingScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
       <View style={styles.header}>
-        <TouchableOpacity 
-          onPress={handleCancel} 
+        <TouchableOpacity
+          onPress={handleCancel}
           style={styles.backButton}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           activeOpacity={0.7}
@@ -188,17 +188,17 @@ const SellProcessingScreen = ({ navigation, route }) => {
             <View style={styles.timelineLeft}>
               <View style={[styles.stepDot, currentStep === 2 ? styles.stepActive : styles.stepCompleted]}>
                 {currentStep === 2 ? (
-                  <Animated.View 
+                  <Animated.View
                     style={[
                       styles.loadingIcon,
                       {
                         transform: [{
                           rotate: rotateAnim.interpolate({
                             inputRange: [0, 1],
-                            outputRange: ['0deg', '360deg']
-                          })
-                        }]
-                      }
+                            outputRange: ['0deg', '360deg'],
+                          }),
+                        }],
+                      },
                     ]}
                   >
                     <Ionicons name="refresh" size={14} color="white" />
@@ -208,12 +208,12 @@ const SellProcessingScreen = ({ navigation, route }) => {
                 )}
               </View>
               <View style={[
-                styles.connector, 
-                styles.secondConnector, 
-                { 
+                styles.connector,
+                styles.secondConnector,
+                {
                   backgroundColor: currentStep >= 3 ? '#4CAF50' : '#E0E0E0',
-                  height: currentStep === 2 ? 140 : 40 // Longer when processing, shorter when completed
-                }
+                  height: currentStep === 2 ? 140 : 40, // Longer when processing, shorter when completed
+                },
               ]} />
             </View>
             <View style={styles.timelineContent}>
@@ -280,7 +280,7 @@ const SellProcessingScreen = ({ navigation, route }) => {
         </View>
 
         {/* Transaction Details Button */}
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.detailsButton, { backgroundColor: theme.primary }]}
           onPress={() => navigation.navigate('SellTransactionDetails', route.params)}
         >

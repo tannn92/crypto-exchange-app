@@ -16,7 +16,7 @@ import BankIcon from '../../components/BankIcon';
 const ReceiveMethodScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
   const { currentMethod } = route.params || {};
-  
+
   const bankAccounts = [
     {
       id: 'bank-vietcombank',
@@ -68,18 +68,18 @@ const ReceiveMethodScreen = ({ navigation, route }) => {
   const handleSelectAccount = (account) => {
     // Close modal first
     navigation.goBack();
-    
+
     // Navigate back to SellFlow with the selected bank account
     setTimeout(() => {
       navigation.navigate('SellFlow', {
         screen: route.params?.returnScreen || 'SellAmount',
-        params: { 
+        params: {
           selectedReceiveMethod: account.id,
           selectedReceiveMethodDetails: {
             accountName: account.accountName,
             accountNumber: account.accountNumber,
             bankName: account.bankName,
-          }
+          },
         },
       });
     }, 100);
@@ -93,7 +93,7 @@ const ReceiveMethodScreen = ({ navigation, route }) => {
           backgroundColor: theme.backgroundInput,
           borderColor: item.isSelected ? theme.primary : theme.border,
           borderWidth: item.isSelected ? 2 : 1,
-        }
+        },
       ]}
       onPress={() => handleSelectAccount(item)}
       activeOpacity={0.7}
@@ -118,7 +118,7 @@ const ReceiveMethodScreen = ({ navigation, route }) => {
       'Coming Soon',
       'Add bank account feature will be available soon!',
       [
-        { text: 'OK', style: 'default' }
+        { text: 'OK', style: 'default' },
       ],
       { cancelable: true }
     );
@@ -127,12 +127,12 @@ const ReceiveMethodScreen = ({ navigation, route }) => {
   const renderAddBankAccount = () => (
     <TouchableOpacity
       style={[
-        styles.addAccountItem, 
-        { 
+        styles.addAccountItem,
+        {
           backgroundColor: theme.backgroundInput,
           borderColor: theme.border,
           borderWidth: 1,
-        }
+        },
       ]}
       onPress={handleAddBankAccount}
       activeOpacity={0.7}

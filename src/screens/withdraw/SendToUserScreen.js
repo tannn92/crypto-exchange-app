@@ -18,12 +18,12 @@ import CoinIcon from '../../components/CoinIcon';
 const SendToUserScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
   const coin = route.params?.coin || { id: 'usdt', symbol: 'USDT', name: 'Tether' };
-  
+
   const [selectedCoin, setSelectedCoin] = useState(coin);
   const [username, setUsername] = useState('');
   const [amount, setAmount] = useState('');
   const [message, setMessage] = useState('');
-  
+
   // Mock balance
   const balance = 2855.00;
 
@@ -52,7 +52,7 @@ const SendToUserScreen = ({ navigation, route }) => {
         // Clear the params to prevent re-triggering
         navigation.setParams({ selectedCoin: undefined });
       }
-      
+
       // Check if we have return params from UsernameSelectionModal
       if (params?.selectedUsername && params.selectedUsername !== username) {
         setUsername(params.selectedUsername);
@@ -82,8 +82,8 @@ const SendToUserScreen = ({ navigation, route }) => {
     <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity 
-          onPress={() => navigation.goBack()} 
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
           style={styles.backButton}
         >
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
@@ -92,11 +92,11 @@ const SendToUserScreen = ({ navigation, route }) => {
           Send {selectedCoin?.symbol || 'USDT'}
         </Text>
         <View style={styles.headerRight}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.headerIcon}
             onPress={() => navigation.getParent()?.push('MainTabs', {
               screen: 'History',
-              params: { selectedTab: 'Withdrawal' }
+              params: { selectedTab: 'Withdrawal' },
             })}
           >
             <Ionicons name="time-outline" size={24} color={theme.textSecondary} />
@@ -104,12 +104,12 @@ const SendToUserScreen = ({ navigation, route }) => {
         </View>
       </View>
 
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardView}
       >
-        <ScrollView 
-          style={styles.content} 
+        <ScrollView
+          style={styles.content}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
         >
@@ -127,7 +127,7 @@ const SendToUserScreen = ({ navigation, route }) => {
                   placeholder="Long press to paste"
                   placeholderTextColor={theme.textSecondary}
                 />
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={[styles.actionButton, { backgroundColor: theme.backgroundForm }]}
                   onPress={handleUsernameSelect}
                 >
@@ -243,12 +243,12 @@ const SendToUserScreen = ({ navigation, route }) => {
             </View>
 
             {/* Submit Button */}
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[
-                styles.submitButton, 
-                { 
-                  backgroundColor: isSubmitEnabled ? theme.primary : '#FFB885'
-                }
+                styles.submitButton,
+                {
+                  backgroundColor: isSubmitEnabled ? theme.primary : '#FFB885',
+                },
               ]}
               onPress={handleSubmit}
               disabled={!isSubmitEnabled}
@@ -336,66 +336,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  quantityContainer: {
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    padding: 16,
-    minHeight: 80,
-  },
-  quantityContent: {
-    gap: 12,
-  },
-  minLabel: {
-    fontSize: 14,
-  },
-  quantityRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  quantityInput: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    flex: 1,
-    lineHeight: 32,
-    textAlignVertical: 'center',
-    paddingVertical: 8,
-  },
-  quantityRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  currencyText: {
-    fontSize: 16,
-    fontWeight: '500',
-  },
   maxButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 15,
-  },
-  maxButtonText: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  balanceRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  balanceLabel: {
-    fontSize: 14,
-  },
-  balanceAmount: {
-    fontSize: 14,
-    fontWeight: '500',
-    marginLeft: 4,
-  },
-  refreshIcon: {
-    marginLeft: 8,
   },
   messageContainer: {
     borderRadius: 12,
@@ -484,10 +428,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginLeft: 15,
-  },
-  balanceContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   maxText: {
     fontSize: 16,

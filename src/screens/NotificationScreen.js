@@ -109,14 +109,14 @@ const NotificationScreen = ({ navigation, route }) => {
   };
 
   const getTransactionIconColor = (type, isPositive) => {
-    if (type === 'buy' || type === 'deposit') return '#4CAF50';
-    if (type === 'sell' || type === 'withdraw') return '#FF6B35';
+    if (type === 'buy' || type === 'deposit') {return '#4CAF50';}
+    if (type === 'sell' || type === 'withdraw') {return '#FF6B35';}
     return theme.textSecondary;
   };
 
   const getTransactionIconBackground = (type, isPositive) => {
-    if (type === 'buy' || type === 'deposit') return '#E8F5E9';
-    if (type === 'sell' || type === 'withdraw') return '#FFEBEE';
+    if (type === 'buy' || type === 'deposit') {return '#E8F5E9';}
+    if (type === 'sell' || type === 'withdraw') {return '#FFEBEE';}
     return '#F5F5F5';
   };
 
@@ -126,8 +126,8 @@ const NotificationScreen = ({ navigation, route }) => {
       return (
         <View style={styles.notificationItem}>
           <View style={styles.notificationLeft}>
-            <Image 
-              source={require('../../assets/icon.png')} 
+            <Image
+              source={require('../../assets/icon.png')}
               style={styles.cryptoVNFullLogo}
               resizeMode="contain"
             />
@@ -151,13 +151,13 @@ const NotificationScreen = ({ navigation, route }) => {
         <View style={styles.notificationItem}>
           <View style={styles.notificationLeft}>
             <View style={[
-              styles.activityIcon, 
-              { backgroundColor: getTransactionIconBackground(item.type, item.isPositive) }
+              styles.activityIcon,
+              { backgroundColor: getTransactionIconBackground(item.type, item.isPositive) },
             ]}>
-              <Ionicons 
-                name={item.icon} 
-                size={20} 
-                color={getTransactionIconColor(item.type, item.isPositive)} 
+              <Ionicons
+                name={item.icon}
+                size={20}
+                color={getTransactionIconColor(item.type, item.isPositive)}
               />
             </View>
             <View style={styles.notificationDetails}>
@@ -174,8 +174,8 @@ const NotificationScreen = ({ navigation, route }) => {
           </View>
           <View style={styles.notificationRight}>
             <Text style={[
-              styles.notificationAmount, 
-              { color: item.isPositive ? '#4CAF50' : '#FF6B35' }
+              styles.notificationAmount,
+              { color: item.isPositive ? '#4CAF50' : '#FF6B35' },
             ]}>
               {item.amount}
             </Text>
@@ -190,25 +190,24 @@ const NotificationScreen = ({ navigation, route }) => {
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <TouchableOpacity 
-            onPress={() => navigation.goBack()} 
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
             style={styles.backButton}
           >
             <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
           </TouchableOpacity>
         </View>
-        
+
         <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>
           Notification
         </Text>
-        
-        <View style={styles.headerRight}>
-        </View>
+
+        <View style={styles.headerRight} />
       </View>
 
       {/* Notification Type Tabs */}
-      <ScrollView 
-        horizontal 
+      <ScrollView
+        horizontal
         showsHorizontalScrollIndicator={false}
         style={styles.tabsContainer}
         contentContainerStyle={styles.tabsContent}
@@ -218,13 +217,13 @@ const NotificationScreen = ({ navigation, route }) => {
             key={tab}
             style={[
               styles.tab,
-              selectedTab === tab && [styles.activeTab, { backgroundColor: '#FF6B35' }]
+              selectedTab === tab && [styles.activeTab, { backgroundColor: '#FF6B35' }],
             ]}
             onPress={() => setSelectedTab(tab)}
           >
             <Text style={[
               styles.tabText,
-              selectedTab === tab ? styles.activeTabText : { color: theme.textPrimary }
+              selectedTab === tab ? styles.activeTabText : { color: theme.textPrimary },
             ]}>
               {tab}
             </Text>

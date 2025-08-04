@@ -16,7 +16,7 @@ import CoinIcon from '../../components/CoinIcon';
 const ConvertConfirmationScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
   const { sourceCoin, destinationCoin, sourceAmount, destinationAmount, exchangeRate } = route.params;
-  
+
   const slideAnim = useRef(new Animated.Value(650)).current;
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const ConvertConfirmationScreen = ({ navigation, route }) => {
       duration: 250,
       useNativeDriver: true,
     }).start();
-  }, []);
+  }, [slideAnim]);
 
   const formatNumber = (num) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -71,17 +71,17 @@ const ConvertConfirmationScreen = ({ navigation, route }) => {
       statusBarTranslucent={true}
     >
       <View style={styles.modalOverlay}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.overlayTouchable}
           activeOpacity={1}
           onPress={handleCancel}
         />
         <Animated.View style={[
-          styles.modalContainer, 
-          { 
+          styles.modalContainer,
+          {
             backgroundColor: theme.backgroundForm,
-            transform: [{ translateY: slideAnim }]
-          }
+            transform: [{ translateY: slideAnim }],
+          },
         ]}>
           {/* Header */}
           <View style={styles.modalHeader}>
@@ -93,8 +93,8 @@ const ConvertConfirmationScreen = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
 
-          <ScrollView 
-            style={styles.modalContent} 
+          <ScrollView
+            style={styles.modalContent}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.scrollContent}
           >
@@ -172,13 +172,13 @@ const ConvertConfirmationScreen = ({ navigation, route }) => {
 
           {/* Action Buttons */}
           <View style={styles.modalActions}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[styles.cancelButton, { backgroundColor: theme.backgroundInput }]}
               onPress={handleCancel}
             >
               <Text style={[styles.cancelButtonText, { color: theme.textPrimary }]}>Cancel</Text>
             </TouchableOpacity>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[styles.confirmButton, { backgroundColor: '#FF6B35' }]}
               onPress={handleConfirm}
             >

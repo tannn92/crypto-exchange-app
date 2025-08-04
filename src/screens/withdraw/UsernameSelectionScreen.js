@@ -40,28 +40,28 @@ const UsernameSelectionScreen = ({ navigation, route }) => {
   const [editName, setEditName] = useState('');
   const [newUsername, setNewUsername] = useState('');
   const [newName, setNewName] = useState('');
-  
+
   // Find the currently selected username based on the current username from send screen
   const getCurrentUsernameId = () => {
-    if (!currentUsername) return null;
+    if (!currentUsername) {return null;}
     const foundUsername = savedUsernames.find(user => user.username === currentUsername);
     return foundUsername ? foundUsername.id : null;
   };
-  
+
   const [selectedUsernameId, setSelectedUsernameId] = useState(getCurrentUsernameId());
 
   const handleUsernameSelect = (user) => {
     // Close modal first
     navigation.goBack();
-    
+
     // Navigate back to SendToUserFlow with the selected username
     setTimeout(() => {
       navigation.navigate('SendToUserFlow', {
         screen: 'SendToUser',
-        params: { 
+        params: {
           selectedUsername: user.username,
-          coin: coin // Pass the coin back
-        }
+          coin: coin, // Pass the coin back
+        },
       });
     }, 200);
   };
@@ -99,8 +99,8 @@ const UsernameSelectionScreen = ({ navigation, route }) => {
 
   const handleUpdateUser = () => {
     if (editingUser) {
-      setUsernames(usernames.map(u => 
-        u.id === editingUser.id 
+      setUsernames(usernames.map(u =>
+        u.id === editingUser.id
           ? { ...u, username: editUsername, name: editName }
           : u
       ));
@@ -134,10 +134,10 @@ const UsernameSelectionScreen = ({ navigation, route }) => {
       key={user.id}
       style={[
         styles.usernameCard,
-        { 
+        {
           backgroundColor: theme.backgroundInput,
-          borderColor: selectedUsernameId === user.id && !isManageMode ? theme.primary : '#E0E0E0'
-        }
+          borderColor: selectedUsernameId === user.id && !isManageMode ? theme.primary : '#E0E0E0',
+        },
       ]}
       onPress={() => !isManageMode && handleUsernameSelect(user)}
       disabled={isManageMode}
@@ -162,7 +162,7 @@ const UsernameSelectionScreen = ({ navigation, route }) => {
             </Text>
           </View>
         </View>
-        
+
         {isManageMode && (
           <View style={styles.cardActions}>
             <TouchableOpacity
@@ -191,8 +191,8 @@ const UsernameSelectionScreen = ({ navigation, route }) => {
     <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity 
-          onPress={() => navigation.goBack()} 
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
           style={styles.backButton}
         >
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
@@ -204,7 +204,7 @@ const UsernameSelectionScreen = ({ navigation, route }) => {
       </View>
 
       {/* Content */}
-      <ScrollView 
+      <ScrollView
         style={styles.content}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
@@ -251,7 +251,7 @@ const UsernameSelectionScreen = ({ navigation, route }) => {
               <Text style={[styles.editModalTitle, { color: theme.textPrimary }]}>
                 Edit Username
               </Text>
-              <TouchableOpacity 
+              <TouchableOpacity
                 onPress={() => setEditModalVisible(false)}
                 style={styles.closeButton}
               >
@@ -265,9 +265,9 @@ const UsernameSelectionScreen = ({ navigation, route }) => {
                   Username
                 </Text>
                 <TextInput
-                  style={[styles.input, { 
+                  style={[styles.input, {
                     backgroundColor: theme.backgroundInput,
-                    color: theme.textPrimary 
+                    color: theme.textPrimary,
                   }]}
                   value={editUsername}
                   onChangeText={setEditUsername}
@@ -281,9 +281,9 @@ const UsernameSelectionScreen = ({ navigation, route }) => {
                   Name
                 </Text>
                 <TextInput
-                  style={[styles.input, { 
+                  style={[styles.input, {
                     backgroundColor: theme.backgroundInput,
-                    color: theme.textPrimary 
+                    color: theme.textPrimary,
                   }]}
                   value={editName}
                   onChangeText={setEditName}
@@ -294,8 +294,8 @@ const UsernameSelectionScreen = ({ navigation, route }) => {
 
               <View style={styles.editModalActions}>
                 <TouchableOpacity
-                  style={[styles.modalButton, styles.cancelButton, { 
-                    backgroundColor: theme.backgroundInput 
+                  style={[styles.modalButton, styles.cancelButton, {
+                    backgroundColor: theme.backgroundInput,
                   }]}
                   onPress={() => setEditModalVisible(false)}
                 >
@@ -330,7 +330,7 @@ const UsernameSelectionScreen = ({ navigation, route }) => {
               <Text style={[styles.editModalTitle, { color: theme.textPrimary }]}>
                 Add new Username
               </Text>
-              <TouchableOpacity 
+              <TouchableOpacity
                 onPress={() => setAddModalVisible(false)}
                 style={styles.closeButton}
               >
@@ -344,9 +344,9 @@ const UsernameSelectionScreen = ({ navigation, route }) => {
                   Username
                 </Text>
                 <TextInput
-                  style={[styles.input, { 
+                  style={[styles.input, {
                     backgroundColor: theme.backgroundInput,
-                    color: theme.textPrimary 
+                    color: theme.textPrimary,
                   }]}
                   value={newUsername}
                   onChangeText={setNewUsername}
@@ -360,9 +360,9 @@ const UsernameSelectionScreen = ({ navigation, route }) => {
                   Name
                 </Text>
                 <TextInput
-                  style={[styles.input, { 
+                  style={[styles.input, {
                     backgroundColor: theme.backgroundInput,
-                    color: theme.textPrimary 
+                    color: theme.textPrimary,
                   }]}
                   value={newName}
                   onChangeText={setNewName}
@@ -373,8 +373,8 @@ const UsernameSelectionScreen = ({ navigation, route }) => {
 
               <View style={styles.editModalActions}>
                 <TouchableOpacity
-                  style={[styles.modalButton, styles.cancelButton, { 
-                    backgroundColor: theme.backgroundInput 
+                  style={[styles.modalButton, styles.cancelButton, {
+                    backgroundColor: theme.backgroundInput,
                   }]}
                   onPress={() => setAddModalVisible(false)}
                 >

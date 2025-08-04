@@ -23,8 +23,8 @@ const SellCompletedScreen = ({ navigation, route }) => {
   };
 
   const handleSellMore = () => {
-    navigation.navigate('SellFlow', { 
-      screen: 'CoinSelection'
+    navigation.navigate('SellFlow', {
+      screen: 'CoinSelection',
     });
   };
 
@@ -37,7 +37,7 @@ const SellCompletedScreen = ({ navigation, route }) => {
         <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>Sell Completed</Text>
         <View style={styles.headerRight} />
       </View>
-      
+
       <View style={styles.content}>
         {/* Success Icon */}
         <View style={styles.successSection}>
@@ -82,47 +82,47 @@ const SellCompletedScreen = ({ navigation, route }) => {
           <Text style={[styles.feedbackTitle, { color: theme.textPrimary }]}>
             How was the experience?
           </Text>
-          
+
           <View style={styles.feedbackButtons}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.feedbackButton}
               onPress={() => setSelectedFeedback('good')}
             >
               <View style={[
-                styles.emojiContainer, 
-                { 
+                styles.emojiContainer,
+                {
                   backgroundColor: selectedFeedback === 'good' ? '#4CAF50' : theme.backgroundSecondary,
-                }
+                },
               ]}>
                 <Text style={styles.emoji}>😊</Text>
               </View>
               <Text style={[
-                styles.feedbackLabel, 
-                { 
+                styles.feedbackLabel,
+                {
                   color: selectedFeedback === 'good' ? '#4CAF50' : theme.textPrimary,
-                  fontWeight: selectedFeedback === 'good' ? '600' : '500'
-                }
+                  fontWeight: selectedFeedback === 'good' ? '600' : '500',
+                },
               ]}>Good</Text>
             </TouchableOpacity>
-            
-            <TouchableOpacity 
+
+            <TouchableOpacity
               style={styles.feedbackButton}
               onPress={() => setSelectedFeedback('bad')}
             >
               <View style={[
-                styles.emojiContainer, 
-                { 
+                styles.emojiContainer,
+                {
                   backgroundColor: selectedFeedback === 'bad' ? '#FF5252' : theme.backgroundSecondary,
-                }
+                },
               ]}>
                 <Text style={styles.emoji}>😞</Text>
               </View>
               <Text style={[
-                styles.feedbackLabel, 
-                { 
+                styles.feedbackLabel,
+                {
                   color: selectedFeedback === 'bad' ? '#FF5252' : theme.textPrimary,
-                  fontWeight: selectedFeedback === 'bad' ? '600' : '500'
-                }
+                  fontWeight: selectedFeedback === 'bad' ? '600' : '500',
+                },
               ]}>Bad</Text>
             </TouchableOpacity>
           </View>
@@ -131,13 +131,13 @@ const SellCompletedScreen = ({ navigation, route }) => {
 
       {/* Action Buttons */}
       <View style={styles.actionButtons}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.viewBalanceButton, { backgroundColor: theme.backgroundSecondary }]}
           onPress={handleViewBalance}
         >
           <Text style={[styles.viewBalanceText, { color: theme.textPrimary }]}>View Balance</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.sellMoreButton, { backgroundColor: '#FF6B35' }]}
           onPress={handleSellMore}
         >

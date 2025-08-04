@@ -52,15 +52,15 @@ const MainApp = () => {
   };
 
   const renderModal = () => {
-    if (navigation.modalStack.length === 0) return null;
+    if (navigation.modalStack.length === 0) {return null;}
 
     const currentModal = navigation.modalStack[navigation.modalStack.length - 1];
-    
+
     switch (currentModal.name) {
       case 'CoinSelection':
         return (
           <View style={styles.modalContainer}>
-            <CoinSelectionScreen 
+            <CoinSelectionScreen
               navigation={{
                 navigate: (screen, params) => {
                   navigation.closeModal();
@@ -75,7 +75,7 @@ const MainApp = () => {
       case 'BuyAmount':
         return (
           <View style={styles.modalContainer}>
-            <BuyAmountScreen 
+            <BuyAmountScreen
               navigation={{
                 navigate: (screen, params) => {
                   navigation.openModal(screen, params);
@@ -89,7 +89,7 @@ const MainApp = () => {
       case 'BuyConfirmation':
         return (
           <View style={styles.modalContainer}>
-            <BuyConfirmationScreen 
+            <BuyConfirmationScreen
               navigation={{
                 navigate: (screen, params) => {
                   navigation.closeModal();
@@ -104,7 +104,7 @@ const MainApp = () => {
       case 'PaymentMethod':
         return (
           <View style={styles.modalContainer}>
-            <PaymentMethodScreen 
+            <PaymentMethodScreen
               navigation={{
                 navigate: (screen, params) => {
                   navigation.closeModal();
@@ -130,52 +130,52 @@ const MainApp = () => {
 
       {/* Bottom Navigation */}
       <View style={[styles.bottomNav, { backgroundColor: theme.bottomNavBackground, borderTopColor: theme.border }]}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.navItem}
           onPress={() => handleTabPress('Home')}
         >
-          <Ionicons 
-            name={activeTab === 'Home' ? 'home' : 'home-outline'} 
-            size={24} 
-            color={activeTab === 'Home' ? theme.primary : theme.bottomNavInactive} 
+          <Ionicons
+            name={activeTab === 'Home' ? 'home' : 'home-outline'}
+            size={24}
+            color={activeTab === 'Home' ? theme.primary : theme.bottomNavInactive}
           />
           <Text style={[
-            styles.navText, 
-            { color: activeTab === 'Home' ? theme.primary : theme.bottomNavInactive }
+            styles.navText,
+            { color: activeTab === 'Home' ? theme.primary : theme.bottomNavInactive },
           ]}>
             Home
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.navItem}
           onPress={() => handleTabPress('Assets')}
         >
-          <Ionicons 
-            name={activeTab === 'Assets' ? 'wallet' : 'wallet-outline'} 
-            size={24} 
-            color={activeTab === 'Assets' ? theme.primary : theme.bottomNavInactive} 
+          <Ionicons
+            name={activeTab === 'Assets' ? 'wallet' : 'wallet-outline'}
+            size={24}
+            color={activeTab === 'Assets' ? theme.primary : theme.bottomNavInactive}
           />
           <Text style={[
-            styles.navText, 
-            { color: activeTab === 'Assets' ? theme.primary : theme.bottomNavInactive }
+            styles.navText,
+            { color: activeTab === 'Assets' ? theme.primary : theme.bottomNavInactive },
           ]}>
             Assets
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.navItem}
           onPress={() => handleTabPress('History')}
         >
-          <Ionicons 
-            name={activeTab === 'History' ? 'time' : 'time-outline'} 
-            size={24} 
-            color={activeTab === 'History' ? theme.primary : theme.bottomNavInactive} 
+          <Ionicons
+            name={activeTab === 'History' ? 'time' : 'time-outline'}
+            size={24}
+            color={activeTab === 'History' ? theme.primary : theme.bottomNavInactive}
           />
           <Text style={[
-            styles.navText, 
-            { color: activeTab === 'History' ? theme.primary : theme.bottomNavInactive }
+            styles.navText,
+            { color: activeTab === 'History' ? theme.primary : theme.bottomNavInactive },
           ]}>
             History
           </Text>

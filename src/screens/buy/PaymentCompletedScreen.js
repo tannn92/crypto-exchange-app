@@ -31,12 +31,12 @@ const PaymentCompletedScreen = ({ navigation, route }) => {
       price: 97187.84, // Default price
       change: 2.5,
       icon: 'btc',
-      iconBg: '#F7931A'
+      iconBg: '#F7931A',
     };
-    
-    navigation.navigate('BuyFlow', { 
+
+    navigation.navigate('BuyFlow', {
       screen: 'BuyAmount',
-      params: { coin: defaultCoin }
+      params: { coin: defaultCoin },
     });
   };
 
@@ -49,7 +49,7 @@ const PaymentCompletedScreen = ({ navigation, route }) => {
         <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>Payment Completed</Text>
         <View style={styles.headerRight} />
       </View>
-      
+
       <View style={styles.content}>
         {/* Success Icon */}
         <View style={styles.successSection}>
@@ -94,47 +94,47 @@ const PaymentCompletedScreen = ({ navigation, route }) => {
           <Text style={[styles.feedbackTitle, { color: theme.textPrimary }]}>
             How was the experience?
           </Text>
-          
+
           <View style={styles.feedbackButtons}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.feedbackButton}
               onPress={() => setSelectedFeedback('good')}
             >
               <View style={[
-                styles.emojiContainer, 
-                { 
+                styles.emojiContainer,
+                {
                   backgroundColor: selectedFeedback === 'good' ? '#4CAF50' : theme.backgroundSecondary,
-                }
+                },
               ]}>
                 <Text style={styles.emoji}>😊</Text>
               </View>
               <Text style={[
-                styles.feedbackLabel, 
-                { 
+                styles.feedbackLabel,
+                {
                   color: selectedFeedback === 'good' ? '#4CAF50' : theme.textPrimary,
-                  fontWeight: selectedFeedback === 'good' ? '600' : '500'
-                }
+                  fontWeight: selectedFeedback === 'good' ? '600' : '500',
+                },
               ]}>Good</Text>
             </TouchableOpacity>
-            
-            <TouchableOpacity 
+
+            <TouchableOpacity
               style={styles.feedbackButton}
               onPress={() => setSelectedFeedback('bad')}
             >
               <View style={[
-                styles.emojiContainer, 
-                { 
+                styles.emojiContainer,
+                {
                   backgroundColor: selectedFeedback === 'bad' ? '#FF5252' : theme.backgroundSecondary,
-                }
+                },
               ]}>
                 <Text style={styles.emoji}>😞</Text>
               </View>
               <Text style={[
-                styles.feedbackLabel, 
-                { 
+                styles.feedbackLabel,
+                {
                   color: selectedFeedback === 'bad' ? '#FF5252' : theme.textPrimary,
-                  fontWeight: selectedFeedback === 'bad' ? '600' : '500'
-                }
+                  fontWeight: selectedFeedback === 'bad' ? '600' : '500',
+                },
               ]}>Bad</Text>
             </TouchableOpacity>
           </View>
@@ -143,13 +143,13 @@ const PaymentCompletedScreen = ({ navigation, route }) => {
 
       {/* Action Buttons */}
       <View style={styles.actionButtons}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.viewBalanceButton, { backgroundColor: theme.backgroundSecondary }]}
           onPress={handleViewBalance}
         >
           <Text style={[styles.viewBalanceText, { color: theme.textPrimary }]}>View Balance</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.buyMoreButton, { backgroundColor: '#FF6B35' }]}
           onPress={handleBuyMore}
         >

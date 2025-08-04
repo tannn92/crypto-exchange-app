@@ -135,11 +135,11 @@ const coinSvgs = {
 
 const CoinIcon = ({ coinId, size = 40, style }) => {
   const svgContent = coinSvgs[coinId];
-  
+
   if (!svgContent) {
     // Fallback if SVG not found
     return (
-      <View 
+      <View
         style={[
           {
             width: size,
@@ -147,17 +147,17 @@ const CoinIcon = ({ coinId, size = 40, style }) => {
             borderRadius: size / 2,
             backgroundColor: '#E0E0E0',
           },
-          style
-        ]} 
+          style,
+        ]}
       />
     );
   }
 
   return (
-    <SvgXml 
-      xml={svgContent} 
-      width={size} 
-      height={size} 
+    <SvgXml
+      xml={svgContent}
+      width={size}
+      height={size}
       style={style}
     />
   );

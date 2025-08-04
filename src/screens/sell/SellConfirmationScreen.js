@@ -13,14 +13,14 @@ import ProcessingGuarantee from '../../components/ProcessingGuarantee';
 
 const SellConfirmationScreen = ({ navigation, route }) => {
   const { theme, isDarkMode } = useTheme();
-  const { 
-    coin, 
-    cryptoAmount, 
-    vndAmount, 
-    exchangeRate, 
-    receiveMethod, 
-    accountName, 
-    accountNumber 
+  const {
+    coin,
+    cryptoAmount,
+    vndAmount,
+    exchangeRate,
+    receiveMethod,
+    accountName,
+    accountNumber,
   } = route.params;
 
   const formatNumber = (num) => {
@@ -62,11 +62,11 @@ const SellConfirmationScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
         <View style={styles.header}>
-          <TouchableOpacity 
+          <TouchableOpacity
             onPress={() => {
               console.log('Back button touched - SellConfirmation');
               handleCancel();
-            }} 
+            }}
             style={styles.backButton}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             activeOpacity={0.7}
@@ -164,7 +164,7 @@ const SellConfirmationScreen = ({ navigation, route }) => {
           <ProcessingGuarantee />
 
           {/* Action Button */}
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.confirmButton, { backgroundColor: theme.primary }]}
             onPress={handleConfirm}
           >

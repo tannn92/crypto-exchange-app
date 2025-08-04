@@ -69,25 +69,25 @@ const AddressSelectionScreen = ({ navigation, route }) => {
     { id: 'solana', symbol: 'SOL', name: 'Solana' },
     { id: 'ton', symbol: 'TON', name: 'The Open Network' },
   ];
-  
+
   // Find the currently selected address based on the current address from withdraw screen
   const getCurrentAddressId = () => {
-    if (!currentAddress) return null;
+    if (!currentAddress) {return null;}
     const foundAddress = savedAddresses.find(addr => addr.fullAddress === currentAddress);
     return foundAddress ? foundAddress.id : null;
   };
-  
+
   const [selectedAddressId, setSelectedAddressId] = useState(getCurrentAddressId());
 
   const handleAddressSelect = (address) => {
     // Close modal first
     navigation.goBack();
-    
+
     // Navigate back to WithdrawFlow with the selected address
     setTimeout(() => {
       navigation.navigate('WithdrawFlow', {
         screen: 'Withdraw',
-        params: { selectedAddress: address }
+        params: { selectedAddress: address },
       });
     }, 200);
   };
@@ -99,7 +99,7 @@ const AddressSelectionScreen = ({ navigation, route }) => {
   const handleDelete = (address) => {
     Alert.alert(
       'Delete Address',
-      `Are you sure you want to delete this address?`,
+      'Are you sure you want to delete this address?',
       [
         {
           text: 'Cancel',
@@ -126,15 +126,15 @@ const AddressSelectionScreen = ({ navigation, route }) => {
 
   const handleUpdateAddress = () => {
     if (editingAddress && editAddress && editNetwork) {
-      setAddresses(addresses.map(a => 
-        a.id === editingAddress.id 
-          ? { 
-              ...a, 
+      setAddresses(addresses.map(a =>
+        a.id === editingAddress.id
+          ? {
+              ...a,
               name: editName || null,
               address: editAddress.length > 10 ? editAddress.substring(0, 5) + '...' + editAddress.substring(editAddress.length - 5) : editAddress,
               fullAddress: editAddress,
               network: editNetwork.symbol,
-              networkName: editNetwork.name
+              networkName: editNetwork.name,
             }
           : a
       ));
@@ -174,10 +174,10 @@ const AddressSelectionScreen = ({ navigation, route }) => {
       key={address.id}
       style={[
         styles.addressCard,
-        { 
+        {
           backgroundColor: theme.backgroundInput,
-          borderColor: selectedAddressId === address.id && !isManageMode ? theme.primary : '#E0E0E0'
-        }
+          borderColor: selectedAddressId === address.id && !isManageMode ? theme.primary : '#E0E0E0',
+        },
       ]}
       onPress={() => !isManageMode && handleAddressSelect(address)}
       disabled={isManageMode}
@@ -253,8 +253,8 @@ const AddressSelectionScreen = ({ navigation, route }) => {
     <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity 
-          onPress={() => navigation.goBack()} 
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
           style={styles.backButton}
         >
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
@@ -266,7 +266,7 @@ const AddressSelectionScreen = ({ navigation, route }) => {
       </View>
 
       {/* Content */}
-      <ScrollView 
+      <ScrollView
         style={styles.content}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
@@ -313,7 +313,7 @@ const AddressSelectionScreen = ({ navigation, route }) => {
               <Text style={[styles.editModalTitle, { color: theme.textPrimary }]}>
                 Edit Address
               </Text>
-              <TouchableOpacity 
+              <TouchableOpacity
                 onPress={() => setEditModalVisible(false)}
                 style={styles.closeButton}
               >
@@ -327,21 +327,21 @@ const AddressSelectionScreen = ({ navigation, route }) => {
                   Network
                 </Text>
                 <TouchableOpacity
-                  style={[styles.networkSelector, { 
+                  style={[styles.networkSelector, {
                     backgroundColor: theme.backgroundInput,
-                    borderColor: '#E0E0E0'
+                    borderColor: '#E0E0E0',
                   }]}
                   onPress={() => setNetworkDropdownVisible(!networkDropdownVisible)}
                 >
-                  <Text style={[styles.networkSelectorText, { 
-                    color: editNetwork ? theme.textPrimary : theme.textSecondary 
+                  <Text style={[styles.networkSelectorText, {
+                    color: editNetwork ? theme.textPrimary : theme.textSecondary,
                   }]}>
                     {editNetwork ? `${editNetwork.symbol} ${editNetwork.name}` : 'Select network'}
                   </Text>
-                  <Ionicons 
-                    name={networkDropdownVisible ? "chevron-up" : "chevron-down"} 
-                    size={20} 
-                    color={theme.textSecondary} 
+                  <Ionicons
+                    name={networkDropdownVisible ? 'chevron-up' : 'chevron-down'}
+                    size={20}
+                    color={theme.textSecondary}
                   />
                 </TouchableOpacity>
                 {networkDropdownVisible && (
@@ -369,9 +369,9 @@ const AddressSelectionScreen = ({ navigation, route }) => {
                   Address
                 </Text>
                 <TextInput
-                  style={[styles.input, { 
+                  style={[styles.input, {
                     backgroundColor: theme.backgroundInput,
-                    color: theme.textPrimary 
+                    color: theme.textPrimary,
                   }]}
                   value={editAddress}
                   onChangeText={setEditAddress}
@@ -386,9 +386,9 @@ const AddressSelectionScreen = ({ navigation, route }) => {
                   Name (Optional)
                 </Text>
                 <TextInput
-                  style={[styles.input, { 
+                  style={[styles.input, {
                     backgroundColor: theme.backgroundInput,
-                    color: theme.textPrimary 
+                    color: theme.textPrimary,
                   }]}
                   value={editName}
                   onChangeText={setEditName}
@@ -399,8 +399,8 @@ const AddressSelectionScreen = ({ navigation, route }) => {
 
               <View style={styles.editModalActions}>
                 <TouchableOpacity
-                  style={[styles.modalButton, styles.cancelButton, { 
-                    backgroundColor: theme.backgroundInput 
+                  style={[styles.modalButton, styles.cancelButton, {
+                    backgroundColor: theme.backgroundInput,
                   }]}
                   onPress={() => setEditModalVisible(false)}
                 >
@@ -435,7 +435,7 @@ const AddressSelectionScreen = ({ navigation, route }) => {
               <Text style={[styles.editModalTitle, { color: theme.textPrimary }]}>
                 Add new Address
               </Text>
-              <TouchableOpacity 
+              <TouchableOpacity
                 onPress={() => setAddModalVisible(false)}
                 style={styles.closeButton}
               >
@@ -449,21 +449,21 @@ const AddressSelectionScreen = ({ navigation, route }) => {
                   Network
                 </Text>
                 <TouchableOpacity
-                  style={[styles.networkSelector, { 
+                  style={[styles.networkSelector, {
                     backgroundColor: theme.backgroundInput,
-                    borderColor: '#E0E0E0'
+                    borderColor: '#E0E0E0',
                   }]}
                   onPress={() => setNetworkDropdownVisible(!networkDropdownVisible)}
                 >
-                  <Text style={[styles.networkSelectorText, { 
-                    color: newNetwork ? theme.textPrimary : theme.textSecondary 
+                  <Text style={[styles.networkSelectorText, {
+                    color: newNetwork ? theme.textPrimary : theme.textSecondary,
                   }]}>
                     {newNetwork ? `${newNetwork.symbol} ${newNetwork.name}` : 'Select network'}
                   </Text>
-                  <Ionicons 
-                    name={networkDropdownVisible ? "chevron-up" : "chevron-down"} 
-                    size={20} 
-                    color={theme.textSecondary} 
+                  <Ionicons
+                    name={networkDropdownVisible ? 'chevron-up' : 'chevron-down'}
+                    size={20}
+                    color={theme.textSecondary}
                   />
                 </TouchableOpacity>
                 {networkDropdownVisible && (
@@ -491,9 +491,9 @@ const AddressSelectionScreen = ({ navigation, route }) => {
                   Address
                 </Text>
                 <TextInput
-                  style={[styles.input, { 
+                  style={[styles.input, {
                     backgroundColor: theme.backgroundInput,
-                    color: theme.textPrimary 
+                    color: theme.textPrimary,
                   }]}
                   value={newAddress}
                   onChangeText={setNewAddress}
@@ -508,9 +508,9 @@ const AddressSelectionScreen = ({ navigation, route }) => {
                   Name (Optional)
                 </Text>
                 <TextInput
-                  style={[styles.input, { 
+                  style={[styles.input, {
                     backgroundColor: theme.backgroundInput,
-                    color: theme.textPrimary 
+                    color: theme.textPrimary,
                   }]}
                   value={newName}
                   onChangeText={setNewName}
@@ -521,8 +521,8 @@ const AddressSelectionScreen = ({ navigation, route }) => {
 
               <View style={styles.editModalActions}>
                 <TouchableOpacity
-                  style={[styles.modalButton, styles.cancelButton, { 
-                    backgroundColor: theme.backgroundInput 
+                  style={[styles.modalButton, styles.cancelButton, {
+                    backgroundColor: theme.backgroundInput,
                   }]}
                   onPress={() => setAddModalVisible(false)}
                 >

@@ -81,9 +81,9 @@ const PaymentProcessingScreen = ({ navigation, route }) => {
 
   const handleCancel = () => {
     setHasNavigated(true);
-    navigation.navigate('BuyFlow', { 
+    navigation.navigate('BuyFlow', {
       screen: 'BuyAmount',
-      params: { coin }
+      params: { coin },
     });
   };
 
@@ -117,11 +117,11 @@ const PaymentProcessingScreen = ({ navigation, route }) => {
       if (qrRef.current) {
         qrRef.current.toDataURL((data) => {
           const base64Image = `data:image/png;base64,${data}`;
-          
+
           // Create a file path
           const filename = `QR_Payment_${Date.now()}.png`;
           const fileUri = FileSystem.documentDirectory + filename;
-          
+
           // Save the image
           FileSystem.writeAsStringAsync(fileUri, data, {
             encoding: FileSystem.EncodingType.Base64,
@@ -180,16 +180,16 @@ const PaymentProcessingScreen = ({ navigation, route }) => {
                     <Text style={styles.stepNumber}>1</Text>
                   </View>
                   <View style={[
-                    styles.connector, 
-                    isDetailsExpanded ? styles.firstConnectorExpanded : styles.firstConnector, 
-                    { backgroundColor: '#E0E0E0' }
+                    styles.connector,
+                    isDetailsExpanded ? styles.firstConnectorExpanded : styles.firstConnector,
+                    { backgroundColor: '#E0E0E0' },
                   ]} />
                 </View>
                 <View style={styles.timelineContent}>
                   <Text style={[styles.stepTitle, { color: theme.textPrimary }]}>
                     Transfer using the details below
                   </Text>
-                  
+
                   <View style={styles.stepDetails}>
                     {/* Timer */}
                     <View style={styles.timerRow}>
@@ -218,14 +218,14 @@ const PaymentProcessingScreen = ({ navigation, route }) => {
                             bankName: bankDetails.bankName,
                             accountNumber: bankDetails.accountNumber,
                             accountName: bankDetails.accountName,
-                            narration: bankDetails.narration
+                            narration: bankDetails.narration,
                           })}
                           size={120}
                           backgroundColor="white"
                           color="black"
                           getRef={(c) => (qrRef.current = c)}
                         />
-                        <TouchableOpacity 
+                        <TouchableOpacity
                           style={[styles.downloadButton, { backgroundColor: theme.primary }]}
                           onPress={handleDownloadQR}
                         >
@@ -238,17 +238,17 @@ const PaymentProcessingScreen = ({ navigation, route }) => {
                     </View>
 
                     {/* Collapsible Bank Details */}
-                    <TouchableOpacity 
+                    <TouchableOpacity
                       style={styles.detailsToggle}
                       onPress={() => setIsDetailsExpanded(!isDetailsExpanded)}
                     >
                       <Text style={[styles.toggleText, { color: theme.primary }]}>
                         Can't scan QR code? Tap here for transfer details.
                       </Text>
-                      <Ionicons 
-                        name={isDetailsExpanded ? "chevron-up" : "chevron-down"} 
-                        size={20} 
-                        color={theme.primary} 
+                      <Ionicons
+                        name={isDetailsExpanded ? 'chevron-up' : 'chevron-down'}
+                        size={20}
+                        color={theme.primary}
                       />
                     </TouchableOpacity>
 
@@ -373,17 +373,17 @@ const PaymentProcessingScreen = ({ navigation, route }) => {
               <View style={styles.timelineItem}>
                 <View style={styles.timelineLeft}>
                   <View style={[styles.stepDot, styles.stepActive]}>
-                    <Animated.View 
+                    <Animated.View
                       style={[
                         styles.loadingIcon,
                         {
                           transform: [{
                             rotate: rotateAnim.interpolate({
                               inputRange: [0, 1],
-                              outputRange: ['0deg', '360deg']
-                            })
-                          }]
-                        }
+                              outputRange: ['0deg', '360deg'],
+                            }),
+                          }],
+                        },
                       ]}
                     >
                       <Ionicons name="refresh" size={14} color="white" />
@@ -398,7 +398,7 @@ const PaymentProcessingScreen = ({ navigation, route }) => {
                   <Text style={[styles.stepDescription, { color: theme.textSecondary }]}>
                     We'll process your order once payment is confirmed
                   </Text>
-                  
+
                   <View style={styles.processingSection}>
                     <View style={styles.timerRow}>
                       <Text style={[styles.timerLabel, { color: theme.textSecondary }]}>Processing time</Text>
@@ -441,14 +441,14 @@ const PaymentProcessingScreen = ({ navigation, route }) => {
 
         {/* Action Buttons */}
         {!isVerifying ? (
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.confirmButton, { backgroundColor: '#FF6B35' }]}
             onPress={handlePaymentSent}
           >
             <Text style={styles.confirmButtonText}>I have sent the payment</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.homeButton, { backgroundColor: '#FF6B35' }]}
             onPress={handleBackToHome}
           >

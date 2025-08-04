@@ -16,11 +16,11 @@ import { getCoinById } from '../../data/coinPrices';
 
 const ConvertScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
-  
+
   // Default coins
   const defaultSourceCoin = { id: 'btc', symbol: 'BTC', name: 'Bitcoin' };
   const defaultDestinationCoin = { id: 'usdt', symbol: 'USDT', name: 'Tether' };
-  
+
   const [sourceCoin, setSourceCoin] = useState(defaultSourceCoin);
   const [destinationCoin, setDestinationCoin] = useState(defaultDestinationCoin);
   const [sourceAmount, setSourceAmount] = useState('');
@@ -53,7 +53,7 @@ const ConvertScreen = ({ navigation, route }) => {
     // Get real coin prices from data module
     const sourceCoinData = getCoinById(sourceCoin.id);
     const destCoinData = getCoinById(destinationCoin.id);
-    
+
     if (!sourceCoinData || !destCoinData) {
       return `1 ${sourceCoin.symbol} = 1 ${destinationCoin.symbol}`;
     }
@@ -64,15 +64,15 @@ const ConvertScreen = ({ navigation, route }) => {
     if (isRateFlipped) {
       // Show 1 destination = X source
       const flippedRate = 1 / conversionRate;
-      return `1 ${destinationCoin.symbol} = ${flippedRate.toLocaleString('en-US', { 
+      return `1 ${destinationCoin.symbol} = ${flippedRate.toLocaleString('en-US', {
         minimumFractionDigits: flippedRate < 1 ? 6 : 2,
-        maximumFractionDigits: flippedRate < 1 ? 6 : 2
+        maximumFractionDigits: flippedRate < 1 ? 6 : 2,
       })} ${sourceCoin.symbol}`;
     } else {
       // Show 1 source = X destination
-      return `1 ${sourceCoin.symbol} = ${conversionRate.toLocaleString('en-US', { 
+      return `1 ${sourceCoin.symbol} = ${conversionRate.toLocaleString('en-US', {
         minimumFractionDigits: conversionRate < 1 ? 6 : 2,
-        maximumFractionDigits: conversionRate < 1 ? 6 : 2
+        maximumFractionDigits: conversionRate < 1 ? 6 : 2,
       })} ${destinationCoin.symbol}`;
     }
   };
@@ -96,7 +96,7 @@ const ConvertScreen = ({ navigation, route }) => {
   useEffect(() => {
     if (sourceAmount && !isNaN(sourceAmount) && parseFloat(sourceAmount) > 0) {
       const amount = parseFloat(sourceAmount);
-      
+
       if (sourceCoin.id === destinationCoin.id) {
         setDestinationAmount(sourceAmount);
         return;
@@ -105,7 +105,7 @@ const ConvertScreen = ({ navigation, route }) => {
       // Get real coin prices from data module
       const sourceCoinData = getCoinById(sourceCoin.id);
       const destCoinData = getCoinById(destinationCoin.id);
-      
+
       if (!sourceCoinData || !destCoinData) {
         setDestinationAmount('');
         return;
@@ -117,10 +117,10 @@ const ConvertScreen = ({ navigation, route }) => {
 
       // Format based on destination currency
       let decimals = 6; // default
-      if (destinationCoin.id === 'btc') decimals = 8;
-      else if (destinationCoin.id === 'eth') decimals = 6;
-      else if (destinationCoin.id === 'xrp') decimals = 2;
-      else if (destinationCoin.id === 'usdt') decimals = 6;
+      if (destinationCoin.id === 'btc') {decimals = 8;}
+      else if (destinationCoin.id === 'eth') {decimals = 6;}
+      else if (destinationCoin.id === 'xrp') {decimals = 2;}
+      else if (destinationCoin.id === 'usdt') {decimals = 6;}
 
       setDestinationAmount(converted.toFixed(decimals));
     } else {
@@ -168,16 +168,16 @@ const ConvertScreen = ({ navigation, route }) => {
     if (!sourceAmount || !destinationAmount) {
       return;
     }
-    
+
     // Get real exchange rate from coin data
     const sourceCoinData = getCoinById(sourceCoin.id);
     const destCoinData = getCoinById(destinationCoin.id);
-    
+
     let conversionRate = 1;
     if (sourceCoinData && destCoinData) {
       conversionRate = sourceCoinData.price / destCoinData.price;
     }
-    
+
     navigation.navigate('ConvertConfirmation', {
       sourceCoin,
       destinationCoin,
@@ -193,19 +193,19 @@ const ConvertScreen = ({ navigation, route }) => {
     <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity 
-          onPress={() => navigation.goBack()} 
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
           style={styles.backButton}
         >
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
         </TouchableOpacity>
         <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>Convert</Text>
         <View style={styles.headerRight}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.headerIcon}
             onPress={() => navigation.getParent()?.navigate('MainTabs', {
               screen: 'History',
-              params: { selectedTab: 'Convert' }
+              params: { selectedTab: 'Convert' },
             })}
           >
             <Ionicons name="time-outline" size={24} color={theme.textSecondary} />
@@ -217,7 +217,7 @@ const ConvertScreen = ({ navigation, route }) => {
         {/* Source Currency */}
         <View style={[styles.currencyCard, { backgroundColor: theme.backgroundInput }]}>
           <View style={styles.currencyHeader}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.currencySelector}
               onPress={handleSourceCoinSelect}
             >
@@ -238,7 +238,7 @@ const ConvertScreen = ({ navigation, route }) => {
               </Text>
             </View>
           </View>
-          
+
           <View style={styles.amountContainer}>
             <TextInput
               style={[styles.amountInput, { color: theme.textPrimary }]}
@@ -251,7 +251,7 @@ const ConvertScreen = ({ navigation, route }) => {
               placeholderTextColor={theme.textSecondary}
               keyboardType="numeric"
             />
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[styles.maxButton, { backgroundColor: theme.primary }]}
               onPress={handleMaxPress}
             >
@@ -262,7 +262,7 @@ const ConvertScreen = ({ navigation, route }) => {
 
         {/* Swap Button */}
         <View style={styles.swapContainer}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.swapButton, { backgroundColor: '#4285F4' }]}
             onPress={handleSwapCurrencies}
           >
@@ -273,7 +273,7 @@ const ConvertScreen = ({ navigation, route }) => {
         {/* Destination Currency */}
         <View style={[styles.currencyCard, { backgroundColor: theme.backgroundInput }]}>
           <View style={styles.currencyHeader}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.currencySelector}
               onPress={handleDestinationCoinSelect}
             >
@@ -286,7 +286,7 @@ const ConvertScreen = ({ navigation, route }) => {
               </View>
             </TouchableOpacity>
           </View>
-          
+
           <View style={styles.amountContainer}>
             <TextInput
               style={[styles.amountInput, { color: theme.textPrimary }]}
@@ -296,13 +296,13 @@ const ConvertScreen = ({ navigation, route }) => {
               editable={false}
             />
           </View>
-          
+
           <View style={styles.feeContainer}>
             <Text style={[styles.feeLabel, { color: theme.textSecondary }]}>
               Fee
             </Text>
             <Text style={[styles.feeAmount, { color: theme.textPrimary }]}>
-              {sourceAmount && parseFloat(sourceAmount) > 0 
+              {sourceAmount && parseFloat(sourceAmount) > 0
                 ? `${(parseFloat(sourceAmount) * 0.001).toFixed(sourceCoin.id === 'btc' ? 8 : sourceCoin.id === 'usdt' ? 6 : sourceCoin.id === 'xrp' ? 2 : 6)} ${sourceCoin.symbol}`
                 : `0 ${sourceCoin.symbol}`
               }
@@ -317,7 +317,7 @@ const ConvertScreen = ({ navigation, route }) => {
               <Text style={[styles.exchangeRateLabel, { color: theme.textSecondary }]}>
                 With price
               </Text>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.infoButton}
                 onPress={() => setShowPriceTooltip(!showPriceTooltip)}
               >
@@ -332,7 +332,7 @@ const ConvertScreen = ({ navigation, route }) => {
                 </View>
               )}
             </View>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.exchangeRateContainer}
               onPress={handleSwapRateDisplay}
             >
@@ -345,12 +345,12 @@ const ConvertScreen = ({ navigation, route }) => {
         </View>
 
         {/* Preview Button */}
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[
-            styles.previewButton, 
-            { 
+            styles.previewButton,
+            {
               backgroundColor: isPreviewEnabled ? '#FF6B00' : 'rgba(255, 107, 0, 0.4)',
-            }
+            },
           ]}
           onPress={handlePreviewConversion}
           disabled={!isPreviewEnabled}

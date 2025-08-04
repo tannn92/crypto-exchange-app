@@ -88,8 +88,8 @@ const ConvertFlowNavigator = () => {
       }}
     >
       <ConvertStack.Screen name="Convert" component={ConvertScreen} />
-      <ConvertStack.Screen 
-        name="ConvertConfirmation" 
+      <ConvertStack.Screen
+        name="ConvertConfirmation"
         component={ConvertConfirmationScreen}
         options={{
           presentation: 'transparentModal',
@@ -126,8 +126,8 @@ const WithdrawFlowNavigator = () => {
       }}
     >
       <WithdrawStack.Screen name="Withdraw" component={WithdrawScreen} />
-      <WithdrawStack.Screen 
-        name="WithdrawConfirmation" 
+      <WithdrawStack.Screen
+        name="WithdrawConfirmation"
         component={WithdrawConfirmationScreen}
         options={{
           presentation: 'transparentModal',
@@ -151,8 +151,8 @@ const SendToUserFlowNavigator = () => {
       }}
     >
       <SendToUserStack.Screen name="SendToUser" component={SendToUserScreen} />
-      <SendToUserStack.Screen 
-        name="SendToUserConfirmation" 
+      <SendToUserStack.Screen
+        name="SendToUserConfirmation"
         component={SendToUserConfirmationScreen}
         options={{
           presentation: 'transparentModal',
@@ -168,7 +168,7 @@ const SendToUserFlowNavigator = () => {
 };
 
 const AppNavigator = () => {
-  const { theme, isDarkMode } = useTheme();
+  const { theme } = useTheme();
 
   return (
     <NavigationContainer>
@@ -179,20 +179,20 @@ const AppNavigator = () => {
         }}
       >
         <Stack.Screen name="MainTabs" component={BottomTabNavigator} />
-        <Stack.Screen 
-          name="BuyFlow" 
+        <Stack.Screen
+          name="BuyFlow"
           component={BuyFlowNavigator}
         />
-        <Stack.Screen 
-          name="SellFlow" 
+        <Stack.Screen
+          name="SellFlow"
           component={SellFlowNavigator}
         />
-        <Stack.Screen 
-          name="ConvertFlow" 
+        <Stack.Screen
+          name="ConvertFlow"
           component={ConvertFlowNavigator}
         />
-        <Stack.Screen 
-          name="CoinSelectionModal" 
+        <Stack.Screen
+          name="CoinSelectionModal"
           component={CoinSelectionScreen}
           options={{
             presentation: 'modal',
@@ -201,15 +201,15 @@ const AppNavigator = () => {
             animationDuration: 200,
           }}
         />
-        <Stack.Screen 
-          name="CoinSelectionScreen" 
+        <Stack.Screen
+          name="CoinSelectionScreen"
           component={CoinSelectionScreen}
           options={{
             headerShown: false,
           }}
         />
-        <Stack.Screen 
-          name="ReceiveMethodScreen" 
+        <Stack.Screen
+          name="ReceiveMethodScreen"
           component={ReceiveMethodScreen}
           options={{
             presentation: 'modal',
@@ -218,20 +218,20 @@ const AppNavigator = () => {
             animationDuration: 200,
           }}
         />
-        <Stack.Screen 
-          name="DepositFlow" 
+        <Stack.Screen
+          name="DepositFlow"
           component={DepositFlowNavigator}
         />
-        <Stack.Screen 
-          name="WithdrawFlow" 
+        <Stack.Screen
+          name="WithdrawFlow"
           component={WithdrawFlowNavigator}
         />
-        <Stack.Screen 
-          name="SendToUserFlow" 
+        <Stack.Screen
+          name="SendToUserFlow"
           component={SendToUserFlowNavigator}
         />
-        <Stack.Screen 
-          name="NetworkSelectionModal" 
+        <Stack.Screen
+          name="NetworkSelectionModal"
           component={NetworkSelectionScreen}
           options={{
             presentation: 'modal',
@@ -240,8 +240,8 @@ const AppNavigator = () => {
             animationDuration: 200,
           }}
         />
-        <Stack.Screen 
-          name="AddressSelectionModal" 
+        <Stack.Screen
+          name="AddressSelectionModal"
           component={AddressSelectionScreen}
           options={{
             presentation: 'modal',
@@ -250,8 +250,8 @@ const AppNavigator = () => {
             animationDuration: 200,
           }}
         />
-        <Stack.Screen 
-          name="WithdrawMethodSelectionModal" 
+        <Stack.Screen
+          name="WithdrawMethodSelectionModal"
           component={WithdrawMethodSelectionScreen}
           options={{
             presentation: 'transparentModal',
@@ -261,8 +261,8 @@ const AppNavigator = () => {
             cardStyle: { backgroundColor: 'transparent' },
           }}
         />
-        <Stack.Screen 
-          name="UsernameSelectionModal" 
+        <Stack.Screen
+          name="UsernameSelectionModal"
           component={UsernameSelectionScreen}
           options={{
             presentation: 'modal',
@@ -271,19 +271,19 @@ const AppNavigator = () => {
             animationDuration: 200,
           }}
         />
-        <Stack.Screen 
-          name="CoinDetails" 
+        <Stack.Screen
+          name="CoinDetails"
           component={CoinDetailsScreen}
         />
-        <Stack.Screen 
-          name="CoinMarket" 
+        <Stack.Screen
+          name="CoinMarket"
           component={CoinMarketScreen}
           options={{
             headerShown: false,
           }}
         />
-        <Stack.Screen 
-          name="ProfileMenu" 
+        <Stack.Screen
+          name="ProfileMenu"
           component={ProfileMenuScreen}
           options={{
             presentation: 'modal',
@@ -292,8 +292,8 @@ const AppNavigator = () => {
             animationDuration: 200,
           }}
         />
-        <Stack.Screen 
-          name="PaymentMethodModal" 
+        <Stack.Screen
+          name="PaymentMethodModal"
           component={PaymentMethodScreen}
           options={{
             presentation: 'modal',
@@ -302,8 +302,8 @@ const AppNavigator = () => {
             animationDuration: 200,
           }}
         />
-        <Stack.Screen 
-          name="Notification" 
+        <Stack.Screen
+          name="Notification"
           component={NotificationScreen}
           options={{
             headerShown: false,

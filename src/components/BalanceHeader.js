@@ -3,10 +3,10 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 
-const BalanceHeader = ({ 
-  currency, 
-  setCurrency, 
-  showCurrencyDropdown, 
+const BalanceHeader = ({
+  currency,
+  setCurrency,
+  showCurrencyDropdown,
   setShowCurrencyDropdown,
   totalBalance,
   balanceVisible,
@@ -14,7 +14,7 @@ const BalanceHeader = ({
   balanceChange,
   balanceChangePercent,
   formatBalance,
-  formatChange 
+  formatChange,
 }) => {
   const { theme } = useTheme();
 
@@ -27,7 +27,7 @@ const BalanceHeader = ({
     if (!balanceVisible) {
       return '*********';
     }
-    
+
     if (currency === 'VND') {
       // For VND, show only integer part
       return Math.floor(amount).toLocaleString();
@@ -41,7 +41,7 @@ const BalanceHeader = ({
     <>
       <View style={styles.balanceHeader}>
         <Text style={[styles.balanceLabel, { color: theme.textSecondary }]}>Total balance in</Text>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.currencySelector}
           onPress={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
         >
@@ -49,34 +49,34 @@ const BalanceHeader = ({
           <Ionicons name="chevron-down" size={16} color={theme.primary} />
         </TouchableOpacity>
       </View>
-      
+
       <View style={styles.balanceAmountContainer}>
         <Text style={[styles.balanceAmount, { color: theme.textPrimary }]}>
           {currency === 'VND' ? '' : '$'}{formatBalanceDisplay(totalBalance)}{currency === 'VND' ? ' VND' : ''}
         </Text>
         <TouchableOpacity onPress={toggleBalanceVisibility} style={styles.eyeIcon}>
-          <Ionicons 
-            name={balanceVisible ? "eye-outline" : "eye-off-outline"} 
-            size={20} 
-            color={theme.textSecondary} 
+          <Ionicons
+            name={balanceVisible ? 'eye-outline' : 'eye-off-outline'}
+            size={20}
+            color={theme.textSecondary}
           />
         </TouchableOpacity>
       </View>
-      
+
       <Text style={[styles.balanceChange, { color: '#16C784' }]}>
         {formatChange(balanceChange, balanceChangePercent)}
       </Text>
-      
+
       {showCurrencyDropdown && (
         <View style={[styles.currencyDropdown, { backgroundColor: theme.backgroundCard }]}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.currencyOption, currency === 'USDT' && styles.activeCurrencyOption]}
             onPress={() => handleCurrencySelect('USDT')}
           >
             <Text style={[styles.currencyOptionText, { color: theme.textPrimary }]}>USDT</Text>
             {currency === 'USDT' && <Ionicons name="checkmark" size={20} color={theme.primary} />}
           </TouchableOpacity>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.currencyOption, currency === 'VND' && styles.activeCurrencyOption]}
             onPress={() => handleCurrencySelect('VND')}
           >

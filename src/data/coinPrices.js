@@ -12,7 +12,7 @@ export const coinPrices = {
     iconBg: '#F7931A',
   },
   eth: {
-    id: 'eth', 
+    id: 'eth',
     symbol: 'ETH',
     name: 'Ethereum',
     price: 3801.38,

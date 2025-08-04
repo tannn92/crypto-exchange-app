@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 
-const ProcessingGuarantee = ({ text = "Processing guaranteed ≤ 5 min", style = {} }) => {
+const ProcessingGuarantee = ({ text = 'Processing guaranteed ≤ 5 min', style = {} }) => {
   const { theme } = useTheme();
 
   return (

@@ -13,16 +13,16 @@ import CoinIcon from '../../components/CoinIcon';
 
 const ConvertSuccessScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
-  const { 
-    sourceCoin, 
-    destinationCoin, 
-    sourceAmount, 
-    destinationAmount, 
+  const {
+    sourceCoin,
+    destinationCoin,
+    sourceAmount,
+    destinationAmount,
     exchangeRate,
     fee,
     finalAmount,
     transactionId,
-    transactionTime
+    transactionTime,
   } = route.params;
 
   const formatNumber = (num) => {
@@ -33,8 +33,8 @@ const ConvertSuccessScreen = ({ navigation, route }) => {
     <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity 
-          onPress={() => navigation.navigate('ConvertFlow', { screen: 'Convert' })} 
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ConvertFlow', { screen: 'Convert' })}
           style={styles.backButton}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
@@ -160,13 +160,13 @@ const ConvertSuccessScreen = ({ navigation, route }) => {
 
       {/* Action Buttons */}
       <View style={styles.actionButtons}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.balanceButton, { backgroundColor: theme.backgroundInput }]}
           onPress={() => navigation.navigate('MainTabs', { screen: 'Assets' })}
         >
           <Text style={[styles.balanceButtonText, { color: theme.textPrimary }]}>View Balance</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.convertMoreButton, { backgroundColor: '#FF6B35' }]}
           onPress={() => navigation.navigate('ConvertFlow', { screen: 'Convert' })}
         >

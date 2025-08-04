@@ -32,8 +32,8 @@ const SendToUserSuccessScreen = ({ navigation, route }) => {
     <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity 
-          onPress={() => navigation.navigate('MainTabs')} 
+        <TouchableOpacity
+          onPress={() => navigation.navigate('MainTabs')}
           style={styles.backButton}
         >
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
@@ -88,7 +88,7 @@ const SendToUserSuccessScreen = ({ navigation, route }) => {
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit',
-                hour12: false
+                hour12: false,
               })}
             </Text>
           </View>
@@ -127,13 +127,13 @@ const SendToUserSuccessScreen = ({ navigation, route }) => {
 
       {/* Action Buttons */}
       <View style={styles.actionButtons}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.saveButton, { backgroundColor: theme.backgroundInput }]}
           onPress={handleGoToHomepage}
         >
           <Text style={[styles.saveButtonText, { color: theme.textPrimary }]}>Homepage</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.balanceButton, { backgroundColor: '#FF6B35' }]}
           onPress={handleViewBalance}
         >

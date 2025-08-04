@@ -20,15 +20,15 @@ import CoinIcon from '../../components/CoinIcon';
 const WithdrawScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
   const coin = route.params?.coin || { id: 'usdt', symbol: 'USDT', name: 'Tether' };
-  
+
   const [selectedCoin, setSelectedCoin] = useState(coin);
   const [selectedNetwork, setSelectedNetwork] = useState(null);
   const [withdrawAddress, setWithdrawAddress] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [showMethodSelection, setShowMethodSelection] = useState(false); // Don't show method selection by default
-  
+
   const slideAnim = useRef(new Animated.Value(300)).current;
-  
+
   // Mock balance
   const balance = 2855.00;
 
@@ -41,7 +41,7 @@ const WithdrawScreen = ({ navigation, route }) => {
         useNativeDriver: true,
       }).start();
     }
-  }, [showMethodSelection]);
+  }, [showMethodSelection, slideAnim]);
 
   const handleMethodSelect = (method) => {
     // Start slide down animation
@@ -50,17 +50,17 @@ const WithdrawScreen = ({ navigation, route }) => {
       duration: 200,
       useNativeDriver: true,
     }).start();
-    
+
     // Immediately hide the modal (don't wait for animation)
     setShowMethodSelection(false);
-    
+
     if (method === 'crypto') {
       // Stay on this screen - the form will now be visible
     } else if (method === 'user') {
       // Navigate to P2P send screen
-      navigation.navigate('SendToUserFlow', { 
+      navigation.navigate('SendToUserFlow', {
         screen: 'SendToUser',
-        params: { coin: selectedCoin }
+        params: { coin: selectedCoin },
       });
     }
   };
@@ -72,7 +72,7 @@ const WithdrawScreen = ({ navigation, route }) => {
       duration: 200,
       useNativeDriver: true,
     }).start();
-    
+
     // Immediately hide the modal and go back
     setShowMethodSelection(false);
     navigation.goBack(); // Go back to home screen
@@ -106,7 +106,7 @@ const WithdrawScreen = ({ navigation, route }) => {
   useFocusEffect(
     React.useCallback(() => {
       const params = route.params;
-      
+
       // Handle coin selection
       if (params?.selectedCoin && params.selectedCoin !== selectedCoin) {
         setSelectedCoin(params.selectedCoin);
@@ -115,13 +115,13 @@ const WithdrawScreen = ({ navigation, route }) => {
         setWithdrawAmount('');
         navigation.setParams({ selectedCoin: undefined });
       }
-      
+
       // Handle network selection
       if (params?.selectedNetwork && params.selectedNetwork !== selectedNetwork) {
         setSelectedNetwork(params.selectedNetwork);
         navigation.setParams({ selectedNetwork: undefined });
       }
-      
+
       // Handle address selection
       if (params?.selectedAddress) {
         setWithdrawAddress(params.selectedAddress.fullAddress);
@@ -131,7 +131,7 @@ const WithdrawScreen = ({ navigation, route }) => {
           symbol: params.selectedAddress.network,
           name: params.selectedAddress.networkName,
           min: '1 USDT',
-          fee: '0 USDT'
+          fee: '0 USDT',
         };
         setSelectedNetwork(networkData);
         navigation.setParams({ selectedAddress: undefined });
@@ -158,8 +158,8 @@ const WithdrawScreen = ({ navigation, route }) => {
         <>
           {/* Header */}
           <View style={styles.header}>
-            <TouchableOpacity 
-              onPress={() => navigation.goBack()} 
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
               style={styles.backButton}
             >
               <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
@@ -168,11 +168,11 @@ const WithdrawScreen = ({ navigation, route }) => {
               Withdraw {selectedCoin?.symbol || 'USDT'}
             </Text>
             <View style={styles.headerRight}>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.headerIcon}
                 onPress={() => navigation.getParent()?.push('MainTabs', {
                   screen: 'History',
-                  params: { selectedTab: 'Withdrawal' }
+                  params: { selectedTab: 'Withdrawal' },
                 })}
               >
                 <Ionicons name="time-outline" size={24} color={theme.textSecondary} />
@@ -180,12 +180,12 @@ const WithdrawScreen = ({ navigation, route }) => {
             </View>
           </View>
 
-          <KeyboardAvoidingView 
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.keyboardView}
           >
-            <ScrollView 
-              style={styles.content} 
+            <ScrollView
+              style={styles.content}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.scrollContent}
             >
@@ -207,7 +207,7 @@ const WithdrawScreen = ({ navigation, route }) => {
                   textAlignVertical="top"
                 />
                 <View style={styles.addressActions}>
-                  <TouchableOpacity 
+                  <TouchableOpacity
                     style={[styles.actionButton, { backgroundColor: theme.backgroundForm }]}
                     onPress={handleAddressSelect}
                   >
@@ -232,8 +232,8 @@ const WithdrawScreen = ({ navigation, route }) => {
               onPress={handleNetworkSelect}
             >
               <Text style={[
-                styles.selectionText, 
-                { color: selectedNetwork ? theme.textPrimary : theme.textSecondary }
+                styles.selectionText,
+                { color: selectedNetwork ? theme.textPrimary : theme.textSecondary },
               ]}>
                 {selectedNetwork ? selectedNetwork.name : 'Select network'}
               </Text>
@@ -328,12 +328,12 @@ const WithdrawScreen = ({ navigation, route }) => {
             </View>
 
             {/* Submit Button */}
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[
-                styles.submitButton, 
-                { 
-                  backgroundColor: isSubmitEnabled ? theme.primary : '#FFB885'
-                }
+                styles.submitButton,
+                {
+                  backgroundColor: isSubmitEnabled ? theme.primary : '#FFB885',
+                },
               ]}
               onPress={handleSubmit}
               disabled={!isSubmitEnabled}
@@ -356,24 +356,24 @@ const WithdrawScreen = ({ navigation, route }) => {
           statusBarTranslucent={true}
         >
           <View style={styles.modalOverlay}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.overlayTouchable}
               activeOpacity={1}
               onPress={handleCloseMethodSelection}
             />
-            <Animated.View 
+            <Animated.View
               style={[
-                styles.modalContainer, 
-                { 
+                styles.modalContainer,
+                {
                   backgroundColor: theme.backgroundForm,
-                  transform: [{ translateY: slideAnim }]
-                }
+                  transform: [{ translateY: slideAnim }],
+                },
               ]}
             >
               {/* Header with back button */}
               <View style={styles.modalHeader}>
-                <TouchableOpacity 
-                  onPress={handleCloseMethodSelection} 
+                <TouchableOpacity
+                  onPress={handleCloseMethodSelection}
                   style={styles.modalBackButton}
                 >
                   <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
@@ -534,62 +534,10 @@ const styles = StyleSheet.create({
   selectionText: {
     fontSize: 16,
   },
-  quantityContainer: {
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    padding: 16,
-  },
-  quantityContent: {
-    gap: 12,
-  },
-  minLabel: {
-    fontSize: 14,
-  },
-  quantityRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  quantityInput: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    flex: 1,
-  },
-  quantityRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  currencyText: {
-    fontSize: 16,
-    fontWeight: '500',
-  },
   maxButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 15,
-  },
-  maxButtonText: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  balanceRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  balanceLabel: {
-    fontSize: 14,
-  },
-  balanceAmount: {
-    fontSize: 14,
-    fontWeight: '500',
-    marginLeft: 4,
-  },
-  refreshIcon: {
-    marginLeft: 8,
   },
   infoSection: {
     gap: 16,

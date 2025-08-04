@@ -19,7 +19,7 @@ const PaymentMethodScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
   const currentPaymentMethod = route.params?.currentPaymentMethod || 'balance';
   const coin = route.params?.coin;
-  
+
   // Initialize state based on current payment method
   const [selectedMethod, setSelectedMethod] = useState(currentPaymentMethod);
   const [isBankExpanded, setIsBankExpanded] = useState(
@@ -49,15 +49,15 @@ const PaymentMethodScreen = ({ navigation, route }) => {
       setSelectedMethod(method);
       // Close modal first
       navigation.goBack();
-      
+
       // Navigate back to BuyFlow with the selected payment method
       setTimeout(() => {
         navigation.navigate('BuyFlow', {
           screen: 'BuyAmount',
-          params: { 
+          params: {
             selectedPaymentMethod: method,
-            coin: coin // Pass the coin back
-          }
+            coin: coin, // Pass the coin back
+          },
         });
       }, 100);
     }
@@ -67,15 +67,15 @@ const PaymentMethodScreen = ({ navigation, route }) => {
     setSelectedMethod(`bank-${bankId}`);
     // Close modal first
     navigation.goBack();
-    
+
     // Navigate back to BuyFlow with the selected bank
     setTimeout(() => {
       navigation.navigate('BuyFlow', {
         screen: 'BuyAmount',
-        params: { 
+        params: {
           selectedPaymentMethod: `bank-${bankId}`,
-          coin: coin // Pass the coin back
-        }
+          coin: coin, // Pass the coin back
+        },
       });
     }, 100);
   };
@@ -99,7 +99,7 @@ const PaymentMethodScreen = ({ navigation, route }) => {
               backgroundColor: theme.backgroundInput,
               borderColor: (selectedMethod.startsWith('bank') || selectedMethod === 'bank') ? theme.primary : theme.border,
               borderWidth: (selectedMethod.startsWith('bank') || selectedMethod === 'bank') ? 2 : 1,
-            }
+            },
           ]}
           onPress={() => handleSelectMethod('bank')}
         >
@@ -123,10 +123,10 @@ const PaymentMethodScreen = ({ navigation, route }) => {
               </View>
             </View>
           </View>
-          <Ionicons 
-            name={isBankExpanded ? "chevron-up" : "chevron-down"} 
-            size={20} 
-            color={theme.textSecondary} 
+          <Ionicons
+            name={isBankExpanded ? 'chevron-up' : 'chevron-down'}
+            size={20}
+            color={theme.textSecondary}
           />
         </TouchableOpacity>
 
@@ -141,7 +141,7 @@ const PaymentMethodScreen = ({ navigation, route }) => {
                   {
                     borderBottomColor: theme.border,
                     backgroundColor: selectedMethod === `bank-${bankId}` ? theme.primary + '15' : theme.backgroundInput,
-                  }
+                  },
                 ]}
                 onPress={() => handleSelectBank(bankId)}
               >
@@ -167,7 +167,7 @@ const PaymentMethodScreen = ({ navigation, route }) => {
               backgroundColor: theme.backgroundInput,
               borderColor: selectedMethod === 'balance' ? theme.primary : theme.border,
               borderWidth: selectedMethod === 'balance' ? 2 : 1,
-            }
+            },
           ]}
           onPress={() => handleSelectMethod('balance')}
         >

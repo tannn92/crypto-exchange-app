@@ -6,12 +6,12 @@ const SellCoinSelectionScreen = ({ navigation, route }) => {
   const handleSelectCoin = (coin) => {
     navigation.navigate('SellFlow', {
       screen: 'SellAmount',
-      params: { coin }
+      params: { coin },
     });
   };
 
   return (
-    <CoinSelectionScreen 
+    <CoinSelectionScreen
       navigation={{
         ...navigation,
         navigate: (screen, params) => {
@@ -22,7 +22,7 @@ const SellCoinSelectionScreen = ({ navigation, route }) => {
             navigation.navigate(screen, params);
           }
         },
-        goBack: navigation.goBack
+        goBack: navigation.goBack,
       }}
       route={route}
     />

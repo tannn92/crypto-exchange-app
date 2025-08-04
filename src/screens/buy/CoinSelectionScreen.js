@@ -23,7 +23,7 @@ const CoinSelectionScreen = ({ navigation, route }) => {
   const [selectedCurrency, setSelectedCurrency] = useState('USDT'); // 'USDT' or 'VND'
   const [selectedPopularCoin, setSelectedPopularCoin] = useState(null);
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
-  
+
   // Detect if we're in buy or sell flow from route params
   const flow = route.params?.flow || 'buy';
   const isSellFlow = flow === 'sell';
@@ -59,23 +59,23 @@ const CoinSelectionScreen = ({ navigation, route }) => {
     // First filter by search text
     const matchesSearch = coin.symbol.toLowerCase().includes(searchText.toLowerCase()) ||
       coin.name.toLowerCase().includes(searchText.toLowerCase());
-    
+
     // Then exclude the specified coin (for convert flow to prevent A->A conversion)
     const isNotExcluded = !excludeCoin || coin.id !== excludeCoin.id;
-    
+
     return matchesSearch && isNotExcluded;
   });
 
   const handleSelectCoin = (coin) => {
     setSelectedCoin(coin);
-    
+
     // Check if this is a modal (has flow in params but not as main navigation)
     if (route.params?.flow && (route.params.flow === 'withdraw' || route.params.flow === 'send' || route.params.flow === 'convert-source' || route.params.flow === 'convert-destination' || route.params.flow === 'deposit')) {
       // Navigate back to the appropriate flow with the selected coin
       if (route.params.flow === 'withdraw') {
         // Close modal first
         navigation.goBack();
-        
+
         // Navigate back to WithdrawFlow with the selected coin
         setTimeout(() => {
           navigation.navigate('WithdrawFlow', {
@@ -86,7 +86,7 @@ const CoinSelectionScreen = ({ navigation, route }) => {
       } else if (route.params.flow === 'send') {
         // Close modal first
         navigation.goBack();
-        
+
         // Navigate back to SendToUserFlow with the selected coin
         setTimeout(() => {
           navigation.navigate('SendToUserFlow', {
@@ -97,7 +97,7 @@ const CoinSelectionScreen = ({ navigation, route }) => {
       } else if (route.params.flow === 'convert-source' || route.params.flow === 'convert-destination') {
         // Close modal first
         navigation.goBack();
-        
+
         // Navigate back to ConvertFlow with the selected coin and flow
         setTimeout(() => {
           navigation.navigate('ConvertFlow', {
@@ -108,7 +108,7 @@ const CoinSelectionScreen = ({ navigation, route }) => {
       } else if (route.params.flow === 'deposit') {
         // Close modal first
         navigation.goBack();
-        
+
         // Navigate back to DepositFlow with the selected coin
         setTimeout(() => {
           navigation.navigate('DepositFlow', {
@@ -119,33 +119,33 @@ const CoinSelectionScreen = ({ navigation, route }) => {
       }
       return;
     }
-    
+
     if (isSellFlow) {
       // Close modal first
       navigation.goBack();
-      
+
       // Navigate back to SellFlow with the selected coin
       setTimeout(() => {
         navigation.navigate('SellFlow', {
           screen: 'SellAmount',
-          params: { 
+          params: {
             selectedCoin: coin,
-            coin: coin // Keep original coin param for compatibility
-          }
+            coin: coin, // Keep original coin param for compatibility
+          },
         });
       }, 100);
     } else {
       // Close modal first
       navigation.goBack();
-      
+
       // Navigate back to BuyFlow with the selected coin
       setTimeout(() => {
         navigation.navigate('BuyFlow', {
           screen: 'BuyAmount',
-          params: { 
+          params: {
             selectedCoin: coin,
-            coin: coin // Keep original coin param for compatibility
-          }
+            coin: coin, // Keep original coin param for compatibility
+          },
         });
       }, 100);
     }
@@ -175,9 +175,9 @@ const CoinSelectionScreen = ({ navigation, route }) => {
 
   const renderCoinItem = ({ item }) => {
     const isPositive = item.change >= 0;
-    
+
     return (
-      <TouchableOpacity 
+      <TouchableOpacity
         style={styles.coinItem}
         onPress={() => handleSelectCoin(item)}
       >
@@ -232,18 +232,18 @@ const CoinSelectionScreen = ({ navigation, route }) => {
                   key={coinSymbol}
                   style={[
                     styles.popularCoin,
-                    { 
+                    {
                       backgroundColor: theme.backgroundSecondary,
                       borderColor: selectedPopularCoin === coinSymbol ? theme.primary : theme.border,
                       borderWidth: selectedPopularCoin === coinSymbol ? 2 : 1,
-                    }
+                    },
                   ]}
                   onPress={() => handlePopularCoinSelect(coinSymbol)}
                 >
                   <CoinIcon coinId={coin?.id} size={20} style={{ marginRight: 6 }} />
                   <Text style={[
-                    styles.popularCoinText, 
-                    { color: selectedPopularCoin === coinSymbol ? theme.primary : theme.textPrimary }
+                    styles.popularCoinText,
+                    { color: selectedPopularCoin === coinSymbol ? theme.primary : theme.textPrimary },
                   ]}>
                     {coinSymbol}
                   </Text>
@@ -256,7 +256,7 @@ const CoinSelectionScreen = ({ navigation, route }) => {
         <View style={styles.listHeader}>
           <Text style={[styles.listHeaderText, { color: theme.textPrimary }]}>Coin name</Text>
           <View style={styles.dropdownContainer}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[styles.priceDropdown, { backgroundColor: theme.backgroundSecondary }]}
               onPress={toggleCurrencyDropdown}
             >
@@ -271,14 +271,14 @@ const CoinSelectionScreen = ({ navigation, route }) => {
                     key={option.code}
                     style={[
                       styles.dropdownItem,
-                      selectedCurrency === option.code && styles.dropdownItemSelected
+                      selectedCurrency === option.code && styles.dropdownItemSelected,
                     ]}
                     onPress={() => selectCurrency(option.code)}
                   >
                     <CoinIcon coinId={option.icon} size={16} />
                     <Text style={[
-                      styles.dropdownItemText, 
-                      { color: theme.textPrimary }
+                      styles.dropdownItemText,
+                      { color: theme.textPrimary },
                     ]}>
                       {option.name}
                     </Text>

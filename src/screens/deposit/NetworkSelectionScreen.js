@@ -25,7 +25,7 @@ const NetworkSelectionScreen = ({ navigation, route }) => {
       min: '1 USDT',
       arrivalTime: '~ 1 mins',
       address: 'EQDtFpEwcFAEcRe5mLVh2N6C0x1hJEM7W61JLnSF74p4q2',
-      status: 'active'
+      status: 'active',
     },
     {
       id: 'trc20',
@@ -35,7 +35,7 @@ const NetworkSelectionScreen = ({ navigation, route }) => {
       min: '1 USDT',
       arrivalTime: '~ 1 mins',
       address: 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t',
-      status: 'active'
+      status: 'active',
     },
     {
       id: 'bsc',
@@ -45,7 +45,7 @@ const NetworkSelectionScreen = ({ navigation, route }) => {
       min: '1 USDT',
       arrivalTime: '~ 1 mins',
       address: '0x742d35Cc6634C0532925a3b844Bc9e7595f6BEd1',
-      status: 'active'
+      status: 'active',
     },
     {
       id: 'polygon',
@@ -55,7 +55,7 @@ const NetworkSelectionScreen = ({ navigation, route }) => {
       min: '1 USDT',
       arrivalTime: '~ 1 mins',
       address: '0x3ccc55fb22b75a3be4437a56d32284f24d3f6372',
-      status: 'suspended'
+      status: 'suspended',
     },
     {
       id: 'solana',
@@ -65,7 +65,7 @@ const NetworkSelectionScreen = ({ navigation, route }) => {
       min: '1 USDT',
       arrivalTime: '~ 1 mins',
       address: '7xKXtg2CW87d7TXQ3aYJvSD4jZvqmZD7mLNQ2B5n3F9p',
-      status: 'active'
+      status: 'active',
     },
   ];
 
@@ -78,23 +78,23 @@ const NetworkSelectionScreen = ({ navigation, route }) => {
       );
       return;
     }
-    
+
     // Close modal first
     navigation.goBack();
-    
+
     // Navigate back to the appropriate flow with the selected network
     setTimeout(() => {
       const targetFlow = route.params?.flow || 'withdraw';
-      
+
       if (targetFlow === 'deposit') {
         navigation.navigate('DepositFlow', {
           screen: 'Deposit',
-          params: { selectedNetwork: network }
+          params: { selectedNetwork: network },
         });
       } else {
         navigation.navigate('WithdrawFlow', {
-          screen: 'Withdraw', 
-          params: { selectedNetwork: network }
+          screen: 'Withdraw',
+          params: { selectedNetwork: network },
         });
       }
     }, 200);
@@ -103,7 +103,7 @@ const NetworkSelectionScreen = ({ navigation, route }) => {
   const renderNetwork = (network, index) => {
     const isSelected = currentNetwork?.id === network.id;
     const isSuspended = network.status === 'suspended';
-    
+
     return (
       <TouchableOpacity
         key={network.id}
@@ -114,7 +114,7 @@ const NetworkSelectionScreen = ({ navigation, route }) => {
             borderColor: isSelected ? theme.primary : theme.border,
             borderWidth: isSelected ? 2 : 1,
             opacity: isSuspended ? 0.6 : 1,
-          }
+          },
         ]}
         onPress={() => handleSelectNetwork(network)}
         activeOpacity={0.7}
@@ -134,7 +134,7 @@ const NetworkSelectionScreen = ({ navigation, route }) => {
             </View>
           )}
         </View>
-        
+
         <View style={styles.networkDetails}>
           <View style={styles.detailRow}>
             <Text style={[styles.detailLabel, { color: theme.textSecondary }]}>
@@ -148,7 +148,7 @@ const NetworkSelectionScreen = ({ navigation, route }) => {
             Min {network.min}
           </Text>
         </View>
-        
+
         {isSelected && (
           <View style={[styles.checkmark, { backgroundColor: theme.primary }]}>
             <Ionicons name="checkmark" size={16} color="white" />
@@ -176,8 +176,8 @@ const NetworkSelectionScreen = ({ navigation, route }) => {
         </Text>
       </View>
 
-      <ScrollView 
-        style={styles.content} 
+      <ScrollView
+        style={styles.content}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
       >

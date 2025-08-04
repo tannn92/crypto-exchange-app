@@ -8,11 +8,9 @@ import {
   ScrollView,
   FlatList,
   Platform,
-  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
-import CoinIcon from '../components/CoinIcon';
 import Svg, { Path } from 'react-native-svg';
 
 // Custom SVG Icons from Homepage
@@ -55,17 +53,6 @@ const HistoryScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
   const [selectedTab, setSelectedTab] = useState(route.params?.selectedTab || 'Buy');
 
-  // Coming soon modal function
-  const showComingSoon = (featureName) => {
-    Alert.alert(
-      'Coming Soon',
-      `${featureName} feature will be available soon!`,
-      [
-        { text: 'OK', style: 'default' }
-      ],
-      { cancelable: true }
-    );
-  };
 
   // Transaction type tabs
   const transactionTabs = ['Buy', 'Sell', 'Convert', 'Deposit', 'Withdrawal'];
@@ -314,29 +301,29 @@ const HistoryScreen = ({ navigation, route }) => {
   }, {});
 
   const getTransactionIcon = (type) => {
-    if (type.includes('Buy')) return BuyIcon;
-    if (type.includes('Sell')) return SellIcon;
-    if (type.includes('Convert')) return ConvertIcon;
-    if (type.includes('Deposit')) return DepositIcon;
-    if (type.includes('Withdraw')) return WithdrawIcon;
+    if (type.includes('Buy')) {return BuyIcon;}
+    if (type.includes('Sell')) {return SellIcon;}
+    if (type.includes('Convert')) {return ConvertIcon;}
+    if (type.includes('Deposit')) {return DepositIcon;}
+    if (type.includes('Withdraw')) {return WithdrawIcon;}
     return null;
   };
 
   const getTransactionIconColor = (type) => {
-    if (type.includes('Buy')) return '#4CAF50';
-    if (type.includes('Sell')) return '#FF6B35';
-    if (type.includes('Convert')) return '#FF6B35';
-    if (type.includes('Deposit')) return '#4CAF50';
-    if (type.includes('Withdraw')) return '#FF6B35';
+    if (type.includes('Buy')) {return '#4CAF50';}
+    if (type.includes('Sell')) {return '#FF6B35';}
+    if (type.includes('Convert')) {return '#FF6B35';}
+    if (type.includes('Deposit')) {return '#4CAF50';}
+    if (type.includes('Withdraw')) {return '#FF6B35';}
     return theme.textSecondary;
   };
 
   const getTransactionIconBackground = (type) => {
-    if (type.includes('Buy')) return '#E8F5E9';
-    if (type.includes('Sell')) return '#FFEBEE';
-    if (type.includes('Convert')) return '#FFEBEE';
-    if (type.includes('Deposit')) return '#E8F5E9';
-    if (type.includes('Withdraw')) return '#FFEBEE';
+    if (type.includes('Buy')) {return '#E8F5E9';}
+    if (type.includes('Sell')) {return '#FFEBEE';}
+    if (type.includes('Convert')) {return '#FFEBEE';}
+    if (type.includes('Deposit')) {return '#E8F5E9';}
+    if (type.includes('Withdraw')) {return '#FFEBEE';}
     return '#F5F5F5';
   };
 
@@ -344,8 +331,8 @@ const HistoryScreen = ({ navigation, route }) => {
     <View style={styles.transactionItem}>
       <View style={styles.transactionLeft}>
         <View style={[
-          styles.transactionIcon, 
-          { backgroundColor: getTransactionIconBackground(item.type) }
+          styles.transactionIcon,
+          { backgroundColor: getTransactionIconBackground(item.type) },
         ]}>
           {(() => {
             const IconComponent = getTransactionIcon(item.type);
@@ -362,11 +349,11 @@ const HistoryScreen = ({ navigation, route }) => {
           </Text>
         </View>
       </View>
-      
+
       <View style={styles.transactionRight}>
         <Text style={[
-          styles.transactionAmount, 
-          { color: item.isPositive ? theme.success : '#FF3B30' }
+          styles.transactionAmount,
+          { color: item.isPositive ? theme.success : '#FF3B30' },
         ]}>
           {item.amount}
         </Text>
@@ -376,7 +363,7 @@ const HistoryScreen = ({ navigation, route }) => {
 
   const renderSection = ({ item }) => {
     const [month, transactions] = item;
-    
+
     return (
       <View style={styles.monthSection}>
         <Text style={[styles.monthHeader, { color: theme.textPrimary }]}>
@@ -396,25 +383,24 @@ const HistoryScreen = ({ navigation, route }) => {
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <TouchableOpacity 
-            onPress={() => navigation.goBack()} 
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
             style={styles.backButton}
           >
             <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
           </TouchableOpacity>
         </View>
-        
+
         <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>
           History
         </Text>
-        
-        <View style={styles.headerRight}>
-        </View>
+
+        <View style={styles.headerRight} />
       </View>
 
       {/* Transaction Type Tabs */}
-      <ScrollView 
-        horizontal 
+      <ScrollView
+        horizontal
         showsHorizontalScrollIndicator={false}
         style={styles.tabsContainer}
         contentContainerStyle={styles.tabsContent}
@@ -424,13 +410,13 @@ const HistoryScreen = ({ navigation, route }) => {
             key={tab}
             style={[
               styles.tab,
-              selectedTab === tab && styles.activeTab
+              selectedTab === tab && styles.activeTab,
             ]}
             onPress={() => setSelectedTab(tab)}
           >
             <Text style={[
               styles.tabText,
-              selectedTab === tab ? styles.activeTabText : { color: theme.textPrimary }
+              selectedTab === tab ? styles.activeTabText : { color: theme.textPrimary },
             ]}>
               {tab}
             </Text>
@@ -469,13 +455,6 @@ const styles = StyleSheet.create({
   },
   backButton: {
     padding: 5,
-  },
-  avatarPlaceholder: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   headerTitle: {
     fontSize: 24,

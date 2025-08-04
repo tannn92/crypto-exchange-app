@@ -71,7 +71,7 @@ const BuyAmountScreen = ({ navigation, route }) => {
         // Clear the params to prevent re-triggering
         navigation.setParams({ selectedCoin: undefined });
       }
-      
+
       // Check if we have return params from PaymentMethodModal
       if (params?.selectedPaymentMethod && params.selectedPaymentMethod !== selectedPayment) {
         setSelectedPayment(params.selectedPaymentMethod);
@@ -80,7 +80,7 @@ const BuyAmountScreen = ({ navigation, route }) => {
       }
     }, [route.params, selectedCoin, selectedPayment, navigation])
   );
-  
+
   // Bank names mapping
   const bankNames = {
     'bank-shinhanbank': 'ShinhanBank',
@@ -96,7 +96,7 @@ const BuyAmountScreen = ({ navigation, route }) => {
   };
 
   const bankLogos = ['shinhanbank', 'vietcombank', 'techcombank', 'msb', 'vietinbank', 'vpbank', 'vib', 'mbbank', 'sacombank'];
-  
+
   // Helper functions for payment method display
   const getPaymentIcon = () => {
     if (selectedPayment.startsWith('bank-')) {
@@ -104,28 +104,28 @@ const BuyAmountScreen = ({ navigation, route }) => {
     }
     return selectedPayment === 'bank' ? 'card' : 'wallet';
   };
-  
+
   const getPaymentTitle = () => {
     if (selectedPayment.startsWith('bank-')) {
       return bankNames[selectedPayment] || 'Bank transfer';
     }
     return selectedPayment === 'bank' ? 'Bank transfer' : 'Your Balance';
   };
-  
+
   const getPaymentSubtitle = () => {
     if (selectedPayment.startsWith('bank-')) {
       return 'Bank transfer'; // Show "Bank transfer" as subtitle when specific bank is selected
     }
     return selectedPayment === 'bank' ? 'Select bank' : `${formatNumber(balance)} VND`;
   };
-  
+
   const getBankId = () => {
     if (selectedPayment.startsWith('bank-')) {
       return selectedPayment.replace('bank-', '');
     }
     return null;
   };
-  
+
   // Handle missing coin parameter
   if (!coin) {
     return (
@@ -166,7 +166,7 @@ const BuyAmountScreen = ({ navigation, route }) => {
   };
 
   const handleSelectDestinationCoin = () => {
-    navigation.navigate('CoinSelectionModal', { 
+    navigation.navigate('CoinSelectionModal', {
       flow: 'buy',
       currentCoin: selectedCoin,
       returnScreen: 'BuyAmountScreen',
@@ -181,24 +181,24 @@ const BuyAmountScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardView}
       >
         <View style={styles.header}>
-          <TouchableOpacity 
-            onPress={() => navigation.goBack()} 
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
             style={styles.backButton}
           >
             <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
           </TouchableOpacity>
           <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>Buy {selectedCoin.symbol}</Text>
           <View style={styles.headerRight}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.headerIcon}
               onPress={() => navigation.getParent()?.navigate('MainTabs', {
                 screen: 'History',
-                params: { selectedTab: 'Buy' }
+                params: { selectedTab: 'Buy' },
               })}
             >
               <Ionicons name="time-outline" size={24} color={theme.textSecondary} />
@@ -206,8 +206,8 @@ const BuyAmountScreen = ({ navigation, route }) => {
           </View>
         </View>
 
-        <ScrollView 
-          style={styles.content} 
+        <ScrollView
+          style={styles.content}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
@@ -254,7 +254,7 @@ const BuyAmountScreen = ({ navigation, route }) => {
               <Text style={[styles.exchangeRateLabel, { color: theme.textSecondary }]}>
                 With price
               </Text>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.infoButton}
                 onPress={() => setShowPriceTooltip(!showPriceTooltip)}
               >
@@ -269,7 +269,7 @@ const BuyAmountScreen = ({ navigation, route }) => {
                 </View>
               )}
             </View>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.exchangeRateContainer}
               onPress={handleSwapCurrencies}
             >
@@ -287,14 +287,14 @@ const BuyAmountScreen = ({ navigation, route }) => {
           {/* Payment Method */}
           <View style={styles.section}>
             <Text style={[styles.sectionLabel, { color: theme.textSecondary }]}>Paying with</Text>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[
-                styles.paymentMethod, 
-                { 
+                styles.paymentMethod,
+                {
                   backgroundColor: theme.backgroundInput,
                   borderColor: theme.border,
                   borderWidth: 1,
-                }
+                },
               ]}
               onPress={() => {
                 console.log('Payment method button pressed');
@@ -313,9 +313,9 @@ const BuyAmountScreen = ({ navigation, route }) => {
             >
               <View style={styles.paymentLeft}>
                 {selectedPayment.startsWith('bank-') ? (
-                  <BankIcon 
-                    bankId={getBankId()} 
-                    size={40} 
+                  <BankIcon
+                    bankId={getBankId()}
+                    size={40}
                     style={styles.paymentIcon}
                   />
                 ) : (
@@ -350,13 +350,13 @@ const BuyAmountScreen = ({ navigation, route }) => {
           </View>
 
           {/* Confirm Button */}
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[
-              styles.confirmButton, 
-              { 
+              styles.confirmButton,
+              {
                 backgroundColor: vndAmount && parseFloat(vndAmount) > 0 ? '#FF6B35' : '#FF9F43',
                 opacity: vndAmount && parseFloat(vndAmount) > 0 ? 1 : 0.7,
-              }
+              },
             ]}
             onPress={handleConfirm}
             disabled={!vndAmount || parseFloat(vndAmount) <= 0}

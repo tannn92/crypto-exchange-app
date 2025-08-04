@@ -150,11 +150,11 @@ const bankSvgs = {
 
 const BankIcon = ({ bankId, size = 16, style }) => {
   const svgContent = bankSvgs[bankId];
-  
+
   if (!svgContent) {
     // Fallback if SVG not found
     return (
-      <View 
+      <View
         style={[
           {
             width: size,
@@ -162,17 +162,17 @@ const BankIcon = ({ bankId, size = 16, style }) => {
             borderRadius: size / 8,
             backgroundColor: '#E0E0E0',
           },
-          style
-        ]} 
+          style,
+        ]}
       />
     );
   }
 
   return (
-    <SvgXml 
-      xml={svgContent} 
-      width={size} 
-      height={size} 
+    <SvgXml
+      xml={svgContent}
+      width={size}
+      height={size}
       style={style}
     />
   );

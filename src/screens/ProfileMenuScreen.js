@@ -21,7 +21,7 @@ const ProfileMenuScreen = ({ navigation }) => {
       'Coming Soon',
       `${featureName} feature will be available soon!`,
       [
-        { text: 'OK', style: 'default' }
+        { text: 'OK', style: 'default' },
       ],
       { cancelable: true }
     );
@@ -113,8 +113,8 @@ const ProfileMenuScreen = ({ navigation }) => {
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity 
-          onPress={() => navigation.goBack()} 
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
           style={styles.closeButton}
         >
           <Ionicons name="close" size={24} color={theme.textSecondary} />
@@ -135,19 +135,19 @@ const ProfileMenuScreen = ({ navigation }) => {
         {/* Menu Sections */}
         {/* Section 1: Profile & Security */}
         {renderSection(menuItems.slice(0, 2))}
-        
+
         <View style={[styles.sectionDivider, { backgroundColor: theme.border }]} />
-        
+
         {/* Section 2: Vouchers, Refer, Recipients */}
         {renderSection(menuItems.slice(2, 5))}
-        
+
         <View style={[styles.sectionDivider, { backgroundColor: theme.border }]} />
-        
+
         {/* Section 3: Settings & Support */}
         {renderSection(menuItems.slice(5, 7))}
-        
+
         <View style={[styles.sectionDivider, { backgroundColor: theme.border }]} />
-        
+
         {/* Section 4: Logout */}
         {renderSection(menuItems.slice(7))}
       </ScrollView>

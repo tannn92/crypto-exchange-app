@@ -18,16 +18,16 @@ import CoinIcon from '../../components/CoinIcon';
 const DepositScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
   const { coin } = route.params || { coin: { id: 'usdt', symbol: 'USDT', name: 'Tether' } };
-  
+
   const [selectedCoin, setSelectedCoin] = useState(coin);
   const [selectedNetwork, setSelectedNetwork] = useState(null);
   const [depositAddress, setDepositAddress] = useState('');
-  
+
   // Use focus effect to handle return values from modal screens
   useFocusEffect(
     React.useCallback(() => {
       const params = route.params;
-      
+
       // Check if we have return params from CoinSelectionModal
       if (params?.selectedCoin && params.selectedCoin !== selectedCoin) {
         setSelectedCoin(params.selectedCoin);
@@ -36,7 +36,7 @@ const DepositScreen = ({ navigation, route }) => {
         // Clear the params to prevent re-triggering
         navigation.setParams({ selectedCoin: undefined });
       }
-      
+
       // Check if we have return params from NetworkSelectionModal
       if (params?.selectedNetwork && params.selectedNetwork !== selectedNetwork) {
         setSelectedNetwork(params.selectedNetwork);
@@ -71,8 +71,8 @@ const DepositScreen = ({ navigation, route }) => {
     <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity 
-          onPress={() => navigation.goBack()} 
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
           style={styles.backButton}
         >
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
@@ -81,11 +81,11 @@ const DepositScreen = ({ navigation, route }) => {
           Deposit {selectedCoin?.symbol || 'USDT'}
         </Text>
         <View style={styles.headerRight}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.headerIcon}
             onPress={() => navigation.getParent()?.navigate('MainTabs', {
               screen: 'History',
-              params: { selectedTab: 'Deposit' }
+              params: { selectedTab: 'Deposit' },
             })}
           >
             <Ionicons name="time-outline" size={24} color={theme.textSecondary} />
@@ -93,12 +93,12 @@ const DepositScreen = ({ navigation, route }) => {
         </View>
       </View>
 
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardView}
       >
-        <ScrollView 
-          style={styles.content} 
+        <ScrollView
+          style={styles.content}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
         >
@@ -132,8 +132,8 @@ const DepositScreen = ({ navigation, route }) => {
             >
               <View style={styles.networkContent}>
                 <Text style={[
-                  styles.selectionText, 
-                  { color: selectedNetwork ? theme.textPrimary : theme.textSecondary }
+                  styles.selectionText,
+                  { color: selectedNetwork ? theme.textPrimary : theme.textSecondary },
                 ]}>
                   {selectedNetwork ? `${selectedNetwork.symbol} ${selectedNetwork.name}` : 'Select'}
                 </Text>
@@ -157,7 +157,7 @@ const DepositScreen = ({ navigation, route }) => {
                 <TextInput
                   style={[styles.input, { color: theme.textPrimary }]}
                   value={depositAddress}
-                  placeholder={selectedNetwork ? "Address will be generated automatically" : "Select a network first"}
+                  placeholder={selectedNetwork ? 'Address will be generated automatically' : 'Select a network first'}
                   placeholderTextColor={theme.textSecondary}
                   multiline={true}
                   numberOfLines={3}
@@ -191,32 +191,32 @@ const DepositScreen = ({ navigation, route }) => {
                       <View style={[styles.finderPattern, { bottom: 0, left: 0 }]}>
                         <View style={styles.finderInner} />
                       </View>
-                      
+
                       {/* Random data pattern */}
                       {Array.from({ length: 625 }, (_, i) => {
                         const row = Math.floor(i / 25);
                         const col = i % 25;
                         // Skip finder pattern areas
-                        const isFinderArea = (row < 9 && col < 9) || 
-                                            (row < 9 && col > 15) || 
+                        const isFinderArea = (row < 9 && col < 9) ||
+                                            (row < 9 && col > 15) ||
                                             (row > 15 && col < 9);
-                        if (isFinderArea) return null;
-                        
+                        if (isFinderArea) {return null;}
+
                         // Create realistic QR pattern
-                        const shouldBeFilled = Math.sin(row * 0.8 + col * 1.2) + 
+                        const shouldBeFilled = Math.sin(row * 0.8 + col * 1.2) +
                                               Math.cos(row * 1.1 - col * 0.9) > 0.3;
-                        
+
                         return (
-                          <View 
+                          <View
                             key={i}
                             style={[
                               styles.qrPixel,
                               {
                                 left: col * 5,
                                 top: row * 5,
-                                backgroundColor: shouldBeFilled ? '#000' : 'transparent'
-                              }
-                            ]} 
+                                backgroundColor: shouldBeFilled ? '#000' : 'transparent',
+                              },
+                            ]}
                           />
                         );
                       })}

@@ -123,12 +123,12 @@ const AssetsScreen = ({ navigation }) => {
 
   // Filter holdings based on hideSmallAssets and search query
   const filteredHoldings = holdings.filter(holding => {
-    const matchesSearch = !searchQuery || 
+    const matchesSearch = !searchQuery ||
       holding.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
       holding.name.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     const matchesVisibility = hideSmallAssets ? holding.value >= 1 : true;
-    
+
     return matchesSearch && matchesVisibility;
   });
 
@@ -136,13 +136,13 @@ const AssetsScreen = ({ navigation }) => {
     const depositCoin = coin || { id: 'usdt', symbol: 'USDT', name: 'Tether' };
     navigation.navigate('DepositFlow', {
       screen: 'Deposit',
-      params: { coin: depositCoin }
+      params: { coin: depositCoin },
     });
   };
 
   const handleWithdraw = () => {
     navigation.navigate('WithdrawMethodSelectionModal', {
-      coin: { id: 'usdt', symbol: 'USDT', name: 'Tether' }
+      coin: { id: 'usdt', symbol: 'USDT', name: 'Tether' },
     });
   };
 
@@ -173,10 +173,10 @@ const AssetsScreen = ({ navigation }) => {
       name: crypto.name,
       price: crypto.price,
     };
-    
+
     navigation.navigate('BuyFlow', {
       screen: 'BuyAmount',
-      params: { coin: coinObject }
+      params: { coin: coinObject },
     });
   };
 
@@ -186,14 +186,14 @@ const AssetsScreen = ({ navigation }) => {
         id: holding.id,
         symbol: holding.symbol,
         name: holding.name,
-        price: holding.lastPrice
-      }
+        price: holding.lastPrice,
+      },
     });
   };
 
   const renderHoldingCard = (holding) => {
     const colors = coinColors[holding.id] || ['#E0E0E0', '#FFFFFF'];
-    
+
     return (
       <TouchableOpacity
         key={holding.id}
@@ -227,7 +227,7 @@ const AssetsScreen = ({ navigation }) => {
               </Text>
             </View>
           </View>
-          
+
           <View style={styles.holdingBottom}>
             <View style={styles.holdingAmountSection}>
               <Text style={[styles.amountValue, { color: theme.textPrimary }]}>
@@ -237,14 +237,14 @@ const AssetsScreen = ({ navigation }) => {
                 {balanceVisible ? `$${holding.value.toLocaleString('en-US', { minimumFractionDigits: 2 })}` : '$*****'}
               </Text>
             </View>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.addButton}
               onPress={(e) => {
                 e.stopPropagation();
                 handleDeposit({
                   id: holding.id,
                   symbol: holding.symbol,
-                  name: holding.name
+                  name: holding.name,
                 });
               }}
             >
@@ -260,11 +260,11 @@ const AssetsScreen = ({ navigation }) => {
     const isLastItem = index === popularCryptos.length - 1;
     return (
       <View key={crypto.id} style={[
-        styles.cryptoRow, 
-        { 
+        styles.cryptoRow,
+        {
           borderBottomColor: theme.border,
-          borderBottomWidth: isLastItem ? 0 : 1 // Remove border for last item
-        }
+          borderBottomWidth: isLastItem ? 0 : 1, // Remove border for last item
+        },
       ]}>
         <View style={styles.cryptoInfo}>
           <CoinIcon coinId={crypto.id} size={40} />
@@ -277,20 +277,20 @@ const AssetsScreen = ({ navigation }) => {
             </Text>
           </View>
         </View>
-        
+
         <View style={styles.cryptoPriceInfo}>
           <Text style={[styles.cryptoPrice, { color: theme.textPrimary }]}>
             {crypto.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}
           </Text>
           <Text style={[
-            styles.cryptoChange, 
-            { color: crypto.isPositive ? '#4CAF50' : '#FF3B30' }
+            styles.cryptoChange,
+            { color: crypto.isPositive ? '#4CAF50' : '#FF3B30' },
           ]}>
             {crypto.isPositive ? '+' : ''}{crypto.change.toFixed(2)}%
           </Text>
         </View>
-        
-        <TouchableOpacity 
+
+        <TouchableOpacity
           style={[styles.buyButton, { backgroundColor: theme.backgroundInput }]}
           onPress={() => handleBuy(crypto)}
         >
@@ -311,13 +311,12 @@ const AssetsScreen = ({ navigation }) => {
             <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
           </TouchableOpacity>
         </View>
-        
+
         <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>
           Assets
         </Text>
-        
-        <View style={styles.headerRight}>
-        </View>
+
+        <View style={styles.headerRight} />
       </View>
 
 
@@ -340,14 +339,14 @@ const AssetsScreen = ({ navigation }) => {
 
           {/* Action Buttons */}
           <View style={styles.actionButtons}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[styles.depositButton, { backgroundColor: theme.primary }]}
               onPress={handleDeposit}
             >
               <Text style={styles.depositButtonText}>Deposit</Text>
             </TouchableOpacity>
-            
-            <TouchableOpacity 
+
+            <TouchableOpacity
               style={[styles.withdrawButton, { backgroundColor: theme.backgroundForm }]}
               onPress={handleWithdraw}
             >
@@ -361,13 +360,13 @@ const AssetsScreen = ({ navigation }) => {
         {/* Holdings Section */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.hiddenAssetsIndicator}
               onPress={() => setHideSmallAssets(!hideSmallAssets)}
             >
-              <View style={[styles.checkbox, { 
+              <View style={[styles.checkbox, {
                 backgroundColor: hideSmallAssets ? theme.primary : 'transparent',
-                borderColor: hideSmallAssets ? theme.primary : '#C0C0C0'
+                borderColor: hideSmallAssets ? theme.primary : '#C0C0C0',
               }]}>
                 {hideSmallAssets && (
                   <Ionicons name="checkmark" size={14} color="white" />
@@ -377,7 +376,7 @@ const AssetsScreen = ({ navigation }) => {
                 Hide assets &lt; 1 USDT
               </Text>
             </TouchableOpacity>
-            
+
             <View style={[styles.searchBar, { backgroundColor: theme.backgroundInput }]}>
               <Ionicons name="search-outline" size={18} color={theme.textSecondary} />
               <TextInput
@@ -387,7 +386,7 @@ const AssetsScreen = ({ navigation }) => {
               />
             </View>
           </View>
-          
+
           {filteredHoldings.map(renderHoldingCard)}
         </View>
 
@@ -396,8 +395,8 @@ const AssetsScreen = ({ navigation }) => {
           <Text style={[styles.sectionTitle, { color: theme.textPrimary }]}>
             Trade popular cryptocurrencies
           </Text>
-          
-          
+
+
           {popularCryptos.map((crypto, index) => renderCryptoRow(crypto, index))}
         </View>
       </ScrollView>
@@ -434,9 +433,6 @@ const styles = StyleSheet.create({
     width: 40,
     alignItems: 'flex-end',
   },
-  notificationButton: {
-    padding: 4,
-  },
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -465,75 +461,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignItems: 'center',
     position: 'relative',
-  },
-  balanceHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  balanceLabel: {
-    fontSize: 16,
-    marginRight: 8,
-  },
-  currencySelector: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  currencyText: {
-    fontWeight: '600',
-    fontSize: 16,
-  },
-  currencyDropdown: {
-    position: 'absolute',
-    top: 70,
-    right: 20,
-    left: 20,
-    borderRadius: 12,
-    padding: 8,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    zIndex: 1000,
-  },
-  currencyOption: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-  },
-  currencyOptionText: {
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  activeCurrencyOption: {
-    backgroundColor: 'rgba(255, 107, 53, 0.1)',
-  },
-  balanceRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    marginBottom: 8,
-  },
-  balanceAmount: {
-    fontSize: 32,
-    fontWeight: 'bold',
-  },
-  eyeIcon: {
-    marginLeft: 12,
-    padding: 4,
-  },
-  balanceChange: {
-    fontSize: 16,
-    fontWeight: '500',
-    marginBottom: 20,
   },
   actionButtons: {
     flexDirection: 'row',

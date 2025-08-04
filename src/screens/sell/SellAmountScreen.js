@@ -20,15 +20,15 @@ import ProcessingGuarantee from '../../components/ProcessingGuarantee';
 const SellAmountScreen = ({ navigation, route }) => {
   const { theme, isDarkMode } = useTheme();
   const { coin: initialCoin } = route.params || {};
-  
+
   // Default coin if none provided
   const defaultCoin = {
     id: 'btc',
     symbol: 'BTC',
     name: 'Bitcoin',
-    price: 96093.46
+    price: 96093.46,
   };
-  
+
   const [selectedCoin, setSelectedCoin] = useState(initialCoin || defaultCoin);
   const [cryptoAmount, setCryptoAmount] = useState('');
   const [vndAmount, setVndAmount] = useState('');
@@ -37,7 +37,7 @@ const SellAmountScreen = ({ navigation, route }) => {
   const [accountNumber, setAccountNumber] = useState('***6868');
   const [showPriceTooltip, setShowPriceTooltip] = useState(false);
   const [isRateFlipped, setIsRateFlipped] = useState(false);
-  
+
   // Calculate exchange rate based on selected coin
   const exchangeRate = (selectedCoin?.price || 0) * 25290; // Convert USD to VND
   const balance = 560; // Mock balance for now
@@ -56,7 +56,7 @@ const SellAmountScreen = ({ navigation, route }) => {
     // Handle returned receive method selection
     if (route.params?.selectedReceiveMethod) {
       setReceiveMethod(route.params.selectedReceiveMethod);
-      
+
       if (route.params?.selectedReceiveMethodDetails) {
         const details = route.params.selectedReceiveMethodDetails;
         setAccountName(details.accountName || 'RANDOM NAME');
@@ -106,7 +106,7 @@ const SellAmountScreen = ({ navigation, route }) => {
   };
 
   const handleSelectSourceCoin = () => {
-    navigation.navigate('CoinSelectionModal', { 
+    navigation.navigate('CoinSelectionModal', {
       flow: 'sell',
       currentCoin: selectedCoin,
     });
@@ -121,15 +121,15 @@ const SellAmountScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
-      <KeyboardAvoidingView 
+      <KeyboardAvoidingView
         style={styles.keyboardAvoid}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Header */}
           <View style={styles.header}>
-            <TouchableOpacity 
-              onPress={() => navigation.goBack()} 
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
               style={styles.backButton}
             >
               <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
@@ -138,11 +138,11 @@ const SellAmountScreen = ({ navigation, route }) => {
               Sell {selectedCoin?.symbol || 'Crypto'}
             </Text>
             <View style={styles.headerRight}>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.headerIcon}
                 onPress={() => navigation.getParent()?.navigate('MainTabs', {
                   screen: 'History',
-                  params: { selectedTab: 'Sell' }
+                  params: { selectedTab: 'Sell' },
                 })}
               >
                 <Ionicons name="time-outline" size={24} color={theme.textSecondary} />
@@ -200,7 +200,7 @@ const SellAmountScreen = ({ navigation, route }) => {
                 <Text style={[styles.exchangeRateLabel, { color: theme.textSecondary }]}>
                   With price
                 </Text>
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={styles.infoButton}
                   onPress={() => setShowPriceTooltip(!showPriceTooltip)}
                 >
@@ -215,7 +215,7 @@ const SellAmountScreen = ({ navigation, route }) => {
                   </View>
                 )}
               </View>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.exchangeRateContainer}
                 onPress={handleSwapCurrencies}
               >
@@ -233,14 +233,14 @@ const SellAmountScreen = ({ navigation, route }) => {
             {/* Receive Method */}
             <View style={styles.section}>
               <Text style={[styles.sectionLabel, { color: theme.textSecondary }]}>Receive method</Text>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={[styles.receiveMethodContainer, { backgroundColor: theme.backgroundInput }]}
                 onPress={handleReceiveMethodPress}
               >
                 <BankIcon bankId={receiveMethod.replace('bank-', '')} size={32} />
                 <View style={styles.bankDetails}>
                   <Text style={[styles.bankName, { color: theme.textPrimary }]}>
-                    {receiveMethod === 'bank-vietcombank' ? 'Vietcombank' : 
+                    {receiveMethod === 'bank-vietcombank' ? 'Vietcombank' :
                      receiveMethod === 'bank-acb' ? 'ACB' :
                      receiveMethod === 'bank-techcombank' ? 'Techcombank' :
                      receiveMethod === 'bank-vietinbank' ? 'VietinBank' :
@@ -260,14 +260,14 @@ const SellAmountScreen = ({ navigation, route }) => {
             </View>
 
             {/* Confirm Button */}
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[
-                styles.confirmButton, 
-                { 
-                  backgroundColor: (!cryptoAmount || parseFloat(cryptoAmount) <= 0) 
+                styles.confirmButton,
+                {
+                  backgroundColor: (!cryptoAmount || parseFloat(cryptoAmount) <= 0)
                     ? 'rgba(255, 107, 0, 0.4)' // Light orange when disabled
-                    : theme.primary             // Full orange when enabled
-                }
+                    : theme.primary,             // Full orange when enabled
+                },
               ]}
               onPress={handleConfirm}
               disabled={!cryptoAmount || parseFloat(cryptoAmount) <= 0}

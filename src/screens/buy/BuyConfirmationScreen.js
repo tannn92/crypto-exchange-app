@@ -110,7 +110,7 @@ const BuyConfirmationScreen = ({ navigation, route }) => {
           <ProcessingGuarantee />
 
           {/* Action Button */}
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.confirmButton, { backgroundColor: theme.primary }]}
             onPress={handleConfirm}
           >

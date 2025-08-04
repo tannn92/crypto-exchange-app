@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,11 +6,9 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   StatusBar,
   Dimensions,
   Image,
-  Alert,
   Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -65,20 +62,20 @@ const MiniChart = ({ data, color }) => {
   const chartWidth = 100;
   const chartHeight = 40;
   const padding = 5;
-  
+
   if (!data || data.length === 0) {
     return <Svg width={chartWidth} height={chartHeight} />;
   }
-  
+
   const validData = data.filter(v => typeof v === 'number' && !isNaN(v));
   if (validData.length === 0) {
     return <Svg width={chartWidth} height={chartHeight} />;
   }
-  
+
   const max = Math.max(...validData);
   const min = Math.min(...validData);
   const range = max - min || 1;
-  
+
   const points = validData.map((value, index) => {
     const x = (index / Math.max(validData.length - 1, 1)) * (chartWidth - padding * 2) + padding;
     const y = chartHeight - padding - ((value - min) / range) * (chartHeight - padding * 2);
@@ -87,26 +84,26 @@ const MiniChart = ({ data, color }) => {
 
   // Create smooth curve using cubic bezier curves for maximum smoothness
   const createSmoothPath = (points) => {
-    if (points.length < 2) return '';
-    if (points.length === 2) return `M ${points[0].x},${points[0].y} L ${points[1].x},${points[1].y}`;
-    
+    if (points.length < 2) {return '';}
+    if (points.length === 2) {return `M ${points[0].x},${points[0].y} L ${points[1].x},${points[1].y}`;}
+
     let path = `M ${points[0].x},${points[0].y}`;
-    
+
     for (let i = 1; i < points.length; i++) {
       const prev = points[i - 1];
       const curr = points[i];
       const next = i < points.length - 1 ? points[i + 1] : curr;
       const prevPrev = i > 1 ? points[i - 2] : prev;
-      
+
       // Control points for smooth cubic bezier
       const cp1x = prev.x + (curr.x - prevPrev.x) * 0.15;
       const cp1y = prev.y + (curr.y - prevPrev.y) * 0.15;
       const cp2x = curr.x - (next.x - prev.x) * 0.15;
       const cp2y = curr.y - (next.y - prev.y) * 0.15;
-      
+
       path += ` C ${cp1x},${cp1y} ${cp2x},${cp2y} ${curr.x},${curr.y}`;
     }
-    
+
     return path;
   };
 
@@ -130,41 +127,41 @@ const MiniChart = ({ data, color }) => {
 const BalanceChart = ({ theme, currency, exchangeRate }) => {
   const [activeDot, setActiveDot] = useState(null);
   const [showDot, setShowDot] = useState(false);
-  
+
   // Smooth balance chart data - scaled to represent growth from ~$1500 to $3243
   const chartData = [
-    45, 46.2, 47.1, 46.8, 47.5, 48.2, 47.9, 48.8, 50.1, 51.3, 50.8, 52.4, 53.6, 54.2, 55.8, 
-    58.2, 60.1, 62.3, 64.8, 67.2, 69.8, 71.4, 73.9, 75.6, 77.8, 79.2, 81.5, 83.1, 84.8, 86.4, 
-    88.1, 89.6, 91.2, 92.8, 94.1, 95.7
+    45, 46.2, 47.1, 46.8, 47.5, 48.2, 47.9, 48.8, 50.1, 51.3, 50.8, 52.4, 53.6, 54.2, 55.8,
+    58.2, 60.1, 62.3, 64.8, 67.2, 69.8, 71.4, 73.9, 75.6, 77.8, 79.2, 81.5, 83.1, 84.8, 86.4,
+    88.1, 89.6, 91.2, 92.8, 94.1, 95.7,
   ];
   const chartWidth = screenWidth - 40; // Adjust for card margins
   const chartHeight = 100;
-  
+
   const validData = chartData.filter(v => typeof v === 'number' && !isNaN(v));
   if (validData.length === 0) {
     return <View style={styles.chartContainer} />;
   }
-  
+
   const max = Math.max(...validData);
   const min = Math.min(...validData);
   const range = max - min || 1;
-  
-  const points = validData.map((value, index) => {
+
+  const balancePoints = validData.map((value, index) => {
     const x = (index / Math.max(validData.length - 1, 1)) * chartWidth;
     const y = chartHeight - ((value - min) / range) * chartHeight;
     return { x: parseFloat(x.toFixed(2)), y: parseFloat(y.toFixed(2)), value };
   });
-  
+
   // Create smooth curve for main balance chart
   const createSmoothBalancePath = (points) => {
-    if (points.length < 2) return '';
-    
+    if (points.length < 2) {return '';}
+
     let path = `M ${points[0].x},${points[0].y}`;
-    
+
     for (let i = 1; i < points.length; i++) {
       const prev = points[i - 1];
       const curr = points[i];
-      
+
       if (i === 1) {
         // First curve
         const cpx1 = prev.x + (curr.x - prev.x) * 0.3;
@@ -182,19 +179,19 @@ const BalanceChart = ({ theme, currency, exchangeRate }) => {
         path += ` C ${cpx1},${cpy1} ${cpx2},${cpy2} ${curr.x},${curr.y}`;
       }
     }
-    
+
     return path;
   };
 
-  const pathData = createSmoothBalancePath(points);
-  
+  const pathData = createSmoothBalancePath(balancePoints);
+
   const areaPath = `${pathData} L ${chartWidth},${chartHeight} L 0,${chartHeight} Z`;
-  
-  
+
+
   const formatValue = (value) => {
     const baseValue = 3243.00; // Base USDT value - updated to match real balance
     const scaledValue = baseValue * (value / 95.7); // Scale based on chart data max value
-    
+
     if (currency === 'VND') {
       return `${(scaledValue * exchangeRate).toLocaleString('en-US', { maximumFractionDigits: 0 })} VND`;
     }
@@ -204,14 +201,14 @@ const BalanceChart = ({ theme, currency, exchangeRate }) => {
 
   return (
     <View style={styles.chartContainer}>
-      
+
       <View style={styles.chartTouchArea}>
         <View style={styles.chartSvgContainer}>
           <Svg width={chartWidth} height={chartHeight} style={styles.chartSvg}>
             <Defs>
               <SvgLinearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                <Stop offset="0%" stopColor={theme.isDarkMode ? "#8BA0FF" : "#6B82FF"} stopOpacity="0.3" />
-                <Stop offset="100%" stopColor={theme.isDarkMode ? "#8BA0FF" : "#6B82FF"} stopOpacity="0.02" />
+                <Stop offset="0%" stopColor={theme.isDarkMode ? '#8BA0FF' : '#6B82FF'} stopOpacity="0.3" />
+                <Stop offset="100%" stopColor={theme.isDarkMode ? '#8BA0FF' : '#6B82FF'} stopOpacity="0.02" />
               </SvgLinearGradient>
             </Defs>
             <Path
@@ -221,11 +218,11 @@ const BalanceChart = ({ theme, currency, exchangeRate }) => {
             <Path
               d={pathData}
               fill="none"
-              stroke={theme.isDarkMode ? "#8BA0FF" : "#6B82FF"}
+              stroke={theme.isDarkMode ? '#8BA0FF' : '#6B82FF'}
               strokeWidth="2"
             />
             {/* Invisible touch areas for each data point */}
-            {points.map((point, index) => (
+            {balancePoints.map((point, index) => (
               <Rect
                 key={index}
                 x={point.x - 15}
@@ -258,12 +255,12 @@ const BalanceChart = ({ theme, currency, exchangeRate }) => {
         </View>
         {showDot && activeDot && (
           <View style={[
-            styles.chartLabel, 
-            { 
+            styles.chartLabel,
+            {
               left: Math.min(Math.max(activeDot.x - 50, 10), chartWidth - 110),
               top: Math.max(activeDot.y - 45, 5),
-              backgroundColor: theme.isDarkMode ? 'rgba(255, 107, 0, 0.95)' : 'rgba(255, 107, 0, 0.9)'
-            }
+              backgroundColor: theme.isDarkMode ? 'rgba(255, 107, 0, 0.95)' : 'rgba(255, 107, 0, 0.9)',
+            },
           ]}>
             <Text style={[styles.chartLabelText, { color: '#FFF' }]}>
               {formatValue(activeDot.value)}
@@ -280,11 +277,11 @@ const CryptoItem = ({ item, theme, navigation }) => {
   const change = typeof item.change === 'number' ? item.change : 0;
   const price = typeof item.price === 'number' ? item.price : 0;
   const isPositive = change >= 0;
-  
+
   const handleCoinPress = () => {
     navigation.navigate('CoinMarket', { coin: item });
   };
-  
+
   return (
     <TouchableOpacity style={styles.cryptoItem} onPress={handleCoinPress}>
       <View style={styles.cryptoLeft}>
@@ -315,7 +312,7 @@ const HomeScreen = ({ navigation, route }) => {
   const [balanceVisible, setBalanceVisible] = useState(true);
   const [currency, setCurrency] = useState('USDT');
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
-  
+
   const exchangeRate = 26300; // 1 USDT = 26,300 VND
   const baseBalance = 3243.00;
   const baseChange = 43.96;
@@ -333,84 +330,68 @@ const HomeScreen = ({ navigation, route }) => {
   const handleQuickAction = (action) => {
     // Default BTC coin for Buy and Sell
     const defaultBTCCoin = coinPrices.btc;
-    
+
     if (action === 'buy') {
-      navigation.navigate('BuyFlow', { 
+      navigation.navigate('BuyFlow', {
         screen: 'BuyAmount',
-        params: { coin: defaultBTCCoin }
+        params: { coin: defaultBTCCoin },
       });
     } else if (action === 'sell') {
-      navigation.navigate('SellFlow', { 
+      navigation.navigate('SellFlow', {
         screen: 'SellAmount',
-        params: { coin: defaultBTCCoin }
+        params: { coin: defaultBTCCoin },
       });
     } else if (action === 'convert') {
-      navigation.navigate('ConvertFlow', { 
-        screen: 'Convert'
+      navigation.navigate('ConvertFlow', {
+        screen: 'Convert',
       });
     } else if (action === 'deposit') {
-      navigation.navigate('DepositFlow', { 
-        screen: 'Deposit'
+      navigation.navigate('DepositFlow', {
+        screen: 'Deposit',
       });
     } else if (action === 'withdraw') {
       navigation.navigate('WithdrawMethodSelectionModal', {
-        coin: { id: 'usdt', symbol: 'USDT', name: 'Tether' }
+        coin: { id: 'usdt', symbol: 'USDT', name: 'Tether' },
       });
     } else {
       console.log(`${action} pressed`);
     }
   };
-  
+
   const toggleBalanceVisibility = () => {
     setBalanceVisible(!balanceVisible);
   };
-  
-  const handleCurrencySelect = (selectedCurrency) => {
-    setCurrency(selectedCurrency);
-    setShowCurrencyDropdown(false);
-  };
-  
+
   const formatBalance = (amount) => {
     if (!balanceVisible) {
       return '*********';
     }
-    
+
     if (currency === 'VND') {
       return (amount * exchangeRate).toLocaleString('en-US', { maximumFractionDigits: 0 });
     }
     return amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
-  
+
   const formatChange = (amount, percent) => {
     if (!balanceVisible) {
       return '****** (****)';
     }
-    
-    const formattedAmount = currency === 'VND' 
+
+    const formattedAmount = currency === 'VND'
       ? (amount * exchangeRate).toLocaleString('en-US', { maximumFractionDigits: 0 })
       : amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    
+
     const currencySymbol = currency === 'VND' ? '' : '$';
     const currencyLabel = currency === 'VND' ? ' VND' : '';
-    
-    return `${currencySymbol}${formattedAmount}${currencyLabel} (${percent.toFixed(2)}%)`;
-  };
 
-  const showComingSoon = (featureName) => {
-    Alert.alert(
-      'Coming Soon',
-      `${featureName} feature will be available soon!`,
-      [
-        { text: 'OK', style: 'default' }
-      ],
-      { cancelable: true }
-    );
+    return `${currencySymbol}${formattedAmount}${currencyLabel} (${percent.toFixed(2)}%)`;
   };
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
-      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
-      
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+
       {/* Header */}
       <View style={[styles.header, { backgroundColor: theme.background }]}>
         <View style={styles.headerLeft}>
@@ -419,8 +400,8 @@ const HomeScreen = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.logoContainer}>
-          <Image 
-            source={require('../../assets/icon.png')} 
+          <Image
+            source={require('../../assets/icon.png')}
             style={styles.logoImage}
             resizeMode="contain"
           />
@@ -428,13 +409,13 @@ const HomeScreen = ({ navigation, route }) => {
         </View>
         <View style={styles.headerRight}>
           <TouchableOpacity onPress={toggleTheme} style={styles.themeToggle}>
-            <Ionicons 
-              name={isDarkMode ? "sunny" : "moon"} 
-              size={24} 
-              color={theme.textPrimary} 
+            <Ionicons
+              name={isDarkMode ? 'sunny' : 'moon'}
+              size={24}
+              color={theme.textPrimary}
             />
           </TouchableOpacity>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.notificationButton}
             onPress={() => navigation.navigate('Notification')}
           >
@@ -446,7 +427,7 @@ const HomeScreen = ({ navigation, route }) => {
         </View>
       </View>
 
-      <ScrollView 
+      <ScrollView
         style={styles.content}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
@@ -468,7 +449,7 @@ const HomeScreen = ({ navigation, route }) => {
           />
 
           <BalanceChart theme={{ ...theme, isDarkMode }} currency={currency} exchangeRate={exchangeRate} />
-          
+
           {/* Quick Actions inside balance card - no separator line */}
           <View style={styles.quickActionsInCard}>
             {quickActions.map((action) => (
@@ -491,30 +472,30 @@ const HomeScreen = ({ navigation, route }) => {
           <View style={styles.cryptoTabs}>
             <TouchableOpacity
               style={[
-                styles.tab, 
+                styles.tab,
                 activeTab === 'popular' && styles.activeTab,
-                activeTab === 'popular' && { borderBottomColor: theme.primary }
+                activeTab === 'popular' && { borderBottomColor: theme.primary },
               ]}
               onPress={() => setActiveTab('popular')}
             >
               <Text style={[
-                styles.tabText, 
-                { color: activeTab === 'popular' ? theme.tabActive : theme.tabInactive }
+                styles.tabText,
+                { color: activeTab === 'popular' ? theme.tabActive : theme.tabInactive },
               ]}>
                 Popular
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[
-                styles.tab, 
+                styles.tab,
                 activeTab === 'all' && styles.activeTab,
-                activeTab === 'all' && { borderBottomColor: theme.primary }
+                activeTab === 'all' && { borderBottomColor: theme.primary },
               ]}
               onPress={() => setActiveTab('all')}
             >
               <Text style={[
-                styles.tabText, 
-                { color: activeTab === 'all' ? theme.tabActive : theme.tabInactive }
+                styles.tabText,
+                { color: activeTab === 'all' ? theme.tabActive : theme.tabInactive },
               ]}>
                 All coins
               </Text>
@@ -620,30 +601,6 @@ const styles = StyleSheet.create({
     elevation: 5,
     overflow: 'visible',
   },
-  balanceHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 10,
-  },
-  balanceLabel: {
-    fontSize: 14,
-  },
-  currencySelector: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft: 8,
-  },
-  currencyText: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  balanceAmountContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 5,
-  },
   balanceAmount: {
     fontSize: 32,
     fontWeight: 'bold',
@@ -689,12 +646,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     textAlign: 'center',
-  },
-  quickActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingHorizontal: 20,
-    marginBottom: 30,
   },
   quickActionsInCard: {
     flexDirection: 'row',

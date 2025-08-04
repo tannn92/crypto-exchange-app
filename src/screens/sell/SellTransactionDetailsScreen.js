@@ -54,8 +54,8 @@ const SellTransactionDetailsScreen = ({ navigation, route }) => {
     <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity 
-          onPress={() => navigation.goBack()} 
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
           style={styles.backButton}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
@@ -218,13 +218,13 @@ const SellTransactionDetailsScreen = ({ navigation, route }) => {
 
       {/* Action Buttons */}
       <View style={styles.actionButtons}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.homeButton, { backgroundColor: theme.backgroundSecondary }]}
           onPress={() => navigation.navigate('MainTabs')}
         >
           <Text style={[styles.homeButtonText, { color: theme.textPrimary }]}>Homepage</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.walletButton, { backgroundColor: '#FF6B35' }]}
           onPress={() => navigation.navigate('MainTabs', { screen: 'Assets' })}
         >

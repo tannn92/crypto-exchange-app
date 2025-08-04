@@ -3,12 +3,10 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   TouchableOpacity,
   ScrollView,
   Modal,
   Animated,
-  Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
@@ -17,7 +15,7 @@ import CoinIcon from '../../components/CoinIcon';
 const WithdrawConfirmationScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
   const { coin, network, address, amount } = route.params;
-  
+
   const slideAnim = useRef(new Animated.Value(600)).current; // Start below screen
 
   useEffect(() => {
@@ -27,7 +25,7 @@ const WithdrawConfirmationScreen = ({ navigation, route }) => {
       duration: 250,
       useNativeDriver: true,
     }).start();
-  }, []);
+  }, [slideAnim]);
 
   const formatNumber = (num) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -68,8 +66,8 @@ const WithdrawConfirmationScreen = ({ navigation, route }) => {
 
   // Format address for display (show first 6 and last 6 characters)
   const formatAddress = (addr) => {
-    if (!addr) return '';
-    if (addr.length <= 12) return addr;
+    if (!addr) {return '';}
+    if (addr.length <= 12) {return addr;}
     return `${addr.substring(0, 6)}...${addr.substring(addr.length - 6)}`;
   };
 
@@ -81,17 +79,17 @@ const WithdrawConfirmationScreen = ({ navigation, route }) => {
       onRequestClose={handleCancel}
     >
       <View style={styles.modalOverlay}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.overlayTouchable}
           activeOpacity={1}
           onPress={handleCancel}
         />
         <Animated.View style={[
-          styles.modalContainer, 
-          { 
+          styles.modalContainer,
+          {
             backgroundColor: theme.backgroundForm,
-            transform: [{ translateY: slideAnim }]
-          }
+            transform: [{ translateY: slideAnim }],
+          },
         ]}>
           {/* Header */}
           <View style={styles.modalHeader}>
@@ -103,8 +101,8 @@ const WithdrawConfirmationScreen = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
 
-          <ScrollView 
-            style={styles.modalContent} 
+          <ScrollView
+            style={styles.modalContent}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.scrollContent}
           >
@@ -171,13 +169,13 @@ const WithdrawConfirmationScreen = ({ navigation, route }) => {
 
           {/* Action Buttons */}
           <View style={styles.modalActions}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[styles.cancelButton, { backgroundColor: theme.backgroundInput }]}
               onPress={handleCancel}
             >
               <Text style={[styles.cancelButtonText, { color: theme.textPrimary }]}>Cancel</Text>
             </TouchableOpacity>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[styles.confirmButton, { backgroundColor: '#FF6B35' }]}
               onPress={handleConfirm}
             >

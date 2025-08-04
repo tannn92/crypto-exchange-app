@@ -14,7 +14,6 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import Svg, { Rect, Line, Path, Circle, Text as SvgText } from 'react-native-svg';
 import { useTheme } from '../context/ThemeContext';
-import CoinIcon from '../components/CoinIcon';
 
 const { width: screenWidth } = Dimensions.get('window');
 const chartWidth = screenWidth - 40;
@@ -26,7 +25,7 @@ const generateCandlestickData = (basePrice, timeframe, count = 50) => {
   const data = [];
   let currentPrice = basePrice;
   const volatility = basePrice * 0.02; // 2% volatility
-  
+
   for (let i = 0; i < count; i++) {
     const change = (Math.random() - 0.5) * volatility;
     const open = currentPrice;
@@ -34,7 +33,7 @@ const generateCandlestickData = (basePrice, timeframe, count = 50) => {
     const high = Math.max(open, close) + Math.random() * volatility * 0.5;
     const low = Math.min(open, close) - Math.random() * volatility * 0.5;
     const volume = Math.random() * 1000000 + 500000;
-    
+
     data.push({
       timestamp: Date.now() - (count - i) * getTimeframeMs(timeframe),
       open: parseFloat(open.toFixed(2)),
@@ -43,10 +42,10 @@ const generateCandlestickData = (basePrice, timeframe, count = 50) => {
       close: parseFloat(close.toFixed(2)),
       volume: parseFloat(volume.toFixed(0)),
     });
-    
+
     currentPrice = close;
   }
-  
+
   return data;
 };
 
@@ -77,37 +76,37 @@ const calculateSMA = (data, period) => {
 const calculateEMA = (data, period) => {
   const ema = [];
   const multiplier = 2 / (period + 1);
-  
+
   // Start with SMA for first value
   ema[0] = data.slice(0, period).reduce((acc, curr) => acc + curr.close, 0) / period;
-  
+
   for (let i = 1; i < data.length - period + 1; i++) {
     ema[i] = (data[i + period - 1].close * multiplier) + (ema[i - 1] * (1 - multiplier));
   }
-  
+
   return ema;
 };
 
 const calculateBollingerBands = (data, period = 20, stdDev = 2) => {
   const sma = calculateSMA(data, period);
   const bands = { upper: [], middle: sma, lower: [] };
-  
+
   for (let i = 0; i < sma.length; i++) {
     const slice = data.slice(i, i + period);
     const variance = slice.reduce((acc, curr) => acc + Math.pow(curr.close - sma[i], 2), 0) / period;
     const stdDeviation = Math.sqrt(variance);
-    
+
     bands.upper.push(sma[i] + (stdDev * stdDeviation));
     bands.lower.push(sma[i] - (stdDev * stdDeviation));
   }
-  
+
   return bands;
 };
 
 // Candlestick Chart Component
 const CandlestickChart = ({ data, theme, indicators }) => {
-  if (!data || data.length === 0) return null;
-  
+  if (!data || data.length === 0) {return null;}
+
   const maxPrice = Math.max(...data.map(d => d.high));
   const minPrice = Math.min(...data.map(d => d.low));
   const priceRange = maxPrice - minPrice;
@@ -115,18 +114,17 @@ const CandlestickChart = ({ data, theme, indicators }) => {
   const adjustedMax = maxPrice + padding;
   const adjustedMin = minPrice - padding;
   const adjustedRange = adjustedMax - adjustedMin;
-  
+
   const candleWidth = (chartWidth - 60) / data.length;
-  
+
   const getY = (price) => 30 + ((adjustedMax - price) / adjustedRange) * (chartHeight - 60);
   const getX = (index) => 30 + (index * candleWidth) + (candleWidth / 2);
-  
+
   // Calculate technical indicators
-  const sma5 = calculateSMA(data, 5);
   const sma20 = calculateSMA(data, 20);
   const ema10 = calculateEMA(data, 10);
   const bollinger = calculateBollingerBands(data, 20, 2);
-  
+
   return (
     <View style={styles.chartContainer}>
       <Svg width={chartWidth} height={chartHeight}>
@@ -156,12 +154,12 @@ const CandlestickChart = ({ data, theme, indicators }) => {
             </React.Fragment>
           );
         })}
-        
+
         {/* Bollinger Bands */}
         {indicators.bollinger && bollinger.upper.length > 0 && (
           <React.Fragment>
             <Path
-              d={`M ${getX(data.length - bollinger.upper.length)} ${getY(bollinger.upper[0])} ${bollinger.upper.map((price, i) => 
+              d={`M ${getX(data.length - bollinger.upper.length)} ${getY(bollinger.upper[0])} ${bollinger.upper.map((price, i) =>
                 `L ${getX(data.length - bollinger.upper.length + i)} ${getY(price)}`
               ).join(' ')}`}
               fill="none"
@@ -170,7 +168,7 @@ const CandlestickChart = ({ data, theme, indicators }) => {
               opacity="0.6"
             />
             <Path
-              d={`M ${getX(data.length - bollinger.lower.length)} ${getY(bollinger.lower[0])} ${bollinger.lower.map((price, i) => 
+              d={`M ${getX(data.length - bollinger.lower.length)} ${getY(bollinger.lower[0])} ${bollinger.lower.map((price, i) =>
                 `L ${getX(data.length - bollinger.lower.length + i)} ${getY(price)}`
               ).join(' ')}`}
               fill="none"
@@ -180,11 +178,11 @@ const CandlestickChart = ({ data, theme, indicators }) => {
             />
           </React.Fragment>
         )}
-        
+
         {/* Moving Averages */}
         {indicators.sma && sma20.length > 0 && (
           <Path
-            d={`M ${getX(data.length - sma20.length)} ${getY(sma20[0])} ${sma20.map((price, i) => 
+            d={`M ${getX(data.length - sma20.length)} ${getY(sma20[0])} ${sma20.map((price, i) =>
               `L ${getX(data.length - sma20.length + i)} ${getY(price)}`
             ).join(' ')}`}
             fill="none"
@@ -193,10 +191,10 @@ const CandlestickChart = ({ data, theme, indicators }) => {
             opacity="0.8"
           />
         )}
-        
+
         {indicators.ema && ema10.length > 0 && (
           <Path
-            d={`M ${getX(data.length - ema10.length)} ${getY(ema10[0])} ${ema10.map((price, i) => 
+            d={`M ${getX(data.length - ema10.length)} ${getY(ema10[0])} ${ema10.map((price, i) =>
               `L ${getX(data.length - ema10.length + i)} ${getY(price)}`
             ).join(' ')}`}
             fill="none"
@@ -205,7 +203,7 @@ const CandlestickChart = ({ data, theme, indicators }) => {
             opacity="0.8"
           />
         )}
-        
+
         {/* Candlesticks */}
         {data.map((candle, index) => {
           const x = getX(index);
@@ -213,11 +211,11 @@ const CandlestickChart = ({ data, theme, indicators }) => {
           const closeY = getY(candle.close);
           const highY = getY(candle.high);
           const lowY = getY(candle.low);
-          
+
           const isGreen = candle.close > candle.open;
           const bodyHeight = Math.abs(closeY - openY);
           const bodyY = Math.min(openY, closeY);
-          
+
           return (
             <React.Fragment key={index}>
               {/* Wick */}
@@ -241,7 +239,7 @@ const CandlestickChart = ({ data, theme, indicators }) => {
             </React.Fragment>
           );
         })}
-        
+
         {/* Current price line */}
         {data.length > 0 && (
           <React.Fragment>
@@ -269,18 +267,18 @@ const CandlestickChart = ({ data, theme, indicators }) => {
 
 // Volume Chart Component
 const VolumeChart = ({ data, theme }) => {
-  if (!data || data.length === 0) return null;
-  
+  if (!data || data.length === 0) {return null;}
+
   const maxVolume = Math.max(...data.map(d => d.volume));
   const currentVolume = data[data.length - 1]?.volume || 0;
   const barWidth = (chartWidth - 60) / data.length;
-  
+
   // Calculate volume moving averages
-  const volumeMA5 = data.length >= 5 ? 
+  const volumeMA5 = data.length >= 5 ?
     data.slice(-5).reduce((sum, candle) => sum + candle.volume, 0) / 5 : 0;
-  const volumeMA10 = data.length >= 10 ? 
+  const volumeMA10 = data.length >= 10 ?
     data.slice(-10).reduce((sum, candle) => sum + candle.volume, 0) / 10 : 0;
-  
+
   const formatVolume = (volume) => {
     if (volume >= 1e9) {
       return (volume / 1e9).toFixed(5);
@@ -291,7 +289,7 @@ const VolumeChart = ({ data, theme }) => {
     }
     return volume.toFixed(0);
   };
-  
+
   const formatVolumeDisplay = (volume) => {
     if (volume >= 1e6) {
       return (volume / 1e6).toFixed(2) + 'M';
@@ -300,7 +298,7 @@ const VolumeChart = ({ data, theme }) => {
     }
     return volume.toFixed(0);
   };
-  
+
   return (
     <View style={styles.volumeContainer}>
       {/* Volume Indicators - Binance Style */}
@@ -320,14 +318,14 @@ const VolumeChart = ({ data, theme }) => {
           {formatVolumeDisplay(currentVolume)}
         </Text>
       </View>
-      
+
       <Svg width={chartWidth} height={volumeChartHeight}>
         {data.map((candle, index) => {
           const x = 30 + (index * barWidth);
           const height = (candle.volume / maxVolume) * (volumeChartHeight - 20);
           const y = volumeChartHeight - height - 10;
           const isGreen = candle.close > candle.open;
-          
+
           return (
             <Rect
               key={index}
@@ -348,17 +346,17 @@ const VolumeChart = ({ data, theme }) => {
 const CoinMarketScreen = ({ navigation, route }) => {
   const { theme, isDarkMode } = useTheme();
   const { coin } = route.params || {};
-  
+
   const [selectedTimeframe, setSelectedTimeframe] = useState('4h');
   const [candlestickData, setCandlestickData] = useState([]);
-  const [indicators, setIndicators] = useState({
+  const [indicators] = useState({
     sma: true,
     ema: true,
     bollinger: true,
   });
-  
+
   const timeframes = ['1m', '5m', '15m', '1h', '4h', '1d', '1w', '1M'];
-  
+
   // Mock market data
   const marketData = {
     high24h: coin?.price ? coin.price * 1.08 : 114063.49,
@@ -368,14 +366,14 @@ const CoinMarketScreen = ({ navigation, route }) => {
     priceChange24h: coin?.change || -0.59,
     marketCap: 2969426426.08,
   };
-  
+
   useEffect(() => {
     if (coin?.price) {
       const data = generateCandlestickData(coin.price, selectedTimeframe);
       setCandlestickData(data);
     }
   }, [coin, selectedTimeframe]);
-  
+
   const showComingSoon = (featureName) => {
     Alert.alert(
       'Coming Soon',
@@ -384,7 +382,7 @@ const CoinMarketScreen = ({ navigation, route }) => {
       { cancelable: true }
     );
   };
-  
+
   if (!coin) {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
@@ -394,73 +392,73 @@ const CoinMarketScreen = ({ navigation, route }) => {
       </SafeAreaView>
     );
   }
-  
+
   const handleBuy = () => {
     navigation.navigate('BuyFlow', {
       screen: 'BuyAmount',
-      params: { coin }
+      params: { coin },
     });
   };
-  
+
   const handleSell = () => {
     navigation.navigate('SellFlow', {
-      screen: 'SellAmount', 
-      params: { coin }
+      screen: 'SellAmount',
+      params: { coin },
     });
   };
-  
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
-      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
-      
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+
       {/* Header */}
       <View style={[styles.header, { backgroundColor: theme.background }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
         </TouchableOpacity>
-        
+
         <Text style={[styles.coinPair, { color: theme.textPrimary }]}>
           {coin.symbol}/USDT
         </Text>
-        
+
         <View style={styles.headerRight}>
-          <TouchableOpacity 
-            onPress={() => showComingSoon('Filter')} 
+          <TouchableOpacity
+            onPress={() => showComingSoon('Filter')}
             style={styles.filterButton}
           >
             <Ionicons name="options-outline" size={24} color={theme.textPrimary} />
           </TouchableOpacity>
         </View>
       </View>
-      
+
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Price & Stats Card */}
         <View style={[styles.priceCard, { backgroundColor: theme.backgroundCard }]}>
           <Text style={[styles.currentPrice, { color: theme.textPrimary }]}>
-            ${coin.price < 10 
-              ? coin.price.toLocaleString('en-US', { 
+            ${coin.price < 10
+              ? coin.price.toLocaleString('en-US', {
                   minimumFractionDigits: 2,
-                  maximumFractionDigits: 4 
+                  maximumFractionDigits: 4,
                 })
-              : coin.price.toLocaleString('en-US', { 
+              : coin.price.toLocaleString('en-US', {
                   minimumFractionDigits: 0,
-                  maximumFractionDigits: 0 
+                  maximumFractionDigits: 0,
                 })
             }
           </Text>
-          
+
           <View style={styles.marketStats}>
             <View style={styles.statRow}>
               <View style={styles.statItem}>
                 <Text style={[styles.statLabel, { color: theme.textSecondary }]}>24h High</Text>
                 <Text style={[styles.statValue, { color: theme.textPrimary }]}>
-                  ${coin.price < 10 
+                  ${coin.price < 10
                     ? marketData.high24h.toFixed(4)
                     : marketData.high24h.toLocaleString('en-US', { maximumFractionDigits: 0 })
                   }
                 </Text>
               </View>
-              
+
               <View style={styles.statItem}>
                 <Text style={[styles.statLabel, { color: theme.textSecondary }]}>24h Vol({coin.symbol})</Text>
                 <Text style={[styles.statValue, { color: theme.textPrimary }]}>
@@ -468,18 +466,18 @@ const CoinMarketScreen = ({ navigation, route }) => {
                 </Text>
               </View>
             </View>
-            
+
             <View style={styles.statRow}>
               <View style={styles.statItem}>
                 <Text style={[styles.statLabel, { color: theme.textSecondary }]}>24h Low</Text>
                 <Text style={[styles.statValue, { color: theme.textPrimary }]}>
-                  ${coin.price < 10 
+                  ${coin.price < 10
                     ? marketData.low24h.toFixed(4)
                     : marketData.low24h.toLocaleString('en-US', { maximumFractionDigits: 0 })
                   }
                 </Text>
               </View>
-              
+
               <View style={styles.statItem}>
                 <Text style={[styles.statLabel, { color: theme.textSecondary }]}>24h Vol(USDT)</Text>
                 <Text style={[styles.statValue, { color: theme.textPrimary }]}>
@@ -489,7 +487,7 @@ const CoinMarketScreen = ({ navigation, route }) => {
             </View>
           </View>
         </View>
-        
+
         {/* Chart Card */}
         <View style={[styles.chartCard, { backgroundColor: theme.backgroundCard }]}>
           {/* Timeframe Controls */}
@@ -502,13 +500,13 @@ const CoinMarketScreen = ({ navigation, route }) => {
                   style={[
                     styles.timeframeButton,
                     selectedTimeframe === tf && styles.activeTimeframe,
-                    selectedTimeframe === tf && { backgroundColor: theme.primary }
+                    selectedTimeframe === tf && { backgroundColor: theme.primary },
                   ]}
                   onPress={() => setSelectedTimeframe(tf)}
                 >
                   <Text style={[
                     styles.timeframeText,
-                    { color: selectedTimeframe === tf ? '#FFF' : theme.textSecondary }
+                    { color: selectedTimeframe === tf ? '#FFF' : theme.textSecondary },
                   ]}>
                     {tf}
                   </Text>
@@ -516,7 +514,7 @@ const CoinMarketScreen = ({ navigation, route }) => {
               ))}
             </View>
           </View>
-          
+
           {/* Technical Indicators */}
           <View style={styles.indicatorContainer}>
             <Text style={[styles.indicatorText, { color: '#F59E0B' }]}>
@@ -526,19 +524,19 @@ const CoinMarketScreen = ({ navigation, route }) => {
               120,133.35
             </Text>
           </View>
-          
+
           {/* Main Chart */}
-          <CandlestickChart 
-            data={candlestickData} 
-            theme={theme} 
+          <CandlestickChart
+            data={candlestickData}
+            theme={theme}
             indicators={indicators}
           />
-          
+
           {/* Volume Chart */}
           <VolumeChart data={candlestickData} theme={theme} />
-          
+
         </View>
-        
+
         {/* Performance Card */}
         <View style={[styles.performanceCard, { backgroundColor: theme.backgroundCard }]}>
           <View style={styles.performanceGrid}>
@@ -569,18 +567,18 @@ const CoinMarketScreen = ({ navigation, route }) => {
           </View>
         </View>
       </ScrollView>
-      
+
       {/* Bottom Action Bar */}
       <View style={[styles.bottomBar, { backgroundColor: theme.background, borderTopColor: theme.border }]}>
         <View style={styles.bottomActions}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.primaryButton, { backgroundColor: theme.primary }]}
             onPress={handleBuy}
           >
             <Text style={styles.primaryButtonText}>Buy</Text>
           </TouchableOpacity>
-          
-          <TouchableOpacity 
+
+          <TouchableOpacity
             style={[styles.secondaryButton, { backgroundColor: theme.backgroundForm, borderColor: theme.border }]}
             onPress={handleSell}
           >

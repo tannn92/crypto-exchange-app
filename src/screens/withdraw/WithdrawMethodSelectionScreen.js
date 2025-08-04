@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -9,12 +9,11 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
-import { CommonActions } from '@react-navigation/native';
 
 const WithdrawMethodSelectionScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
   const { coin } = route.params || { coin: { id: 'usdt', symbol: 'USDT', name: 'Tether' } };
-  
+
   const slideAnim = useRef(new Animated.Value(300)).current;
 
   useEffect(() => {
@@ -24,7 +23,7 @@ const WithdrawMethodSelectionScreen = ({ navigation, route }) => {
       duration: 250,
       useNativeDriver: true,
     }).start();
-  }, []);
+  }, [slideAnim]);
 
   const handleClose = () => {
     // Slide down animation before closing
@@ -44,11 +43,11 @@ const WithdrawMethodSelectionScreen = ({ navigation, route }) => {
       duration: 200,
       useNativeDriver: true,
     }).start();
-    
+
     // Navigate immediately without waiting for animation
     navigation.replace('SendToUserFlow', {
       screen: 'SendToUser',
-      params: { coin }
+      params: { coin },
     });
   };
 
@@ -59,11 +58,11 @@ const WithdrawMethodSelectionScreen = ({ navigation, route }) => {
       duration: 200,
       useNativeDriver: true,
     }).start();
-    
+
     // Navigate immediately without waiting for animation
     navigation.replace('WithdrawFlow', {
       screen: 'Withdraw',
-      params: { coin }
+      params: { coin },
     });
   };
 
@@ -118,24 +117,24 @@ const WithdrawMethodSelectionScreen = ({ navigation, route }) => {
       statusBarTranslucent={true}
     >
       <View style={styles.modalOverlay}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.overlayTouchable}
           activeOpacity={1}
           onPress={handleClose}
         />
-        <Animated.View 
+        <Animated.View
           style={[
-            styles.modalContainer, 
-            { 
+            styles.modalContainer,
+            {
               backgroundColor: theme.backgroundForm,
-              transform: [{ translateY: slideAnim }]
-            }
+              transform: [{ translateY: slideAnim }],
+            },
           ]}
         >
           {/* Header */}
           <View style={styles.modalHeader}>
-            <TouchableOpacity 
-              onPress={handleClose} 
+            <TouchableOpacity
+              onPress={handleClose}
               style={styles.modalBackButton}
             >
               <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />

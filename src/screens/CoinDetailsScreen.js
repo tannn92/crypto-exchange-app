@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -16,7 +16,7 @@ import { getCoinById } from '../data/coinPrices';
 const CoinDetailsScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
   const { coin } = route.params || {};
-  
+
   if (!coin) {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
@@ -318,7 +318,7 @@ const CoinDetailsScreen = ({ navigation, route }) => {
   const coinBalance = mockBalances[coin.id] || { amount: 0, value: 0, currency: coin.symbol };
   const coinData = getCoinById(coin.id);
   const lastPrice = coinData ? coinData.price : 0;
-  
+
   // Get transactions for the current coin
   const coinTransactions = allTransactions[coin.id] || [];
 
@@ -328,7 +328,7 @@ const CoinDetailsScreen = ({ navigation, route }) => {
   const handleDeposit = () => {
     navigation.navigate('DepositFlow', {
       screen: 'Deposit',
-      params: { coin }
+      params: { coin },
     });
   };
 
@@ -339,7 +339,7 @@ const CoinDetailsScreen = ({ navigation, route }) => {
   const handleConvert = () => {
     navigation.navigate('ConvertFlow', {
       screen: 'Convert',
-      params: { selectedCoin: coin }
+      params: { selectedCoin: coin },
     });
   };
 
@@ -387,18 +387,18 @@ const CoinDetailsScreen = ({ navigation, route }) => {
             <View style={styles.coinIconContainer}>
               <CoinIcon coinId={coin.id} size={60} />
             </View>
-            
+
             <Text style={[styles.balanceLabel, { color: theme.textSecondary }]}>
               My balance
             </Text>
-            
+
             <Text style={[styles.balanceAmount, { color: theme.textPrimary }]}>
-              {coinBalance.amount.toLocaleString('en-US', { 
+              {coinBalance.amount.toLocaleString('en-US', {
                 minimumFractionDigits: 2,
-                maximumFractionDigits: 8 
+                maximumFractionDigits: 8,
               })} {coin.symbol}
             </Text>
-            
+
             <Text style={[styles.balanceChange, { color: theme.success }]}>
               ~${balanceInUSD.toLocaleString('en-US', { minimumFractionDigits: 2 })}
             </Text>
@@ -416,14 +416,14 @@ const CoinDetailsScreen = ({ navigation, route }) => {
 
           {/* Action Buttons */}
           <View style={styles.actionButtons}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[styles.primaryButton, { backgroundColor: theme.primary }]}
               onPress={handleDeposit}
             >
               <Text style={styles.primaryButtonText}>Deposit</Text>
             </TouchableOpacity>
-            
-            <TouchableOpacity 
+
+            <TouchableOpacity
               style={[styles.secondaryButton, { backgroundColor: theme.backgroundForm }]}
               onPress={handleWithdraw}
             >
@@ -431,8 +431,8 @@ const CoinDetailsScreen = ({ navigation, route }) => {
                 Withdraw
               </Text>
             </TouchableOpacity>
-            
-            <TouchableOpacity 
+
+            <TouchableOpacity
               style={[styles.secondaryButton, { backgroundColor: theme.backgroundForm }]}
               onPress={handleConvert}
             >
@@ -448,19 +448,19 @@ const CoinDetailsScreen = ({ navigation, route }) => {
           <Text style={[styles.sectionTitle, { color: theme.textPrimary }]}>
             Transactions history
           </Text>
-          
+
           <View style={[styles.transactionsList, { backgroundColor: theme.backgroundInput }]}>
             {coinTransactions.map((transaction) => (
               <View key={transaction.id} style={styles.transactionItem}>
                 <View style={styles.transactionLeft}>
                   <View style={[
-                    styles.transactionIcon, 
-                    { backgroundColor: getTransactionColor(transaction.type) + '20' }
+                    styles.transactionIcon,
+                    { backgroundColor: getTransactionColor(transaction.type) + '20' },
                   ]}>
-                    <Ionicons 
-                      name={getTransactionIcon(transaction.type)} 
-                      size={20} 
-                      color={getTransactionColor(transaction.type)} 
+                    <Ionicons
+                      name={getTransactionIcon(transaction.type)}
+                      size={20}
+                      color={getTransactionColor(transaction.type)}
                     />
                   </View>
                   <View style={styles.transactionDetails}>
@@ -472,11 +472,11 @@ const CoinDetailsScreen = ({ navigation, route }) => {
                     </Text>
                   </View>
                 </View>
-                
+
                 <View style={styles.transactionRight}>
                   <Text style={[
-                    styles.transactionAmount, 
-                    { color: transaction.isPositive ? theme.success : '#FF3B30' }
+                    styles.transactionAmount,
+                    { color: transaction.isPositive ? theme.success : '#FF3B30' },
                   ]}>
                     {formatAmount(transaction.amount, transaction.currency, transaction.isPositive)}
                   </Text>

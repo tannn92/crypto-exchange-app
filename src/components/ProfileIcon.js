@@ -62,11 +62,11 @@ const profileIcons = {
 
 const ProfileIcon = ({ iconId, size = 24, color = '#7B7C86', style }) => {
   const svgContent = profileIcons[iconId];
-  
+
   if (!svgContent) {
     // Fallback if SVG not found
     return (
-      <View 
+      <View
         style={[
           {
             width: size,
@@ -74,8 +74,8 @@ const ProfileIcon = ({ iconId, size = 24, color = '#7B7C86', style }) => {
             borderRadius: size / 2,
             backgroundColor: '#E0E0E0',
           },
-          style
-        ]} 
+          style,
+        ]}
       />
     );
   }
@@ -84,10 +84,10 @@ const ProfileIcon = ({ iconId, size = 24, color = '#7B7C86', style }) => {
   const coloredSvgContent = svgContent.replace(/fill="#7B7C86"/g, `fill="${color}"`);
 
   return (
-    <SvgXml 
-      xml={coloredSvgContent} 
-      width={size} 
-      height={size} 
+    <SvgXml
+      xml={coloredSvgContent}
+      width={size}
+      height={size}
       style={style}
     />
   );

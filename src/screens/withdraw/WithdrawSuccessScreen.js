@@ -12,7 +12,7 @@ import { useTheme } from '../../context/ThemeContext';
 
 const WithdrawSuccessScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
-  const { coin, network, address, amount, fee, totalAmount, transactionId, transactionTime } = route.params;
+  const { coin, network, address, amount, transactionTime } = route.params;
 
   const formatNumber = (num) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -20,8 +20,8 @@ const WithdrawSuccessScreen = ({ navigation, route }) => {
 
   // Format address for display (show first 6 and last 6 characters)
   const formatAddress = (addr) => {
-    if (!addr) return '';
-    if (addr.length <= 20) return addr;
+    if (!addr) {return '';}
+    if (addr.length <= 20) {return addr;}
     return `${addr.substring(0, 20)}${addr.substring(addr.length - 20)}`;
   };
 
@@ -44,8 +44,8 @@ const WithdrawSuccessScreen = ({ navigation, route }) => {
     <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundForm }]}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity 
-          onPress={() => navigation.navigate('MainTabs')} 
+        <TouchableOpacity
+          onPress={() => navigation.navigate('MainTabs')}
           style={styles.backButton}
         >
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
@@ -100,7 +100,7 @@ const WithdrawSuccessScreen = ({ navigation, route }) => {
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit',
-                hour12: false
+                hour12: false,
               })}
             </Text>
           </View>
@@ -156,13 +156,13 @@ const WithdrawSuccessScreen = ({ navigation, route }) => {
 
       {/* Action Buttons */}
       <View style={styles.actionButtons}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.saveButton, { backgroundColor: theme.backgroundInput }]}
           onPress={handleHomepage}
         >
           <Text style={[styles.saveButtonText, { color: theme.textPrimary }]}>Homepage</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.balanceButton, { backgroundColor: '#FF6B35' }]}
           onPress={handleViewBalance}
         >
