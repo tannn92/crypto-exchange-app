@@ -418,17 +418,10 @@ const CoinMarketScreen = ({ navigation, route }) => {
         </TouchableOpacity>
 
         <Text style={[styles.coinPair, { color: theme.textPrimary }]}>
-          {coin.symbol}/USDT
+          {coin.name}
         </Text>
 
-        <View style={styles.headerRight}>
-          <TouchableOpacity
-            onPress={() => showComingSoon('Filter')}
-            style={styles.filterButton}
-          >
-            <Ionicons name="options-outline" size={24} color={theme.textPrimary} />
-          </TouchableOpacity>
-        </View>
+        <View style={styles.headerRight} />
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>

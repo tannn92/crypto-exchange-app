@@ -12,7 +12,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cryptoList, cryptoData } from '../../data/coinPrices';
 import CoinIcon from '../../components/CoinIcon';
 
-const popularCoins = ['BTC', 'ETH', 'USDT'];
+const popularCoins = ['BTC', 'ETH', 'BNB', 'USDT'];
 const VND_TO_USDT_RATE = 1 / 25290; // 1 VND = 0.0000395257 USDT (25,290 VND = 1 USDT)
 
 const CoinSelectionScreen = ({ navigation, route }) => {

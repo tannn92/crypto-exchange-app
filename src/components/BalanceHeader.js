@@ -33,7 +33,7 @@ const BalanceHeader = ({
       return Math.floor(amount).toLocaleString();
     } else {
       // For USDT, show with decimals
-      return formatBalance(amount);
+      return amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
   };
 

@@ -140,7 +140,7 @@ const SendToUserSuccessScreen = ({ navigation, route }) => {
           onPress={handleViewBalance}
           testID="send-user-view-balance-button"
         >
-          <Text style={styles.balanceButtonText}>View balance</Text>
+          <Text style={styles.balanceButtonText}>View Balance</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

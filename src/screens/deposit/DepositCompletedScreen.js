@@ -236,7 +236,7 @@ const DepositCompletedScreen = ({ navigation, route }) => {
             onPress={handleViewBalance}
           >
             <Text style={[styles.secondaryButtonText, { color: theme.textPrimary }]}>
-              View balance
+              View Balance
             </Text>
           </TouchableOpacity>
 

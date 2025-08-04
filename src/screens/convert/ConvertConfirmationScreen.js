@@ -19,7 +19,7 @@ const ConvertConfirmationScreen = ({ navigation, route }) => {
   const insets = useSafeAreaInsets();
   const { sourceCoin, destinationCoin, sourceAmount, destinationAmount, exchangeRate } = route.params;
 
-  const slideAnim = useRef(new Animated.Value(650)).current;
+  const slideAnim = useRef(new Animated.Value(530)).current;
 
   useEffect(() => {
     Animated.timing(slideAnim, {
@@ -39,7 +39,7 @@ const ConvertConfirmationScreen = ({ navigation, route }) => {
 
   const handleConfirm = () => {
     Animated.timing(slideAnim, {
-      toValue: 650,
+      toValue: 530,
       duration: 200,
       useNativeDriver: true,
     }).start(() => {
@@ -56,7 +56,7 @@ const ConvertConfirmationScreen = ({ navigation, route }) => {
 
   const handleCancel = () => {
     Animated.timing(slideAnim, {
-      toValue: 650,
+      toValue: 530,
       duration: 200,
       useNativeDriver: true,
     }).start(() => {
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    height: 500,
+    height: 530,
     paddingTop: 15,
   },
   modalHeader: {

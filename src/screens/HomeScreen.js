@@ -198,9 +198,18 @@ const BalanceChart = ({ theme, currency, exchangeRate }) => {
   };
 
 
+  const handlePointPress = (point, index) => {
+    console.log('Point touched:', point, index);
+    setActiveDot({ ...point, index });
+    setShowDot(true);
+    setTimeout(() => {
+      setShowDot(false);
+      setActiveDot(null);
+    }, 4000);
+  };
+
   return (
     <View style={styles.chartContainer}>
-
       <View style={styles.chartTouchArea}>
         <View style={styles.chartSvgContainer}>
           <Svg width={chartWidth} height={chartHeight} style={styles.chartSvg}>
@@ -220,26 +229,6 @@ const BalanceChart = ({ theme, currency, exchangeRate }) => {
               stroke={theme.isDarkMode ? '#8BA0FF' : '#6B82FF'}
               strokeWidth="2"
             />
-            {/* Invisible touch areas for each data point */}
-            {balancePoints.map((point, index) => (
-              <Rect
-                key={index}
-                x={point.x - 15}
-                y={0}
-                width={30}
-                height={chartHeight}
-                fill="transparent"
-                onPress={() => {
-                  console.log('Point touched:', point, index);
-                  setActiveDot({ ...point, index });
-                  setShowDot(true);
-                  setTimeout(() => {
-                    setShowDot(false);
-                    setActiveDot(null);
-                  }, 4000);
-                }}
-              />
-            ))}
             {showDot && activeDot && (
               <Circle
                 cx={activeDot.x}
@@ -251,6 +240,22 @@ const BalanceChart = ({ theme, currency, exchangeRate }) => {
               />
             )}
           </Svg>
+          {/* Touch areas overlay */}
+          {balancePoints.map((point, index) => (
+            <TouchableOpacity
+              key={index}
+              style={[
+                styles.chartTouchPoint,
+                {
+                  left: point.x - 20,
+                  width: 40,
+                  height: chartHeight,
+                }
+              ]}
+              onPress={() => handlePointPress(point, index)}
+              activeOpacity={1}
+            />
+          ))}
         </View>
         {showDot && activeDot && (
           <View style={[
@@ -316,6 +321,10 @@ const HomeScreen = ({ navigation, route }) => {
   const baseBalance = 3243.00;
   const baseChange = 43.96;
   const baseChangePercent = 1.47;
+  
+  // Calculate total balance and change based on currency
+  const totalBalance = currency === 'VND' ? baseBalance * exchangeRate : baseBalance;
+  const balanceChangeAmount = currency === 'VND' ? baseChange * exchangeRate : baseChange;
 
 
   const quickActions = [
@@ -437,10 +446,10 @@ const HomeScreen = ({ navigation, route }) => {
             setCurrency={setCurrency}
             showCurrencyDropdown={showCurrencyDropdown}
             setShowCurrencyDropdown={setShowCurrencyDropdown}
-            totalBalance={baseBalance}
+            totalBalance={totalBalance}
             balanceVisible={balanceVisible}
             toggleBalanceVisibility={toggleBalanceVisibility}
-            balanceChange={baseChange}
+            balanceChange={balanceChangeAmount}
             balanceChangePercent={baseChangePercent}
             formatBalance={formatBalance}
             formatChange={formatChange}
@@ -501,9 +510,14 @@ const HomeScreen = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
 
-          {cryptoData.map((item) => (
-            <CryptoItem key={item.id} item={item} theme={theme} navigation={navigation} />
-          ))}
+          {activeTab === 'popular' 
+            ? cryptoData.filter(item => ['btc', 'eth', 'bnb', 'usdt'].includes(item.id)).map((item) => (
+                <CryptoItem key={item.id} item={item} theme={theme} navigation={navigation} />
+              ))
+            : cryptoData.map((item) => (
+                <CryptoItem key={item.id} item={item} theme={theme} navigation={navigation} />
+              ))
+          }
         </View>
 
         {/* Contest Section */}
@@ -519,8 +533,8 @@ const HomeScreen = ({ navigation, route }) => {
 
       </ScrollView>
       
-      {/* Debug component - remove in production */}
-      <SafeAreaDebugger visible={__DEV__} />
+      {/* Debug component - only show in development on local machine */}
+      <SafeAreaDebugger visible={__DEV__ && !global.Expo?.Constants?.executionEnvironment?.startsWith('storeClient')} />
     </View>
   );
 };
@@ -632,6 +646,10 @@ const styles = StyleSheet.create({
   },
   chartSvg: {
     alignSelf: 'center',
+  },
+  chartTouchPoint: {
+    position: 'absolute',
+    top: 0,
   },
   chartLabel: {
     position: 'absolute',

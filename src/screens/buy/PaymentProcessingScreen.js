@@ -21,6 +21,34 @@ import BankIcon from '../../components/BankIcon';
 const PaymentProcessingScreen = ({ navigation, route }) => {
   const { theme } = useTheme();
   const { coin, vndAmount, cryptoAmount, exchangeRate, paymentMethod } = route.params;
+
+  // Bank names and IDs mapping
+  const bankNames = {
+    'bank-shinhanbank': 'ShinhanBank',
+    'bank-vietcombank': 'Vietcombank',
+    'bank-techcombank': 'Techcombank',
+    'bank-msb': 'MSB',
+    'bank-vietinbank': 'VietinBank',
+    'bank-vpbank': 'VPBank',
+    'bank-vib': 'VIB',
+    'bank-mbbank': 'MBBank',
+    'bank-sacombank': 'Sacombank',
+    'bank-acb': 'ACB',
+  };
+
+  // Get bank name and ID from payment method
+  const getBankInfo = () => {
+    if (paymentMethod && paymentMethod.startsWith('bank-')) {
+      const bankId = paymentMethod.replace('bank-', '');
+      return {
+        name: bankNames[paymentMethod] || 'Vietcombank',
+        id: bankId
+      };
+    }
+    return { name: 'Vietcombank', id: 'vietcombank' }; // Default fallback
+  };
+
+  const bankInfo = getBankInfo();
   const [timeRemaining, setTimeRemaining] = useState({ minutes: 2, seconds: 30 });
   const [isVerifying, setIsVerifying] = useState(false);
   const [hasNavigated, setHasNavigated] = useState(false);
@@ -96,7 +124,7 @@ const PaymentProcessingScreen = ({ navigation, route }) => {
   };
 
   const bankDetails = {
-    name: 'Vietcombank',
+    name: bankInfo.name,
     accountNumber: '079079084084',
     accountName: 'CONG TY TNHH CRYPTOVN',
     amount: formatNumber(Math.round(vndAmount)),
@@ -277,7 +305,7 @@ const PaymentProcessingScreen = ({ navigation, route }) => {
                         <View style={styles.detailRow}>
                           <Text style={[styles.detailLabel, { color: theme.textSecondary }]}>Bank name</Text>
                           <View style={styles.detailValueContainer}>
-                            <BankIcon bankId="vietcombank" size={20} />
+                            <BankIcon bankId={bankInfo.id} size={20} />
                             <Text style={[styles.detailValue, { color: theme.textPrimary, marginLeft: 8 }]}>
                               {bankDetails.name}
                             </Text>

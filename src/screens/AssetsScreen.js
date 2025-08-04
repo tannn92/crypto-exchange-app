@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import CoinIcon from '../components/CoinIcon';
 import BalanceHeader from '../components/BalanceHeader';
+import { coinPrices } from '../data/coinPrices';
 
 const AssetsScreen = ({ navigation }) => {
   const { theme } = useTheme();
@@ -39,6 +40,8 @@ const AssetsScreen = ({ navigation }) => {
     xrp: ['#E8E9EA', theme.backgroundInput],
     sol: ['#F0E6FF', theme.backgroundInput],
     bnb: ['#FFF8E1', theme.backgroundInput],
+    bch: ['#E8F5E8', theme.backgroundInput],
+    ltc: ['#F0F0F0', theme.backgroundInput],
   };
 
   // User's portfolio holdings
@@ -86,40 +89,14 @@ const AssetsScreen = ({ navigation }) => {
   ];
 
   // Popular cryptocurrencies for trading (using consistent IDs with coinPrices)
-  const popularCryptos = [
-    {
-      id: 'btc',
-      symbol: 'BTC',
-      name: 'Bitcoin',
-      price: 117512.00,
-      change: -2.60,
-      isPositive: false,
-    },
-    {
-      id: 'eth',
-      symbol: 'ETH',
-      name: 'Ethereum',
-      price: 3801.38,
-      change: 0.69,
-      isPositive: true,
-    },
-    {
-      id: 'usdt',
-      symbol: 'USDT',
-      name: 'Tether USDT',
-      price: 0.9999,
-      change: 0.00,
-      isPositive: true,
-    },
-    {
-      id: 'sol',
-      symbol: 'SOL',
-      name: 'Solana',
-      price: 180.00,
-      change: 5.80,
-      isPositive: true,
-    },
-  ];
+  const popularCryptos = Object.values(coinPrices).map(coin => ({
+    id: coin.id,
+    symbol: coin.symbol,
+    name: coin.name,
+    price: coin.price,
+    change: coin.change,
+    isPositive: coin.change >= 0,
+  }));
 
   // Filter holdings based on hideSmallAssets and search query
   const filteredHoldings = holdings.filter(holding => {

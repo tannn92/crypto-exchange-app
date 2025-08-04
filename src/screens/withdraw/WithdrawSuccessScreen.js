@@ -234,7 +234,7 @@ const WithdrawSuccessScreen = ({ navigation, route }) => {
             onPress={handleViewBalance}
             testID="withdraw-view-balance-button"
           >
-            <Text style={styles.balanceButtonText}>View balance</Text>
+            <Text style={styles.balanceButtonText}>View Balance</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

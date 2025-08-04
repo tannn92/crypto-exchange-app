@@ -291,10 +291,7 @@ const WithdrawScreen = ({ navigation, route }) => {
             </View>
           </View>
 
-        </ScrollView>
-
-        {/* Bottom Card with Withdraw Info and Submit Button */}
-        <View style={styles.bottomContainer}>
+          {/* Bottom Card with Withdraw Info and Submit Button */}
           <View style={[styles.bottomCard, { backgroundColor: theme.backgroundInput }]}>
             {/* Withdraw Info */}
             <View style={styles.infoSection}>
@@ -358,7 +355,8 @@ const WithdrawScreen = ({ navigation, route }) => {
               <Text style={styles.submitButtonText}>Submit</Text>
             </TouchableOpacity>
           </View>
-        </View>
+
+        </ScrollView>
       </KeyboardAvoidingView>
         </>
       )}
@@ -498,7 +496,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 20,
-    paddingBottom: 120,
+    paddingBottom: 20,
   },
   section: {
     marginBottom: 20,
@@ -590,19 +588,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-  bottomContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'transparent',
-  },
   bottomCard: {
+    marginTop: 20,
     paddingHorizontal: 20,
     paddingTop: 20,
     paddingBottom: 30,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    borderRadius: 16,
+    marginHorizontal: -20,
   },
   submitButton: {
     paddingVertical: 16,

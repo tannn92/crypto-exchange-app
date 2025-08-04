@@ -108,6 +108,16 @@ export const cryptoData = [
     // SOL: Up 5.80% - smooth strong upward movement
     sparklineData: [35, 35.8, 36.9, 37.2, 38.1, 39.4, 40.8, 42.3, 43.9, 45.6, 47.2, 49.1, 50.8, 52.6, 54.3, 56.2, 58.1, 60.3, 62.4, 64.2],
   },
+  {
+    ...coinPrices.bch,
+    // BCH: Down 0.35% - slight downward trend
+    sparklineData: [50, 49.8, 49.9, 49.7, 49.5, 49.6, 49.4, 49.3, 49.2, 49.1, 49.2, 49.0, 48.9, 48.8, 48.7, 48.6, 48.5, 48.4, 48.3, 48.2],
+  },
+  {
+    ...coinPrices.ltc,
+    // LTC: Down 0.05% - mostly flat with slight decline
+    sparklineData: [50, 50.01, 49.98, 50.02, 49.99, 49.97, 50.01, 49.98, 49.96, 49.99, 49.97, 49.95, 49.98, 49.96, 49.94, 49.97, 49.95, 49.93, 49.96, 49.94],
+  },
 ];
 
 // Export array format for CoinSelectionScreen compatibility
@@ -118,6 +128,8 @@ export const cryptoList = [
   coinPrices.bch,
   coinPrices.ltc,
   coinPrices.xrp,
+  coinPrices.bnb,
+  coinPrices.sol,
 ];
 
 // Helper function to get coin by symbol

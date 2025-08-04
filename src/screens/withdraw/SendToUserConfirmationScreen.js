@@ -19,7 +19,7 @@ const SendToUserConfirmationScreen = ({ navigation, route }) => {
   const insets = useSafeAreaInsets();
   const { coin, username, amount, message } = route.params;
 
-  const slideAnim = useRef(new Animated.Value(550)).current;
+  const slideAnim = useRef(new Animated.Value(570)).current;
 
   useEffect(() => {
     Animated.timing(slideAnim, {
@@ -39,7 +39,7 @@ const SendToUserConfirmationScreen = ({ navigation, route }) => {
 
   const handleConfirm = () => {
     Animated.timing(slideAnim, {
-      toValue: 550,
+      toValue: 570,
       duration: 200,
       useNativeDriver: true,
     }).start(() => {
@@ -56,7 +56,7 @@ const SendToUserConfirmationScreen = ({ navigation, route }) => {
 
   const handleCancel = () => {
     Animated.timing(slideAnim, {
-      toValue: 550,
+      toValue: 570,
       duration: 200,
       useNativeDriver: true,
     }).start(() => {
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    height: 550,
+    height: 570,
     paddingTop: 15,
   },
   modalHeader: {

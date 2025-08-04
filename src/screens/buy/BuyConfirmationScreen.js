@@ -14,6 +14,28 @@ const BuyConfirmationScreen = ({ navigation, route }) => {
   const { theme, isDarkMode } = useTheme();
   const { coin, vndAmount, cryptoAmount, exchangeRate, paymentMethod } = route.params;
 
+  // Bank names mapping
+  const bankNames = {
+    'bank-shinhanbank': 'ShinhanBank',
+    'bank-vietcombank': 'Vietcombank',
+    'bank-techcombank': 'Techcombank',
+    'bank-msb': 'MSB',
+    'bank-vietinbank': 'VietinBank',
+    'bank-vpbank': 'VPBank',
+    'bank-vib': 'VIB',
+    'bank-mbbank': 'MBBank',
+    'bank-sacombank': 'Sacombank',
+    'bank-acb': 'ACB',
+  };
+
+  // Get bank name from payment method
+  const getBankName = () => {
+    if (paymentMethod && paymentMethod.startsWith('bank-')) {
+      return bankNames[paymentMethod] || 'Vietcombank';
+    }
+    return 'Vietcombank'; // Default fallback
+  };
+
   const formatNumber = (num) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   };
@@ -76,7 +98,7 @@ const BuyConfirmationScreen = ({ navigation, route }) => {
 
             <View style={styles.detailRow}>
               <Text style={[styles.detailLabel, { color: theme.textSecondary }]}>Transfer to</Text>
-              <Text style={[styles.detailValue, { color: theme.textPrimary }]}>Vietcombank</Text>
+              <Text style={[styles.detailValue, { color: theme.textPrimary }]}>{getBankName()}</Text>
             </View>
 
             <View style={styles.detailRow}>
