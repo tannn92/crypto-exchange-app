@@ -5,16 +5,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { getTabBarHeight, hasGestureNavigation } from '../utils/SafeAreaHelper';
-import ScreenWrapper from '../components/ScreenWrapper';
-import HomeScreen from '../screens/HomeScreen';
-import AssetsScreen from '../screens/AssetsScreen';
-import HistoryScreen from '../screens/HistoryScreen';
+import { SafeHomeScreen, SafeAssetsScreen, SafeHistoryScreen } from './SafeScreens';
 
 const Tab = createBottomTabNavigator();
-
-// Placeholder screens - removed as not used
-
-// HistoryScreen is now imported from the actual component
 
 const BottomTabNavigator = () => {
   const { theme } = useTheme();
@@ -65,30 +58,9 @@ const BottomTabNavigator = () => {
         headerShown: false,
       })}
     >
-      <Tab.Screen 
-        name="Home" 
-        component={(props) => (
-          <ScreenWrapper route={props.route}>
-            <HomeScreen {...props} />
-          </ScreenWrapper>
-        )} 
-      />
-      <Tab.Screen 
-        name="Assets" 
-        component={(props) => (
-          <ScreenWrapper route={props.route}>
-            <AssetsScreen {...props} />
-          </ScreenWrapper>
-        )} 
-      />
-      <Tab.Screen 
-        name="History" 
-        component={(props) => (
-          <ScreenWrapper route={props.route}>
-            <HistoryScreen {...props} />
-          </ScreenWrapper>
-        )} 
-      />
+      <Tab.Screen name="Home" component={SafeHomeScreen} />
+      <Tab.Screen name="Assets" component={SafeAssetsScreen} />
+      <Tab.Screen name="History" component={SafeHistoryScreen} />
     </Tab.Navigator>
   );
 };

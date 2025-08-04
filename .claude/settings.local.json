@@ -38,7 +38,8 @@
       "Bash(git rm:*)",
       "Bash(npx eslint:*)",
       "Bash(npm run lint:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(sed:*)"
     ],
     "deny": []
   }
