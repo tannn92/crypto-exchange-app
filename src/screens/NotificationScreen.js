@@ -329,7 +329,7 @@ const NotificationScreen = ({ navigation, route }) => {
       // Announcement notification
       return (
         <TouchableOpacity 
-          style={styles.notificationItem}
+          style={[styles.notificationItem, { borderBottomColor: theme.border }]}
           onPress={() => handleNotificationPress(item)}
           activeOpacity={0.7}
         >
@@ -359,7 +359,7 @@ const NotificationScreen = ({ navigation, route }) => {
       // Activity notification
       return (
         <TouchableOpacity 
-          style={styles.notificationItem}
+          style={[styles.notificationItem, { borderBottomColor: theme.border }]}
           onPress={() => handleNotificationPress(item)}
           activeOpacity={0.7}
         >
@@ -407,7 +407,7 @@ const NotificationScreen = ({ navigation, route }) => {
           <TouchableOpacity
             onPress={() => {
               console.log('Back button touched - NotificationScreen');
-              navigation.navigate('MainTabs', { screen: 'Home' });
+              navigation.goBack();
             }}
             style={styles.backButton}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
@@ -559,7 +559,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
   },
   notificationLeft: {
     flexDirection: 'row',

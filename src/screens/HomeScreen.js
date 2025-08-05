@@ -14,7 +14,6 @@ import Svg, { Path, Circle, Rect, Defs, LinearGradient as SvgLinearGradient, Sto
 import { useTheme } from '../context/ThemeContext';
 import CoinIcon from '../components/CoinIcon';
 import BalanceHeader from '../components/BalanceHeader';
-import SafeAreaDebugger from '../components/SafeAreaDebugger';
 import { cryptoData, coinPrices } from '../data/coinPrices';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -133,6 +132,86 @@ const BalanceChart = ({ theme, currency, exchangeRate }) => {
     58.2, 60.1, 62.3, 64.8, 67.2, 69.8, 71.4, 73.9, 75.6, 77.8, 79.2, 81.5, 83.1, 84.8, 86.4,
     88.1, 89.6, 91.2, 92.8, 94.1, 95.7,
   ];
+
+  // Generate time data for the last 36 data points (every 2 hours for the last 3 days)
+  const generateTimeData = () => {
+    const now = new Date();
+    const timeData = [];
+    
+    // Generate dates from oldest to newest (left to right on chart)
+    for (let i = chartData.length - 1; i >= 0; i--) {
+      const timeAgo = new Date(now.getTime() - (i * 2 * 60 * 60 * 1000)); // 2 hours ago each step
+      timeData.push(timeAgo); // Push directly, don't unshift
+    }
+    
+    return timeData;
+  };
+
+  const timeData = generateTimeData();
+
+  // Generate time markers for display - find positions corresponding to 0:00 AM of each day
+  const generateTimeMarkers = () => {
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    // Get the first and last dates from our time data
+    const firstDate = new Date(timeData[0]);
+    const lastDate = new Date(timeData[timeData.length - 1]);
+    
+    // Create midnight markers for each day in the range
+    const allMarkers = [];
+    const currentDate = new Date(firstDate);
+    currentDate.setHours(0, 0, 0, 0);
+    
+    while (currentDate <= lastDate) {
+      // Find the closest data point to this midnight
+      let closestIndex = 0;
+      let minDiff = Math.abs(timeData[0].getTime() - currentDate.getTime());
+      
+      for (let i = 1; i < timeData.length; i++) {
+        const diff = Math.abs(timeData[i].getTime() - currentDate.getTime());
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestIndex = i;
+        }
+      }
+      
+      const x = (closestIndex / Math.max(timeData.length - 1, 1)) * chartWidth;
+      const monthName = monthNames[currentDate.getMonth()];
+      const day = currentDate.getDate();
+      const label = `${monthName} ${day}`;
+      
+      allMarkers.push({
+        x,
+        time: new Date(currentDate),
+        label,
+        index: closestIndex
+      });
+      
+      // Move to next day
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    
+    // Now filter markers to prevent overlap - ensure minimum spacing
+    const filteredMarkers = [];
+    const minSpacing = 60; // Minimum pixels between markers to prevent overlap
+    
+    allMarkers.forEach((marker, index) => {
+      // Check if this marker has enough space from previous markers
+      const hasSpace = filteredMarkers.every(existingMarker => 
+        Math.abs(existingMarker.x - marker.x) >= minSpacing
+      );
+      
+      // Also ensure the marker is not too close to the chart edges
+      const hasEdgeSpace = marker.x >= 30 && marker.x <= (chartWidth - 30);
+      
+      if (hasSpace && hasEdgeSpace) {
+        filteredMarkers.push(marker);
+      }
+    });
+    
+    return filteredMarkers;
+  };
   const chartWidth = screenWidth - 40; // Adjust for card margins
   const chartHeight = 100;
 
@@ -148,8 +227,15 @@ const BalanceChart = ({ theme, currency, exchangeRate }) => {
   const balancePoints = validData.map((value, index) => {
     const x = (index / Math.max(validData.length - 1, 1)) * chartWidth;
     const y = chartHeight - ((value - min) / range) * chartHeight;
-    return { x: parseFloat(x.toFixed(2)), y: parseFloat(y.toFixed(2)), value };
+    return { 
+      x: parseFloat(x.toFixed(2)), 
+      y: parseFloat(y.toFixed(2)), 
+      value,
+      time: timeData[index]
+    };
   });
+
+  const timeMarkers = generateTimeMarkers();
 
   // Create smooth curve for main balance chart
   const createSmoothBalancePath = (points) => {
@@ -197,22 +283,51 @@ const BalanceChart = ({ theme, currency, exchangeRate }) => {
     return `${scaledValue.toFixed(2)} USDT`;
   };
 
+  const formatTime = (date) => {
+    // Format as "MM/DD HH:MM"
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    
+    return `${month}/${day} ${hours}:${minutes}`;
+  };
+
+  const formatFullDateTime = (date) => {
+    // Format as "MM/DD/YYYY HH:MM:SS"
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    
+    return `${month}/${day}/${year} ${hours}:${minutes}:${seconds}`;
+  };
+
 
   const handlePointPress = (point, index) => {
     console.log('Point touched:', point, index);
     setActiveDot({ ...point, index });
     setShowDot(true);
-    setTimeout(() => {
-      setShowDot(false);
-      setActiveDot(null);
-    }, 4000);
+    // Remove auto-hide timeout - popup will only disappear when clicking elsewhere
+  };
+
+  const handleChartAreaPress = () => {
+    // Hide popup when clicking outside of data points
+    setShowDot(false);
+    setActiveDot(null);
   };
 
   return (
     <View style={styles.chartContainer}>
-      <View style={styles.chartTouchArea}>
+      <TouchableOpacity 
+        style={styles.chartTouchArea}
+        onPress={handleChartAreaPress}
+        activeOpacity={1}
+      >
         <View style={styles.chartSvgContainer}>
-          <Svg width={chartWidth} height={chartHeight} style={styles.chartSvg}>
+          <Svg width={chartWidth} height={chartHeight + 20} style={styles.chartSvg}>
             <Defs>
               <SvgLinearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                 <Stop offset="0%" stopColor={theme.isDarkMode ? '#8BA0FF' : '#6B82FF'} stopOpacity="0.3" />
@@ -252,7 +367,10 @@ const BalanceChart = ({ theme, currency, exchangeRate }) => {
                   height: chartHeight,
                 }
               ]}
-              onPress={() => handlePointPress(point, index)}
+              onPress={(e) => {
+                e.stopPropagation(); // Prevent background touch from firing
+                handlePointPress(point, index);
+              }}
               activeOpacity={1}
             />
           ))}
@@ -261,16 +379,36 @@ const BalanceChart = ({ theme, currency, exchangeRate }) => {
           <View style={[
             styles.chartLabel,
             {
-              left: Math.min(Math.max(activeDot.x - 50, 10), chartWidth - 110),
-              top: Math.max(activeDot.y - 45, 5),
+              left: Math.min(Math.max(activeDot.x - 75, 10), chartWidth - 150),
+              top: Math.max(activeDot.y - 55, 5),
               backgroundColor: theme.isDarkMode ? 'rgba(255, 107, 0, 0.95)' : 'rgba(255, 107, 0, 0.9)',
             },
           ]}>
             <Text style={[styles.chartLabelText, { color: '#FFF' }]}>
               {formatValue(activeDot.value)}
             </Text>
+            <Text style={[styles.chartLabelTime, { color: '#FFF' }]}>
+              {formatFullDateTime(activeDot.time)}
+            </Text>
           </View>
         )}
+      </TouchableOpacity>
+      
+      {/* Time markers below the chart */}
+      <View style={styles.timeMarkersContainer}>
+        {timeMarkers.map((marker, index) => (
+          <View 
+            key={index} 
+            style={[
+              styles.timeMarker,
+              { left: marker.x }
+            ]}
+          >
+            <Text style={[styles.timeMarkerText, { color: theme.textSecondary }]}>
+              {marker.label}
+            </Text>
+          </View>
+        ))}
       </View>
     </View>
   );
@@ -533,8 +671,6 @@ const HomeScreen = ({ navigation, route }) => {
 
       </ScrollView>
       
-      {/* Debug component - only show in development on local machine */}
-      <SafeAreaDebugger visible={__DEV__ && !global.Expo?.Constants?.executionEnvironment?.startsWith('storeClient')} />
     </View>
   );
 };
@@ -633,7 +769,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     marginTop: 10,
     marginBottom: 0,
-    height: 120,
+    height: 140, // Increased height to accommodate time markers
     width: '100%',
   },
   chartTouchArea: {
@@ -665,6 +801,34 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     textAlign: 'center',
+  },
+  chartLabelTime: {
+    fontSize: 10,
+    fontWeight: '500',
+    textAlign: 'center',
+    marginTop: 2,
+    opacity: 0.9,
+  },
+  timeMarkersContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 20,
+    flexDirection: 'row',
+  },
+  timeMarker: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 60,
+    marginLeft: -30, // Center the text exactly over the vertical line
+  },
+  timeMarkerText: {
+    fontSize: 10,
+    fontWeight: '500',
+    textAlign: 'center',
+    width: '100%',
   },
   quickActionsInCard: {
     flexDirection: 'row',
