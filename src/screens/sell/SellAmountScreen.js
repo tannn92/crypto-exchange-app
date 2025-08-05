@@ -32,7 +32,7 @@ const SellAmountScreen = ({ navigation, route }) => {
   const [cryptoAmount, setCryptoAmount] = useState('');
   const [vndAmount, setVndAmount] = useState('');
   const [receiveMethod, setReceiveMethod] = useState('bank-vietcombank');
-  const [accountName, setAccountName] = useState('Nguyen Van A');
+  const [accountName, setAccountName] = useState('NGUYEN THE DUY');
   const [accountNumber, setAccountNumber] = useState('***6868');
   const [showPriceTooltip, setShowPriceTooltip] = useState(false);
   const [isRateFlipped, setIsRateFlipped] = useState(false);

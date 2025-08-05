@@ -56,8 +56,20 @@ const SellCompletedScreen = ({ navigation, route }) => {
   };
 
   const handleSellMore = () => {
+    // Navigate to sell form with BTC as default coin
+    const defaultCoin = {
+      id: 'btc',
+      symbol: 'BTC',
+      name: 'Bitcoin',
+      price: 97187.84, // Default price
+      change: 2.5,
+      icon: 'btc',
+      iconBg: '#F7931A',
+    };
+
     navigation.navigate('SellFlow', {
-      screen: 'CoinSelection',
+      screen: 'SellAmount',
+      params: { coin: defaultCoin },
     });
   };
 

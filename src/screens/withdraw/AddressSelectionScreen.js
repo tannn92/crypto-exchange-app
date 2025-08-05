@@ -31,7 +31,7 @@ const AddressSelectionScreen = ({ navigation, route }) => {
     {
       id: '2',
       label: 'USDT',
-      name: 'John Smith',
+      name: 'Nguyen The Duy',
       address: 'THPdj...jks21',
       fullAddress: 'THPdjhf8s9djfh8s9dhf8s9dhf8s9dhjks21',
       network: 'BSC',

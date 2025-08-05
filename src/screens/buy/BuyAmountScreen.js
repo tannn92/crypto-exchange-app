@@ -94,7 +94,8 @@ const BuyAmountScreen = ({ navigation, route }) => {
     'bank-acb': 'ACB',
   };
 
-  const bankLogos = ['shinhanbank', 'vietcombank', 'techcombank', 'msb', 'vietinbank', 'vpbank', 'vib', 'mbbank', 'sacombank'];
+  // Priority order: Vietcombank, Vietinbank, Techcombank, MBBank, VPBank, VIB, then others
+  const bankLogos = ['vietcombank', 'vietinbank', 'techcombank', 'mbbank', 'vpbank', 'vib', 'shinhanbank', 'sacombank', 'acb'];
 
   // Helper functions for payment method display
   const getPaymentIcon = () => {
@@ -348,9 +349,21 @@ const BuyAmountScreen = ({ navigation, route }) => {
                         Buy crypto 24/7 via:
                       </Text>
                       <View style={styles.bankLogos}>
-                        {bankLogos.slice(0, screenWidth < 400 ? 5 : 8).map((bank, index) => (
-                          <BankIcon key={bank} bankId={bank} size={16} style={{ marginLeft: 4 }} />
-                        ))}
+                        {(() => {
+                          // iPhone 16 Pro Max: 6 logos, iPhone 16 Pro: 4 logos, others: 3 logos
+                          const displayCount = screenWidth >= 440 ? 6 : screenWidth >= 390 ? 4 : 3;
+                          return bankLogos.slice(0, displayCount).map((bank, index) => (
+                            <BankIcon key={bank} bankId={bank} size={16} style={{ marginLeft: index > 0 ? 4 : 0 }} />
+                          ));
+                        })()}
+                        {(() => {
+                          const displayCount = screenWidth >= 440 ? 6 : screenWidth >= 390 ? 4 : 3;
+                          return bankLogos.length > displayCount && (
+                            <Text style={[styles.moreText, { color: theme.textSecondary }]}>
+                              +{bankLogos.length - displayCount}
+                            </Text>
+                          );
+                        })()}
                       </View>
                     </View>
                   ) : (
@@ -596,6 +609,12 @@ const styles = StyleSheet.create({
   bankLogos: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexWrap: 'nowrap',
+  },
+  moreText: {
+    fontSize: 12,
+    marginLeft: 6,
+    fontWeight: '500',
   },
   confirmButton: {
     paddingVertical: 16,

@@ -16,7 +16,24 @@
         "simulator": true
       }
     },
-    "production": {}
+    "production": {
+      "ios": {
+        "distribution": "store"
+      },
+      "android": {
+        "distribution": "store"
+      }
+    },
+    "testflight": {
+      "ios": {
+        "distribution": "store"
+      }
+    },
+    "adhoc": {
+      "ios": {
+        "distribution": "adhoc"
+      }
+    }
   },
   "submit": {
     "production": {}

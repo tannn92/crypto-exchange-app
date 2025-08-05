@@ -57,7 +57,8 @@
       "Bash(npx expo run:ios --configuration Debug)",
       "Bash(xcrun simctl create:*)",
       "Bash(npx expo:*)",
-      "Bash(vercel:*)"
+      "Bash(vercel:*)",
+      "Bash(npx eas:*)"
     ],
     "deny": []
   }

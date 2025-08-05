@@ -26,8 +26,8 @@ const UsernameSelectionScreen = ({ navigation, route }) => {
     },
     {
       id: '2',
-      username: 'jamesblack',
-      name: 'James Black',
+      username: 'nguyentheduy',
+      name: 'Nguyen The Duy',
     },
   ];
 

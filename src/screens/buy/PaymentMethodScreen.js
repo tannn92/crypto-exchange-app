@@ -25,7 +25,8 @@ const PaymentMethodScreen = ({ navigation, route }) => {
     currentPaymentMethod.startsWith('bank-') || currentPaymentMethod === 'bank'
   );
 
-  const bankLogos = ['shinhanbank', 'vietcombank', 'techcombank', 'msb', 'vietinbank', 'vpbank', 'vib', 'mbbank', 'sacombank'];
+  // Priority order: Vietcombank, Vietinbank, Techcombank, MBBank, VPBank, VIB, then others
+  const bankLogos = ['vietcombank', 'vietinbank', 'techcombank', 'mbbank', 'vpbank', 'vib', 'shinhanbank', 'sacombank', 'acb'];
   const bankNames = {
     shinhanbank: 'ShinhanBank',
     vietcombank: 'Vietcombank',
@@ -38,7 +39,8 @@ const PaymentMethodScreen = ({ navigation, route }) => {
     sacombank: 'Sacombank',
     acb: 'ACB',
   };
-  const expandedBanks = ['vietcombank', 'sacombank', 'msb', 'vib', 'mbbank', 'acb', 'techcombank'];
+  // Use same priority order for expanded list: Vietcombank, Vietinbank, Techcombank, MBBank, VPBank, VIB, then others
+  const expandedBanks = ['vietcombank', 'vietinbank', 'techcombank', 'mbbank', 'vpbank', 'vib', 'shinhanbank', 'sacombank', 'acb'];
 
   const handleSelectMethod = (method) => {
     if (method === 'bank') {
@@ -126,9 +128,21 @@ const PaymentMethodScreen = ({ navigation, route }) => {
                   Buy crypto 24/7 via:
                 </Text>
                 <View style={styles.bankLogos}>
-                  {bankLogos.slice(0, screenWidth < 400 ? 5 : 8).map((bank, index) => (
-                    <BankIcon key={bank} bankId={bank} size={16} style={{ marginLeft: 4 }} />
-                  ))}
+                  {(() => {
+                    // iPhone 16 Pro Max: 6 logos, iPhone 16 Pro: 4 logos, others: 3 logos
+                    const displayCount = screenWidth >= 440 ? 6 : screenWidth >= 390 ? 4 : 3;
+                    return bankLogos.slice(0, displayCount).map((bank, index) => (
+                      <BankIcon key={bank} bankId={bank} size={16} style={{ marginLeft: index > 0 ? 4 : 0 }} />
+                    ));
+                  })()}
+                  {(() => {
+                    const displayCount = screenWidth >= 440 ? 6 : screenWidth >= 390 ? 4 : 3;
+                    return bankLogos.length > displayCount && (
+                      <Text style={[styles.moreText, { color: theme.textSecondary }]}>
+                        +{bankLogos.length - displayCount}
+                      </Text>
+                    );
+                  })()}
                 </View>
               </View>
             </View>
@@ -284,6 +298,12 @@ const styles = StyleSheet.create({
   bankLogos: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexWrap: 'nowrap',
+  },
+  moreText: {
+    fontSize: 12,
+    marginLeft: 6,
+    fontWeight: '500',
   },
   expandedBanks: {
     marginTop: 8,

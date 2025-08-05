@@ -17,7 +17,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.remitano.cryptovn",
+      "bundleIdentifier": "com.cryptovn.app",
       "buildNumber": "1"
     },
     "android": {
@@ -25,12 +25,15 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FF6B35"
       },
-      "package": "com.remitano.cryptovn",
+      "package": "com.cryptovn.app",
       "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
+    },
+    "cli": {
+      "appVersionSource": "local"
     }
   }
 }

@@ -125,10 +125,10 @@ const ProfileMenuScreen = ({ navigation }) => {
         {/* User Info */}
         <View style={styles.userInfo}>
           <Text style={[styles.userName, { color: theme.textPrimary }]}>
-            John Smith
+            Nguyen The Duy
           </Text>
           <Text style={[styles.userEmail, { color: theme.textSecondary }]}>
-            johnsmith.uk@cryptovn.com
+            nguyentheduy@cryptovn.com
           </Text>
         </View>
 
