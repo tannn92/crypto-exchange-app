@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -7,13 +7,14 @@ import {
   TouchableOpacity,
   Dimensions,
   Image,
-  Platform,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
-import Svg, { Path, Circle, Rect, Defs, LinearGradient as SvgLinearGradient, Stop } from 'react-native-svg';
+import Svg, { Path, Circle, Defs, LinearGradient as SvgLinearGradient, Stop } from 'react-native-svg';
 import { useTheme } from '../context/ThemeContext';
 import CoinIcon from '../components/CoinIcon';
 import BalanceHeader from '../components/BalanceHeader';
+import OnboardingOverlay from '../components/OnboardingOverlay';
 import { cryptoData, coinPrices } from '../data/coinPrices';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -454,11 +455,67 @@ const HomeScreen = ({ navigation, route }) => {
   const [balanceVisible, setBalanceVisible] = useState(true);
   const [currency, setCurrency] = useState('USDT');
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [onboardingStep, setOnboardingStep] = useState(1);
+  const scrollViewRef = useRef(null);
 
   const exchangeRate = 26300; // 1 USDT = 26,300 VND
   const baseBalance = 3243.00;
   const baseChange = 43.96;
   const baseChangePercent = 1.47;
+
+  // Check if onboarding should be shown
+  useEffect(() => {
+    const checkOnboardingStatus = async () => {
+      try {
+        // Always show onboarding for testing
+        // const hasSeenOnboarding = await AsyncStorage.getItem('hasSeenOnboarding');
+        // if (!hasSeenOnboarding) {
+          // Scroll to top before showing onboarding
+          if (scrollViewRef.current) {
+            scrollViewRef.current.scrollTo({ y: 0, animated: false });
+          }
+          setShowOnboarding(true);
+        // }
+      } catch (error) {
+        console.log('Error checking onboarding status:', error);
+      }
+    };
+
+    checkOnboardingStatus();
+  }, []);
+
+  const handleCloseOnboarding = async () => {
+    try {
+      // Temporarily disabled saving to always show onboarding
+      // await AsyncStorage.setItem('hasSeenOnboarding', 'true');
+      setShowOnboarding(false);
+      setOnboardingStep(1); // Reset to first step
+    } catch (error) {
+      console.log('Error saving onboarding status:', error);
+    }
+  };
+
+  const handleNextOnboarding = () => {
+    if (onboardingStep >= 4) {
+      handleCloseOnboarding();
+    } else {
+      setOnboardingStep(onboardingStep + 1);
+    }
+  };
+
+  // Debug function to reset onboarding (can be called from dev tools)
+  const resetOnboarding = async () => {
+    try {
+      await AsyncStorage.removeItem('hasSeenOnboarding');
+      setShowOnboarding(true);
+    } catch (error) {
+      console.log('Error resetting onboarding status:', error);
+    }
+  };
+
+  // Make resetOnboarding available globally for testing
+  global.resetOnboarding = resetOnboarding;
   
   // Calculate total balance and change based on currency
   const totalBalance = currency === 'VND' ? baseBalance * exchangeRate : baseBalance;
@@ -573,6 +630,7 @@ const HomeScreen = ({ navigation, route }) => {
       </View>
 
       <ScrollView
+        ref={scrollViewRef}
         style={styles.content}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
@@ -670,6 +728,14 @@ const HomeScreen = ({ navigation, route }) => {
         </View>
 
       </ScrollView>
+
+      {/* Onboarding Overlay */}
+      <OnboardingOverlay
+        visible={showOnboarding}
+        onClose={handleCloseOnboarding}
+        step={onboardingStep}
+        onNext={handleNextOnboarding}
+      />
       
     </View>
   );
