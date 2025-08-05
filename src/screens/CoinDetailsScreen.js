@@ -481,27 +481,31 @@ const CoinDetailsScreen = ({ navigation, route }) => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.backgroundInput }]}>
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Top Section - Seamless White Background including header */}
-        <View style={[styles.topSection, { backgroundColor: theme.backgroundInput }]}>
-          {/* Header with Back Button */}
-          <View style={styles.header}>
-            <TouchableOpacity
-              onPress={() => {
-                console.log('Back button touched - CoinDetailsScreen');
-                navigation.goBack();
-              }}
-              style={styles.backButton}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-              activeOpacity={0.7}
-              accessible={true}
-              accessibilityLabel="Go back"
-            >
-              <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
-            </TouchableOpacity>
-          </View>
+    <View style={[styles.container, { backgroundColor: theme.isDarkMode ? '#000000' : theme.backgroundForm }]}>
+      {/* Header with Back Button */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => {
+            console.log('Back button touched - CoinDetailsScreen');
+            navigation.goBack();
+          }}
+          style={styles.backButton}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          activeOpacity={0.7}
+          accessible={true}
+          accessibilityLabel="Go back"
+        >
+          <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
+        </TouchableOpacity>
+        
+        <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>
+          {coin.name}
+        </Text>
+      </View>
 
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        {/* Card 1: Balance Information */}
+        <View style={[styles.balanceCard, { backgroundColor: theme.backgroundInput }]}>
           {/* Coin Icon and Balance Section */}
           <View style={styles.balanceSection}>
             <View style={styles.coinIconContainer}>
@@ -563,17 +567,24 @@ const CoinDetailsScreen = ({ navigation, route }) => {
           </View>
         </View>
 
-        {/* Transactions History */}
-        <View style={styles.transactionsSection}>
+        {/* Card 2: Transactions History */}
+        <View style={[styles.transactionsCard, { backgroundColor: theme.backgroundInput }]}>
           <Text style={[styles.sectionTitle, { color: theme.textPrimary }]}>
             Transactions history
           </Text>
 
-          <View style={[styles.transactionsList, { backgroundColor: theme.backgroundInput }]}>
-            {coinTransactions.map((transaction) => (
+          {coinTransactions.map((transaction, index) => {
+            const isLastItem = index === coinTransactions.length - 1;
+            return (
               <TouchableOpacity
                 key={transaction.id}
-                style={styles.transactionItem}
+                style={[
+                  styles.transactionItem,
+                  {
+                    borderBottomColor: theme.border,
+                    borderBottomWidth: isLastItem ? 0 : 1,
+                  },
+                ]}
                 onPress={() => handleTransactionPress(transaction)}
                 activeOpacity={0.7}
                 accessible={true}
@@ -609,8 +620,8 @@ const CoinDetailsScreen = ({ navigation, route }) => {
                   </Text>
                 </View>
               </TouchableOpacity>
-            ))}
-          </View>
+            );
+          })}
         </View>
       </ScrollView>
     </View>
@@ -626,6 +637,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 15,
+    justifyContent: 'center',
+    position: 'relative',
   },
   backButton: {
     width: 60,
@@ -633,18 +646,28 @@ const styles = StyleSheet.create({
     zIndex: 10,
     paddingVertical: 5,
     paddingHorizontal: 5,
+    position: 'absolute',
+    left: 20,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    textAlign: 'center',
   },
   content: {
     flex: 1,
+    paddingHorizontal: 20,
   },
-  topSection: {
-    paddingBottom: 20,
+  balanceCard: {
+    padding: 20,
+    borderRadius: 16,
     marginBottom: 20,
+    alignItems: 'center',
   },
   balanceSection: {
     alignItems: 'center',
     paddingVertical: 20,
-    paddingHorizontal: 20,
+    width: '100%',
   },
   coinIconContainer: {
     marginBottom: 20,
@@ -668,7 +691,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
     paddingTop: 20,
-    paddingHorizontal: 20,
+    width: '100%',
+    borderTopWidth: 1,
   },
   priceLabel: {
     fontSize: 16,
@@ -680,8 +704,7 @@ const styles = StyleSheet.create({
   actionButtons: {
     flexDirection: 'row',
     gap: 12,
-    marginTop: 20,
-    paddingHorizontal: 20,
+    width: '100%',
   },
   primaryButton: {
     flex: 1,
@@ -706,25 +729,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  transactionsSection: {
+  transactionsCard: {
+    padding: 20,
+    borderRadius: 16,
     marginBottom: 20,
-    paddingHorizontal: 20,
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: '600',
     marginBottom: 20,
   },
-  transactionsList: {
-    borderRadius: 16,
-    padding: 4,
-  },
   transactionItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 0,
   },
   transactionLeft: {
     flexDirection: 'row',
